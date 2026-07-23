@@ -1,0 +1,21 @@
+{
+	"nodes":[
+		{"id":"0712eeac167318fd","type":"text","text":"laravel\nThe **Brain / Engine**. It is the core backend framework handling the server-side logic, user authentication, and data routing, filling the exact same architectural role as a Django backend","x":-340,"y":80,"width":360,"height":180},
+		{"id":"33c31e0f719ee754","type":"text","text":"MySQL\nThe **Filing Cabinet**. It is the relational database where all the structured information lives. It uses standard SQL queries to store and retrieve details like doctor names, pharmacy addresses, and user profiles.","x":160,"y":-220,"width":400,"height":180},
+		{"id":"8cf87e534fc429f6","type":"text","text":"OpenRouteService (ORS)\nThe **GPS Navigator**. Once OR-Tools decides the order (e.g., A then B then C), ORS draws the actual driving lines on the roads between them and calculates exactly how many minutes the drive will take.","x":-1257,"y":170,"width":367,"height":190},
+		{"id":"2a849d0e284d5864","type":"text","text":"Google OR-Tools\nThe **Ultimate Puzzle Solver**. If you have 15 places to visit, there are billions of possible route combinations. OR-Tools uses heavy math to instantly solve the puzzle and tell you the absolute smartest _order_ to visit them in so you don't waste time driving back and forth.","x":-235,"y":460,"width":395,"height":200},
+		{"id":"2d21ee3dcd1af36d","type":"text","text":"Nominatim\nThe **Address Translator**. Maps cannot read text like \"123 Main Street.\" Nominatim takes that text and translates it into the exact GPS coordinates (Latitude: 40.7128, Longitude: -74.0060) that computers understand.","x":-720,"y":-500,"width":380,"height":200},
+		{"id":"7d68d5b846d78116","type":"text","text":"Leaflet.js\nThe **Interactive Canvas**. This is the frontend tool that lets the user click, drag, and zoom on the map in their web browser.","x":-1560,"y":-160,"width":303,"height":160},
+		{"id":"f1930b7091fddc79","type":"text","text":"Python Pipeline (Scrapy & Pandas)\nPython (BeautifulSoup/Scrapy):The **Digital Harvester**. Instead of a human manually copy-pasting contact info from medical directories, these Python scripts automatically browse the web, grab the public data, and download it.\n\n**Pandas:** The **Filter / Cleaner**. After the harvester grabs the messy data, Pandas sweeps through it to fix formatting errors, delete duplicate entries, and organize it perfectly before putting it into the MySQL filing cabinet.","x":720,"y":320,"width":560,"height":260},
+		{"id":"e06da32a9082bb5e","type":"text","text":"OpenStreetMap (OSM)\nThe **Map Artwork**. Leaflet provides a blank canvas; OSM provides the actual visual background pictures of the streets, oceans, parks, and city names to draw on.","x":-2000,"y":-720,"width":300,"height":160}
+	],
+	"edges":[
+		{"id":"f52e152621408ef2","fromNode":"33c31e0f719ee754","fromSide":"left","toNode":"0712eeac167318fd","toSide":"right","label":"store and supply all the application's data "},
+		{"id":"091c82911ef2171b","fromNode":"f1930b7091fddc79","fromSide":"top","toNode":"33c31e0f719ee754","toSide":"bottom","label":"automated worker that scrapes and cleans external data before dropping it into the database for Laravel to eventually use"},
+		{"id":"a85f5f3e3967ba92","fromNode":"2d21ee3dcd1af36d","fromSide":"bottom","toNode":"0712eeac167318fd","toSide":"top","label":"replies with precise coordinates"},
+		{"id":"464368db41da85a0","fromNode":"2a849d0e284d5864","fromSide":"top","toNode":"0712eeac167318fd","toSide":"bottom","label":"replies with the optimal mathematical sequence to visit them"},
+		{"id":"e6e49ac039d7453b","fromNode":"8cf87e534fc429f6","fromSide":"right","toNode":"0712eeac167318fd","toSide":"left","label":"replies with the actual driving directions and travel times"},
+		{"id":"11757b8a6f768480","fromNode":"7d68d5b846d78116","fromSide":"right","toNode":"0712eeac167318fd","toSide":"left","label":" processed data (the routes, the markers, the schedule) to the frontend where Leaflet uses it to draw the interactive map on the screen"},
+		{"id":"ff766808103d13c9","fromNode":"e06da32a9082bb5e","fromSide":"bottom","toNode":"7d68d5b846d78116","toSide":"top","label":"provides the visual background map tiles so the routes plotted by Leaflet aren't just floating in a blank white space"}
+	]
+}

@@ -1,0 +1,1 @@
+clean the scraped data , normalize format remove duplicates before injecting the pristine data into mysql
