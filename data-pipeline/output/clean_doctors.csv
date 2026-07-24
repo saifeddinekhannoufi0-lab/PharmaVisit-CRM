@@ -1,0 +1,26 @@
+row_id,first_name,last_name,specialty,address,city,postal_code,region,phone,source
+1,Amina,Chraibi,Cardiologie,14 Avenue Mohammed V,Rabat,10000,Rabat-Salé-Kénitra,+212537123001,sample
+2,Hassan,Ouazzani,Pédiatrie,7 Rue Patrice Lumumba,Rabat,10000,Rabat-Salé-Kénitra,+212537123002,sample
+3,Fatima,El Idrissi,Médecine Générale,23 Avenue Al Amir Fal,Salé,11000,Rabat-Salé-Kénitra,+212537123003,sample
+4,Youssef,Berrada,Neurologie,45 Boulevard Hassan II,Rabat,10020,Rabat-Salé-Kénitra,+212537123004,sample
+5,Khadija,Mansouri,Gynécologie,"3 Rue Oued Fès, Agdal",Rabat,10080,Rabat-Salé-Kénitra,+212537123005,sample
+6,Houda,El Amrani,Cardiologie,13 Rue du Parc,Casablanca,20000,Casablanca-Settat,+212522123001,sample
+7,Rachid,Sebti,Neurologie,22 Boulevard Zerktouni,Casablanca,20050,Casablanca-Settat,+212522123002,sample
+8,Asmaa,El Kadiri,Gynécologie,5 Rue Atlas,Casablanca,20000,Casablanca-Settat,+212522123003,sample
+9,Kamal,Benali,Pédiatrie,17 Avenue Hassan II,Casablanca,20000,Casablanca-Settat,+212522123004,sample
+10,Mohamed,Lahlou,Ophtalmologie,18 Avenue Fal Ould Omer,Rabat,10000,Rabat-Salé-Kénitra,+212537123006,sample
+11,Nour,El Fassi,Dermatologie,34 Boulevard Mohammed V,Fès,30000,Fès-Meknès,+212535123001,sample
+12,Anas,Kettani,Médecine Générale,7 Rue Ibn Battouta,Marrakech,40000,Marrakech-Safi,+212524123001,sample
+13,Hind,Bensouda,Endocrinologie,15 Avenue Al Moukaouama,Tanger,90000,Tanger-Tétouan-Al Hoceïma,+212539123001,sample
+14,Aziz,Zniber,Chirurgie Générale,11 Boulevard Al Massira,Salé,11000,Rabat-Salé-Kénitra,+212537123007,sample
+15,Zineb,Alaoui,Rhumatologie,120 Avenue Mehdi Ben Barka,Rabat,10100,Rabat-Salé-Kénitra,+212537123008,sample
+16,Samir,Taleb,Pneumologie,8 Rue des Orangers,Agadir,80000,Souss-Massa,+212528123001,sample
+17,Leila,Cherkaoui,Pédiatrie,34 Rue Moulay Rachid,Témara,12000,Rabat-Salé-Kénitra,+212537123009,sample
+18,Mehdi,Boussaid,Médecine Interne,Avenue Ibn Sina,Rabat,10050,Rabat-Salé-Kénitra,+212537123010,sample
+19,Rim,Tazi,Endocrinologie,67 Avenue Hassan II,Rabat,10020,Rabat-Salé-Kénitra,+212537123011,sample
+20,Omar,Filali,Pneumologie,5 Rue Doukala,Rabat,10000,Rabat-Salé-Kénitra,+212537123012,sample
+21,Nadia,Benkirane,Dermatologie,55 Rue Tarik Ibn Ziad,Rabat,10000,Rabat-Salé-Kénitra,+212537123013,sample
+22,Khalid,El Ouahabi,Chirurgie Générale,3 Avenue Al Amir Sultan,Salé,11020,Rabat-Salé-Kénitra,+212537123014,sample
+23,Sara,Moujahid,Ophtalmologie,12 Boulevard Al Massira,Rabat,10000,Rabat-Salé-Kénitra,+212537123015,sample
+24,Driss,Laamari,Cardiologie,78 Rue Abou Inane,Fès,30020,Fès-Meknès,+212535123002,sample
+25,Widad,Bennis,Médecine Générale,22 Avenue des FAR,Casablanca,20100,Casablanca-Settat,+212522123005,sample
