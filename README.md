@@ -9,6 +9,7 @@ PharmaVisit is a comprehensive Customer Relationship Management (CRM) and Field 
 - **Redis Performance Buffer**: High-performance caching layer using Redis to significantly reduce MySQL bottlenecks. It caches doctor/pharmacy lists, territory statistics, and optimized route results to avoid redundant, expensive API calls and database queries.
 - **Automated Data Pipeline**: Built-in data extraction pipeline (using Scrapy) to scrape, clean, and import medical registry data into the platform.
 - **Interactive Maps**: Visual mapping of doctors, pharmacies, and optimized daily routes using Leaflet.js.
+- **Premium UI & Brand Integration**: A dark-mode first design utilizing the PHI teal color palette, custom inline SVG iconography (replacing emojis), and smooth CSS micro-animations like the heartbeat pulse loader and molecular background textures for a modern, state-of-the-art user experience.
 - **RESTful API Architecture**: Robust APIs to manage Territories, Doctors, Pharmacies, Route Stops, and Visit Logs.
 
 ## Technology Stack

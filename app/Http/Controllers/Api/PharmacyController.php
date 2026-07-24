@@ -19,7 +19,7 @@ class PharmacyController extends Controller
     {
         $territoryId = $request->user()->territory_id;
 
-        $filters = $request->only(['search', 'city', 'page']);
+        $filters = $request->only(['search', 'city', 'page', 'per_page']);
 
         $pharmacies = CacheService::rememberPharmacies($territoryId, $filters, function () use ($request, $territoryId) {
             $query = Pharmacy::inTerritory($territoryId)
@@ -38,9 +38,19 @@ class PharmacyController extends Controller
                 $query->where('city', $city);
             }
 
-            return $query->orderBy('name')
-                         ->paginate(25)
-                         ->through(fn($p) => $this->formatPharmacy($p));
+            $perPage = min((int) ($request->query('per_page', 25)), 100);
+
+            $paginated = $query->orderBy('name')->paginate($perPage);
+
+            $items = $paginated->getCollection()->map(fn($p) => $this->formatPharmacy($p));
+
+            return [
+                'data'         => $items->values()->all(),
+                'current_page' => $paginated->currentPage(),
+                'last_page'    => $paginated->lastPage(),
+                'per_page'     => $paginated->perPage(),
+                'total'        => $paginated->total(),
+            ];
         });
 
         return response()->json($pharmacies);

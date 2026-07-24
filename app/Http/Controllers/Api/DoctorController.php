@@ -22,7 +22,7 @@ class DoctorController extends Controller
         $territoryId = $request->user()->territory_id;
 
         // Build a filter fingerprint for the cache key
-        $filters = $request->only(['search', 'specialty', 'priority', 'city', 'page']);
+        $filters = $request->only(['search', 'specialty', 'priority', 'city', 'page', 'per_page']);
 
         $doctors = CacheService::rememberDoctors($territoryId, $filters, function () use ($request, $territoryId) {
             $query = Doctor::inTerritory($territoryId)
@@ -50,9 +50,20 @@ class DoctorController extends Controller
                 $query->where('city', $city);
             }
 
-            return $query->orderBy('last_name')
-                         ->paginate(25)
-                         ->through(fn($d) => $this->formatDoctor($d));
+            $perPage = min((int) ($request->query('per_page', 25)), 100);
+
+            $paginated = $query->orderBy('last_name')->paginate($perPage);
+
+            // Format BEFORE caching so no closures are stored
+            $items = $paginated->getCollection()->map(fn($d) => $this->formatDoctor($d));
+
+            return [
+                'data'         => $items->values()->all(),
+                'current_page' => $paginated->currentPage(),
+                'last_page'    => $paginated->lastPage(),
+                'per_page'     => $paginated->perPage(),
+                'total'        => $paginated->total(),
+            ];
         });
 
         return response()->json($doctors);
