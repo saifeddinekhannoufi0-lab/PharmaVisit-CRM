@@ -1,58 +1,71 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PharmaVisit CRM
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+PharmaVisit is a comprehensive Customer Relationship Management (CRM) and Field Representative Dashboard designed specifically for managing and optimizing visits to healthcare professionals (Doctors and Pharmacies).
 
-## About Laravel
+## Key Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Field Rep Dashboard**: An intuitive interface for representatives to manage their assigned territories, view statistics, and track visits.
+- **Route Optimization Microservice**: A dedicated Python/FastAPI microservice leveraging OR-Tools and Mapbox to calculate the most efficient driving routes for field reps, minimizing travel time and distance.
+- **Redis Performance Buffer**: High-performance caching layer using Redis to significantly reduce MySQL bottlenecks. It caches doctor/pharmacy lists, territory statistics, and optimized route results to avoid redundant, expensive API calls and database queries.
+- **Automated Data Pipeline**: Built-in data extraction pipeline (using Scrapy) to scrape, clean, and import medical registry data into the platform.
+- **Interactive Maps**: Visual mapping of doctors, pharmacies, and optimized daily routes using Leaflet.js.
+- **RESTful API Architecture**: Robust APIs to manage Territories, Doctors, Pharmacies, Route Stops, and Visit Logs.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Technology Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend (Main Application)**: Laravel (PHP 8+), MySQL, Redis
+- **Backend (Route Optimizer)**: Python, FastAPI, OR-Tools, Mapbox
+- **Frontend**: Blade, JavaScript, Vanilla CSS, Leaflet.js
+- **Data Scraping**: Python, Scrapy, Pandas
+- **Caching & Sessions**: Redis
 
-## Learning Laravel
+## The Redis Implementation (Performance Buffer)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **What it is:** An incredibly fast, in-memory caching database.
+- **Which problems it solves:**
+  - **Fixes Laravel & MySQL bottlenecks:** Instead of Laravel asking MySQL for the exact same list of doctors every time a user logs in, it asks once and saves the result in Redis. The next time, Redis delivers the data instantly, taking the heavy workload off MySQL.
+  - **Saves API Costs:** If you calculate the optimized route between "Doctor A" and "Pharmacy B" on Monday, Redis memorizes that route. If another commercial rep needs the exact same route on Tuesday, Laravel pulls it from Redis instead of paying Mapbox or OR-Tools to calculate it all over again. (24-hour TTL for routes, auto-invalidation on data mutation).
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Project Structure
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- `/app` - Laravel application core (Controllers, Models, Services)
+- `/route-optimizer` - Python microservice for TSP route optimization
+- `/data-pipeline` - Python web scraping and data preparation scripts
+- `/public` - Compiled frontend assets
+- `/routes` - Web and API route definitions
 
-## Agentic Development
+## Setup and Installation
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+### 1. Laravel Application
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Route Optimizer Microservice
+Navigate to `/route-optimizer`:
+```bash
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+pip install -r requirements.txt
+uvicorn main:app --port 8001
+```
 
-## Contributing
+### 3. Data Pipeline
+Navigate to `/data-pipeline`:
+```bash
+pip install -r requirements.txt
+scrapy crawl medical_registry
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 4. Running the Development Server
+```bash
+npm install
+npm run dev
+php artisan serve
+```
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+*Developed for optimal healthcare CRM management.*
