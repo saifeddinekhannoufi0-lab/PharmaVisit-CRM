@@ -1,41 +1,55 @@
-# PharmaVisit CRM
+<div align="center">
 
-PharmaVisit is a comprehensive Customer Relationship Management (CRM) and Field Representative Dashboard designed specifically for managing and optimizing visits to healthcare professionals (Doctors and Pharmacies).
+<h1>⚕️ PharmaVisit CRM</h1>
+<p><strong>Field Service Routing & Management for Pharma Sales Reps</strong></p>
 
-## Key Features
+<p>
+  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" />
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" />
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
+</p>
 
-- **Field Rep Dashboard**: An intuitive interface for representatives to manage their assigned territories, view statistics, and track visits.
-- **Route Optimization Microservice**: A dedicated Python/FastAPI microservice leveraging OR-Tools and Mapbox to calculate the most efficient driving routes for field reps, minimizing travel time and distance.
-- **Redis Performance Buffer**: High-performance caching layer using Redis to significantly reduce MySQL bottlenecks. It caches doctor/pharmacy lists, territory statistics, and optimized route results to avoid redundant, expensive API calls and database queries.
-- **Automated Data Pipeline**: Built-in data extraction pipeline (using Scrapy) to scrape, clean, and import medical registry data into the platform.
-- **Interactive Maps**: Visual mapping of doctors, pharmacies, and optimized daily routes using Leaflet.js.
-- **Premium UI & Brand Integration**: A dark-mode first design utilizing the PHI teal color palette, custom inline SVG iconography (replacing emojis), and smooth CSS micro-animations like the heartbeat pulse loader and molecular background textures for a modern, state-of-the-art user experience.
-- **RESTful API Architecture**: Robust APIs to manage Territories, Doctors, Pharmacies, Route Stops, and Visit Logs.
+<p>PharmaVisit is a comprehensive Customer Relationship Management (CRM) and Field Representative Dashboard designed specifically for managing and optimizing visits to healthcare professionals (Doctors and Pharmacies).</p>
 
-## Technology Stack
+</div>
 
-- **Backend (Main Application)**: Laravel (PHP 8+), MySQL, Redis
-- **Backend (Route Optimizer)**: Python, FastAPI, OR-Tools, Mapbox
-- **Frontend**: Blade, JavaScript, Vanilla CSS, Leaflet.js
-- **Data Scraping**: Python, Scrapy, Pandas
-- **Caching & Sessions**: Redis
+---
 
-## The Redis Implementation (Performance Buffer)
+## ✨ Features
 
-- **What it is:** An incredibly fast, in-memory caching database.
-- **Which problems it solves:**
-  - **Fixes Laravel & MySQL bottlenecks:** Instead of Laravel asking MySQL for the exact same list of doctors every time a user logs in, it asks once and saves the result in Redis. The next time, Redis delivers the data instantly, taking the heavy workload off MySQL.
-  - **Saves API Costs:** If you calculate the optimized route between "Doctor A" and "Pharmacy B" on Monday, Redis memorizes that route. If another commercial rep needs the exact same route on Tuesday, Laravel pulls it from Redis instead of paying Mapbox or OR-Tools to calculate it all over again. (24-hour TTL for routes, auto-invalidation on data mutation).
+| Feature | Description |
+|---|---|
+| 🧑‍💼 **Field Rep Dashboard** | Intuitive interface for representatives to manage territories, view stats, and track visits |
+| 🗺️ **Interactive Maps** | Visual mapping of doctors, pharmacies, and optimized daily routes using Leaflet.js |
+| 🚀 **Route Optimizer** | Dedicated Python/FastAPI microservice leveraging OR-Tools to calculate efficient routes |
+| ⚡ **Redis Performance Buffer** | Caches data and routes, reducing MySQL bottlenecks and expensive API calls |
+| 🤖 **Automated Data Pipeline** | Built-in Scrapy data extraction pipeline to scrape and import medical registry data |
+| 🎨 **Premium UI Integration** | Dark-mode design with PHI teal palette, custom SVGs, and CSS micro-animations |
+| 🔌 **RESTful API** | Robust APIs to manage Territories, Doctors, Pharmacies, Route Stops, and Visit Logs |
 
-## Project Structure
+---
 
-- `/app` - Laravel application core (Controllers, Models, Services)
-- `/route-optimizer` - Python microservice for TSP route optimization
-- `/data-pipeline` - Python web scraping and data preparation scripts
-- `/public` - Compiled frontend assets
-- `/routes` - Web and API route definitions
+## 🏗️ Tech Stack
 
-## Setup and Installation
+### Frontend
+- **Blade** + **Vanilla JS/CSS** — modern templating and styling
+- **Leaflet.js** — interactive maps
+- **Custom SVGs** — scalable vector icons
+
+### Backend
+- **Laravel (PHP 8+)** — core application logic and REST API
+- **MySQL** — relational database
+- **Redis** — high-performance caching layer
+
+### Microservices & Data
+- **Python + FastAPI** — Route Optimizer microservice
+- **OR-Tools & Mapbox** — TSP solving and geocoding
+- **Scrapy & Pandas** — data scraping and preparation
+
+---
+
+## 🚀 Getting Started
 
 ### 1. Laravel Application
 ```bash
