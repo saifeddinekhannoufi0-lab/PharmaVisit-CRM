@@ -18,7 +18,7 @@
 <div id="login-overlay">
   <div class="login-card">
     <div class="login-logo">
-      <div class="icon">💊</div>
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><path d="M9 10h1.5l1-2.5 1.5 5 1-2.5H16"/></svg></div>
       <h2>PharmaVisit</h2>
       <p>Sign in to your rep dashboard</p>
     </div>
@@ -50,7 +50,7 @@
     <!-- Header: logo + rep card -->
     <div id="sidebar-header">
       <div class="logo">
-        <div class="logo-icon">💊</div>
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><path d="M9 10h1.5l1-2.5 1.5 5 1-2.5H16"/></svg></div>
         <div class="logo-text">
           <h1>PharmaVisit</h1>
           <p>Field Rep Dashboard</p>
@@ -62,7 +62,7 @@
           <div class="rep-name" id="rep-name">Loading…</div>
           <div class="rep-territory" id="rep-territory">—</div>
         </div>
-        <button class="btn-logout" id="btn-logout" title="Sign out">⏏</button>
+        <button class="btn-logout" id="btn-logout" title="Sign out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg></button>
       </div>
     </div>
 
@@ -84,21 +84,21 @@
 
     <!-- Tabs -->
     <div id="tabs">
-      <button class="tab-btn active" data-tab="doctors">🩺 Doctors</button>
-      <button class="tab-btn" data-tab="pharmacies">🏥 Pharmacies</button>
+      <button class="tab-btn active" data-tab="doctors"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Doctors</button>
+      <button class="tab-btn" data-tab="pharmacies"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg> Pharmacies</button>
     </div>
 
     <!-- Search -->
     <div id="search-bar">
       <div class="search-input-wrap">
-        <span>🔍</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
         <input type="search" id="search-input" placeholder="Search by name, specialty, city…">
       </div>
     </div>
 
     <!-- Entity list -->
     <div id="entity-list">
-      <div class="empty-state"><div class="icon">⏳</div><p>Loading…</p></div>
+      <div class="empty-state"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg></div><p>Loading…</p></div>
     </div>
 
     <!-- Footer: optimize button -->
@@ -106,7 +106,7 @@
       <div class="selection-info" id="selection-info">Select doctors to plan your route</div>
       <button id="btn-optimize" disabled>
         <div class="spinner"></div>
-        <span class="btn-text">⚡ Optimize My Day</span>
+        <span class="btn-text"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Optimize My Day</span>
       </button>
     </div>
 
@@ -118,7 +118,7 @@
 
     <!-- Loading overlay (shown during optimization) -->
     <div id="loading-overlay">
-      <div class="loading-spinner"></div>
+      <svg class="pulse-line" viewBox="0 0 200 40" fill="none"><polyline stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="0,20 25,20 35,20 45,6 55,34 65,12 75,28 85,20 115,20 125,20 135,6 145,34 155,12 165,28 175,20 200,20"/></svg>
       <div class="loading-text" id="loading-text">Optimizing your route…</div>
     </div>
 
@@ -146,10 +146,10 @@
         <div class="form-group">
           <label for="visit-outcome">Outcome</label>
           <select id="visit-outcome" class="form-control">
-            <option value="completed">✅ Completed</option>
-            <option value="no_show">❌ No show</option>
-            <option value="rescheduled">📅 Rescheduled</option>
-            <option value="cancelled">🚫 Cancelled</option>
+            <option value="completed">Completed</option>
+            <option value="no_show">No show</option>
+            <option value="rescheduled">Rescheduled</option>
+            <option value="cancelled">Cancelled</option>
           </select>
         </div>
       </div>

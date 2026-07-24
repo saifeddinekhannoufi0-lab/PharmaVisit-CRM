@@ -151,7 +151,7 @@ function renderEntityList(filter = '') {
     : entities;
 
   if (!filtered.length) {
-    list.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><p>No results</p></div>`;
+    list.innerHTML = `<div class="empty-state"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><p>No results</p></div>`;
     return;
   }
 
@@ -295,10 +295,10 @@ async function optimizeRoute() {
 
     State.currentRoute = result;
     renderOptimizedRoute(result);
-    showToast(`✅ Route optimized — ${result.ordered_stops.length} stops`, 'success');
+    showToast(`Route optimized — ${result.ordered_stops.length} stops`, 'success');
 
   } catch (e) {
-    showToast(`❌ ${e.message}`, 'error');
+    showToast(`${e.message}`, 'error');
   } finally {
     btn.classList.remove('loading');
     hideLoading();
@@ -316,7 +316,7 @@ function renderOptimizedRoute(result) {
     const sm = L.marker([sl.lat, sl.lng], {
       icon: L.divIcon({
         className: '',
-        html: `<div class="map-marker start">🚀</div>`,
+        html: `<div class="map-marker start"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>`,
         iconSize: [34, 34], iconAnchor: [17, 17],
       }),
     }).addTo(State.map)
@@ -389,7 +389,7 @@ function renderSummaryCard(result) {
       <div class="summary-stat"><div class="val">${durStr}</div><div class="lbl">Drive time</div></div>
     </div>
     <div class="stop-list-mini">${stopsMini}</div>
-    ${result.notes ? `<p style="font-size:11px;color:var(--prio-med);margin-top:10px">⚠ ${result.notes}</p>` : ''}
+    ${result.notes ? `<p style="font-size:11px;color:var(--prio-med);margin-top:10px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> ${result.notes}</p>` : ''}
   `;
 
   document.getElementById('route-summary').classList.add('visible');
@@ -435,10 +435,10 @@ async function submitVisitLog() {
       outcome,
     });
 
-    showToast('✅ Visit logged successfully', 'success');
+    showToast('Visit logged successfully', 'success');
     closeVisitPanel();
   } catch (e) {
-    showToast(`❌ ${e.message}`, 'error');
+    showToast(`${e.message}`, 'error');
   }
 }
 

@@ -1,4 +1,4 @@
-/* PharmaVisit CRM — Premium Dark UI */
+/* PharmaVisit CRM — Premium Dark UI · PHI Teal Brand */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 /* ── Reset & Variables ────────────────────────────────────────────────────── */
@@ -13,9 +13,9 @@
   --border:      rgba(99,130,200,0.15);
   --border-glow: rgba(99,130,200,0.35);
 
-  --accent:      #4f8ef7;
-  --accent-dim:  rgba(79,142,247,0.15);
-  --accent-glow: rgba(79,142,247,0.35);
+  --accent:      #14b8a6;
+  --accent-dim:  rgba(20,184,166,0.15);
+  --accent-glow: rgba(20,184,166,0.35);
 
   --text-primary:   #e8edf5;
   --text-secondary: #8da0bc;
@@ -34,7 +34,7 @@
   --radius-lg: 16px;
 
   --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
-  --shadow-glow: 0 0 20px rgba(79,142,247,0.2);
+  --shadow-glow: 0 0 20px rgba(20,184,166,0.2);
 
   --transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
 }
@@ -72,13 +72,14 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
 
 .logo-icon {
   width: 38px; height: 38px;
-  background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, #0f766e 100%);
   border-radius: var(--radius-sm);
   display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
+  color: #fff;
   box-shadow: var(--shadow-glow);
   flex-shrink: 0;
 }
+.logo-icon svg { width: 22px; height: 22px; }
 
 .logo-text { line-height: 1.2; }
 .logo-text h1 { font-size: 15px; font-weight: 700; color: var(--text-primary); }
@@ -94,7 +95,7 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
 
 .rep-avatar {
   width: 36px; height: 36px;
-  background: linear-gradient(135deg, var(--accent), #7c3aed);
+  background: linear-gradient(135deg, var(--accent), #0f766e);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 14px;
@@ -106,9 +107,11 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
 .rep-territory { font-size: 11px; color: var(--text-muted); }
 
 .btn-logout {
-  background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; border-radius: 4px; font-size: 15px;
+  background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; border-radius: 4px;
   transition: var(--transition);
+  display: flex; align-items: center;
 }
+.btn-logout svg { width: 16px; height: 16px; }
 .btn-logout:hover { color: var(--prio-high); }
 
 /* ── Stats bar ────────────────────────────────────────────────────────────── */
@@ -136,9 +139,13 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
   font-size: 12px; font-weight: 500; cursor: pointer;
   border-bottom: 2px solid transparent; margin-bottom: -1px;
   transition: var(--transition);
+  display: flex; align-items: center; justify-content: center; gap: 5px;
 }
 .tab-btn:hover  { color: var(--text-primary); }
 .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+/* ── Inline SVG icon sizing ──────────────────────────────────────────────── */
+.ico { width: 16px; height: 16px; vertical-align: -3px; flex-shrink: 0; }
 
 /* ── Search & Filters ────────────────────────────────────────────────────── */
 #search-bar {
@@ -152,7 +159,9 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
 .search-input-wrap span {
   position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
   color: var(--text-muted); font-size: 14px; pointer-events: none;
+  display: flex; align-items: center;
 }
+.search-input-wrap span svg { width: 14px; height: 14px; }
 input[type="search"] {
   width: 100%; padding: 9px 12px 9px 32px;
   background: var(--bg-card); border: 1px solid var(--border);
@@ -233,17 +242,17 @@ input[type="search"]::placeholder { color: var(--text-muted); }
 
 #btn-optimize {
   width: 100%; padding: 12px;
-  background: linear-gradient(135deg, var(--accent) 0%, #3b6fd4 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, #0d9488 100%);
   border: none; border-radius: var(--radius);
   color: #fff; font-family: 'Inter', sans-serif;
   font-size: 14px; font-weight: 600;
   cursor: pointer; transition: var(--transition);
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow: 0 4px 16px rgba(79,142,247,0.4);
+  box-shadow: 0 4px 16px rgba(20,184,166,0.4);
 }
 #btn-optimize:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 6px 24px rgba(79,142,247,0.55);
+  box-shadow: 0 6px 24px rgba(20,184,166,0.55);
 }
 #btn-optimize:disabled {
   opacity: 0.4; cursor: not-allowed;
@@ -363,7 +372,7 @@ select.form-control option { background: var(--bg-card); }
   font-size: 13px; font-weight: 600;
   cursor: pointer; transition: var(--transition);
 }
-.btn-primary:hover { background: #3a7ef5; }
+.btn-primary:hover { background: #0d9488; }
 
 /* ── Login overlay ────────────────────────────────────────────────────────── */
 #login-overlay {
@@ -372,7 +381,22 @@ select.form-control option { background: var(--bg-card); }
   display: flex; align-items: center; justify-content: center;
 }
 
+/* Part 3 — Faint hexagonal molecular dot-pattern texture */
+#login-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(20,184,166,0.05) 1.5px, transparent 1.5px),
+    radial-gradient(circle, rgba(20,184,166,0.05) 1.5px, transparent 1.5px);
+  background-size: 32px 56px;
+  background-position: 0 0, 16px 28px;
+  pointer-events: none;
+}
+
 .login-card {
+  position: relative;
+  z-index: 1;
   background: var(--bg-sidebar);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -390,10 +414,11 @@ select.form-control option { background: var(--bg-card); }
 .login-logo { text-align: center; margin-bottom: 28px; }
 .login-logo .icon {
   width: 56px; height: 56px; margin: 0 auto 12px;
-  background: linear-gradient(135deg, var(--accent), #7c3aed);
+  background: linear-gradient(135deg, var(--accent), #0f766e);
   border-radius: 14px; display: flex; align-items: center; justify-content: center;
-  font-size: 26px; box-shadow: 0 8px 24px rgba(79,142,247,0.4);
+  color: #fff; box-shadow: 0 8px 24px rgba(20,184,166,0.4);
 }
+.login-logo .icon svg { width: 30px; height: 30px; }
 .login-logo h2 { font-size: 22px; font-weight: 700; }
 .login-logo p  { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
 
@@ -410,14 +435,14 @@ select.form-control option { background: var(--bg-card); }
 
 #btn-login {
   width: 100%; margin-top: 8px; padding: 13px;
-  background: linear-gradient(135deg, var(--accent) 0%, #3b6fd4 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, #0d9488 100%);
   border: none; border-radius: var(--radius-sm);
   color: #fff; font-family: 'Inter', sans-serif;
   font-size: 15px; font-weight: 600; cursor: pointer;
   transition: var(--transition);
-  box-shadow: 0 4px 16px rgba(79,142,247,0.35);
+  box-shadow: 0 4px 16px rgba(20,184,166,0.35);
 }
-#btn-login:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(79,142,247,0.5); }
+#btn-login:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(20,184,166,0.5); }
 
 .login-error {
   background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3);
@@ -459,6 +484,7 @@ select.form-control option { background: var(--bg-card); }
 }
 .map-marker:hover { transform: scale(1.15); }
 .map-marker.start { background: var(--start-color); font-size: 16px; }
+.map-marker.start svg { width: 16px; height: 16px; }
 
 /* ── Loading overlay ──────────────────────────────────────────────────────── */
 #loading-overlay {
@@ -470,13 +496,15 @@ select.form-control option { background: var(--bg-card); }
 }
 #loading-overlay.visible { display: flex; }
 
-.loading-spinner {
-  width: 48px; height: 48px;
-  border: 3px solid rgba(79,142,247,0.2);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+/* Part 2 — Signature pulse-line loading motif */
+.pulse-line { width: 180px; height: 40px; }
+.pulse-line polyline {
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
+  animation: drawPulse 1.8s ease-in-out infinite;
 }
+@keyframes drawPulse { to { stroke-dashoffset: 0; } }
+
 .loading-text { font-size: 14px; color: var(--text-secondary); }
 
 /* ── Empty state ──────────────────────────────────────────────────────────── */
@@ -484,5 +512,6 @@ select.form-control option { background: var(--bg-card); }
   text-align: center; padding: 40px 20px;
   color: var(--text-muted);
 }
-.empty-state .icon { font-size: 36px; margin-bottom: 10px; opacity: 0.4; }
+.empty-state .icon { margin-bottom: 10px; opacity: 0.4; }
+.empty-state .icon svg { width: 36px; height: 36px; }
 .empty-state p { font-size: 13px; }
