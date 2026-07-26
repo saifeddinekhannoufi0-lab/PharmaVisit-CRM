@@ -6,7 +6,10 @@ use Closure;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * Centralized Redis caching layer for PharmaVisit.
+ * Centralized caching layer for PharmaVisit.
+ *
+ * Supports both tagged stores (Redis) and untagged stores (file, array).
+ * Falls back gracefully to plain cache keys when tags are unsupported.
  *
  * Key structure:
  *   pharmavisit:doctors:{territory_id}:{filter_hash}
@@ -24,6 +27,43 @@ class CacheService
     // ─── Key Prefixes ────────────────────────────────────────────────
     private const PREFIX = 'pharmavisit';
 
+    // ─── Tag Support Detection ───────────────────────────────────────
+
+    /**
+     * Returns true if the current cache store supports tagging.
+     */
+    private static function supportsTags(): bool
+    {
+        try {
+            Cache::tags(['_probe'])->get('_probe');
+            return true;
+        } catch (\BadMethodCallException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Remember a value using tags if supported, otherwise use a plain key.
+     */
+    private static function remember(array $tags, string $key, int $ttl, Closure $callback): mixed
+    {
+        if (self::supportsTags()) {
+            return Cache::tags($tags)->remember($key, $ttl, $callback);
+        }
+
+        return Cache::remember($key, $ttl, $callback);
+    }
+
+    /**
+     * Flush a tagged group if supported, otherwise do nothing (plain cache expires naturally).
+     */
+    private static function flushTags(array $tags): void
+    {
+        if (self::supportsTags()) {
+            Cache::tags($tags)->flush();
+        }
+    }
+
     // ─── Doctor Caching ──────────────────────────────────────────────
 
     /**
@@ -33,8 +73,7 @@ class CacheService
     {
         $key = self::doctorListKey($territoryId, $filters);
 
-        return Cache::tags(self::doctorTags($territoryId))
-            ->remember($key, self::TTL_LIST, $callback);
+        return self::remember(self::doctorTags($territoryId), $key, self::TTL_LIST, $callback);
     }
 
     /**
@@ -44,8 +83,7 @@ class CacheService
     {
         $key = self::PREFIX . ":doctor:{$doctorId}";
 
-        return Cache::tags(self::doctorTags($territoryId))
-            ->remember($key, self::TTL_LIST, $callback);
+        return self::remember(self::doctorTags($territoryId), $key, self::TTL_LIST, $callback);
     }
 
     // ─── Pharmacy Caching ────────────────────────────────────────────
@@ -57,8 +95,7 @@ class CacheService
     {
         $key = self::pharmacyListKey($territoryId, $filters);
 
-        return Cache::tags(self::pharmacyTags($territoryId))
-            ->remember($key, self::TTL_LIST, $callback);
+        return self::remember(self::pharmacyTags($territoryId), $key, self::TTL_LIST, $callback);
     }
 
     // ─── Territory Stats Caching ─────────────────────────────────────
@@ -70,8 +107,7 @@ class CacheService
     {
         $key = self::PREFIX . ":territory:{$territoryId}:stats";
 
-        return Cache::tags(self::territoryStatsTags($territoryId))
-            ->remember($key, self::TTL_STATS, $callback);
+        return self::remember(self::territoryStatsTags($territoryId), $key, self::TTL_STATS, $callback);
     }
 
     // ─── Route Caching ───────────────────────────────────────────────
@@ -83,8 +119,7 @@ class CacheService
     {
         $key = self::routeKey($doctorIds, $startLocation);
 
-        return Cache::tags(['routes'])
-            ->remember($key, self::TTL_ROUTE, $callback);
+        return self::remember(['routes'], $key, self::TTL_ROUTE, $callback);
     }
 
     // ─── Invalidation ────────────────────────────────────────────────
@@ -95,7 +130,7 @@ class CacheService
      */
     public static function invalidateTerritory(int $territoryId): void
     {
-        Cache::tags(["territory:{$territoryId}"])->flush();
+        self::flushTags(["territory:{$territoryId}"]);
     }
 
     /**
@@ -103,8 +138,8 @@ class CacheService
      */
     public static function invalidateDoctors(int $territoryId): void
     {
-        Cache::tags(self::doctorTags($territoryId))->flush();
-        Cache::tags(self::territoryStatsTags($territoryId))->flush();
+        self::flushTags(self::doctorTags($territoryId));
+        self::flushTags(self::territoryStatsTags($territoryId));
     }
 
     /**
@@ -112,8 +147,8 @@ class CacheService
      */
     public static function invalidatePharmacies(int $territoryId): void
     {
-        Cache::tags(self::pharmacyTags($territoryId))->flush();
-        Cache::tags(self::territoryStatsTags($territoryId))->flush();
+        self::flushTags(self::pharmacyTags($territoryId));
+        self::flushTags(self::territoryStatsTags($territoryId));
     }
 
     /**
@@ -121,7 +156,7 @@ class CacheService
      */
     public static function invalidateAllRoutes(): void
     {
-        Cache::tags(['routes'])->flush();
+        self::flushTags(['routes']);
     }
 
     /**
@@ -129,8 +164,12 @@ class CacheService
      */
     public static function flushAll(): void
     {
-        Cache::tags(['pharmavisit'])->flush();
-        Cache::tags(['routes'])->flush();
+        if (self::supportsTags()) {
+            Cache::tags(['pharmavisit'])->flush();
+            Cache::tags(['routes'])->flush();
+        } else {
+            Cache::flush();
+        }
     }
 
     // ─── Key Builders ────────────────────────────────────────────────

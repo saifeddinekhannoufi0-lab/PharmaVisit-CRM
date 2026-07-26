@@ -272,23 +272,50 @@ function prioColor(p) {
 }
 
 // ─── Optimization ─────────────────────────────────────────────────────────────
+
+/**
+ * Get the user's current GPS position via the browser Geolocation API.
+ * Returns { lat, lng } or null if denied/unavailable.
+ */
+function getCurrentPosition() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) return resolve(null);
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      ()    => resolve(null),
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  });
+}
+
 async function optimizeRoute() {
   if (State.selectedIds.size < 1) return;
 
   const btn = document.getElementById('btn-optimize');
   btn.classList.add('loading');
-  showLoading('Optimizing your route…');
+  showLoading('Getting your location…');
 
   try {
     const doctorIds = [...State.selectedIds];
 
-    // Use map center as start, or compute average
-    const center = State.map.getCenter();
+    // Try real GPS first, fall back to map center
+    const gps = await getCurrentPosition();
+    const startLat  = gps ? gps.lat : State.map.getCenter().lat;
+    const startLng  = gps ? gps.lng : State.map.getCenter().lng;
+    const startName = gps ? 'Your Current Location' : 'Map Center (GPS unavailable)';
+
+    if (!gps) {
+      showToast('GPS unavailable — using map center as start', 'warning');
+    }
+
+    showLoading('Optimizing your route…');
+
     const result = await api('POST', '/routes/optimize', {
       doctor_ids: doctorIds,
-      start_lat:  center.lat,
-      start_lng:  center.lng,
-      start_name: 'Your Location',
+      start_lat:  startLat,
+      start_lng:  startLng,
+      start_name: startName,
     });
 
     if (!result) return;
@@ -304,6 +331,7 @@ async function optimizeRoute() {
     hideLoading();
   }
 }
+
 
 function renderOptimizedRoute(result) {
   clearMapLayers();
