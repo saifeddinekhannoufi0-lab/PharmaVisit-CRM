@@ -323,15 +323,17 @@ function initMap() {
 function dropInitialPins() {
   clearMapLayers();
 
-  const entities = State.activeTab === 'doctors' ? State.doctors : State.pharmacies;
-  const geocoded  = entities.filter(e => e.lat && e.lng);
+  // ── Show BOTH doctors and pharmacies on the map simultaneously ──
+  const allEntities = [
+    ...State.doctors.filter(e => e.lat && e.lng).map(e => ({ ...e, _type: 'doctor' })),
+    ...State.pharmacies.filter(e => e.lat && e.lng).map(e => ({ ...e, _type: 'pharmacy' })),
+  ];
 
-  if (!geocoded.length) return;
+  if (!allEntities.length) return;
 
-  // Use marker clustering for performance with 600+ markers
   const cluster = L.markerClusterGroup({
     chunkedLoading: true,
-    maxClusterRadius: 60,
+    maxClusterRadius: 55,
     showCoverageOnHover: false,
     iconCreateFunction(c) {
       const n = c.getChildCount();
@@ -344,31 +346,37 @@ function dropInitialPins() {
     },
   });
 
-  geocoded.forEach(e => {
+  allEntities.forEach(e => {
+    const isDoc = e._type === 'doctor';
+
+    // Different icon for doctors vs pharmacies
+    const iconHtml = isDoc
+      ? `<div class="map-marker prio-${e.priority ?? 'medium'}"><span class="map-marker-dot"></span></div>`
+      : `<div class="map-marker-pharmacy"><span class="map-marker-cross">✚</span></div>`;
+
     const marker = L.marker([e.lat, e.lng], {
       icon: L.divIcon({
         className: '',
-        html: `<div class="map-marker prio-${e.priority ?? 'medium'}"><span class="map-marker-dot"></span></div>`,
-        iconSize: [34, 34],
-        iconAnchor: [17, 34],
+        html: iconHtml,
+        iconSize:   isDoc ? [34, 34] : [28, 28],
+        iconAnchor: isDoc ? [17, 34] : [14, 28],
       }),
     });
 
-    const isDoc = 'specialty' in e;
-    const tag   = isDoc ? 'DOCTEUR' : 'PHARMACIE';
-    const name  = e.full_name || e.name;
-    const sub   = e.specialty || (isDoc ? 'Médecin' : 'Pharmacie');
-    const addr  = e.address  ? `<div class="pic2-row"><span>📍</span> <span>${e.address}</span></div>` : '';
-    const phone = e.phone    ? `<div class="pic2-row"><span>📞</span> <span style="color:#0284c7">${e.phone}</span></div>` : '';
+    const tag  = isDoc ? 'DOCTEUR' : 'PHARMACIE';
+    const name = e.full_name || e.name;
+    const sub  = e.specialty || (isDoc ? 'Médecin' : 'Pharmacie');
+    const addr = e.address ? `<div class="pic2-row"><span>📍</span> <span>${e.address}</span></div>` : '';
+    const phone = e.phone  ? `<div class="pic2-row"><span>📞</span> <span style="color:#0284c7">${e.phone}</span></div>` : '';
 
     marker.bindPopup(`
       <div class="pic2-tooltip">
-        <div class="pic2-tag">${tag}</div>
+        <div class="pic2-tag ${isDoc ? '' : 'pharmacy-tag'}">${tag}</div>
         <div class="pic2-name">${name}</div>
         <div class="pic2-sub">${sub}</div>
         <div class="pic2-details">${addr}${phone}</div>
-        <button class="pic2-btn" onclick="toggleSelectById(${e.id})">Ajouter à ma journée</button>
-      </div>`, { offset: [0, -28], className: 'pic2-leaflet-tooltip' });
+        <button class="pic2-btn" onclick="toggleSelectById(${e.id}, '${e._type}')">Ajouter à ma journée</button>
+      </div>`, { offset: [0, -20], className: 'pic2-leaflet-tooltip' });
 
     marker.on('click', () => showVisitPanel(e));
     cluster.addLayer(marker);
@@ -379,7 +387,11 @@ function dropInitialPins() {
   State.map.addLayer(cluster);
 }
 
-window.toggleSelectById = function(id) {
+window.toggleSelectById = function(id, type) {
+  // Switch to the right tab automatically
+  if (type && State.activeTab !== type + 's') {
+    switchTab(type + 's');
+  }
   if (State.selectedIds.has(id)) {
     State.selectedIds.delete(id);
   } else {

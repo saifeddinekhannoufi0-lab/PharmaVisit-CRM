@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
 
   <!-- App CSS -->
-  <link rel="stylesheet" href="/css/pharmavisit.css?v=5">
+  <link rel="stylesheet" href="/css/pharmavisit.css?v=6">
 </head>
 <body>
 
@@ -209,7 +209,7 @@
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
 <!-- App JS -->
-<script src="/js/pharmavisit.js?v=5"></script>
+<script src="/js/pharmavisit.js?v=6"></script>
 
 </body>
 </html>

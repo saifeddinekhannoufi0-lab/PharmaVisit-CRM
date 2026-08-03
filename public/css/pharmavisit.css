@@ -770,6 +770,33 @@ select.form-control option { background: var(--bg-card); }
   100% { transform: scale(2.5); opacity: 0; }
 }
 
+/* ── Pharmacy map marker ──────────────────────────────────────────────────── */
+.map-marker-pharmacy {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: 2px solid rgba(255,255,255,0.3);
+  box-shadow: 0 2px 8px rgba(16,185,129,0.5), 0 0 0 3px rgba(16,185,129,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s;
+}
+.map-marker-pharmacy:hover { transform: scale(1.15); }
+.map-marker-cross {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Pharmacy popup tag override */
+.pic2-tag.pharmacy-tag {
+  background: linear-gradient(90deg, #10b981, #059669);
+  color: #fff;
+}
+
 /* ── Marker Cluster Icons ─────────────────────────────────────────────────── */
 .cluster-icon {
   background: var(--accent);
