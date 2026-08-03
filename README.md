@@ -136,7 +136,7 @@ Ordered stops sent to OSRM Route API → returns GeoJSON LineString drawn on the
 |-------|------------|------|
 | Backend | Laravel 11 (PHP 8.3) | REST API, auth, Eloquent ORM |
 | Auth | Laravel Sanctum | Bearer token authentication |
-| Database | MySQL 8 | Primary data store (166 doctors, 50 pharmacies) |
+| Database | MySQL 8 | Primary data store (160 doctors, 50 pharmacies) |
 | Cache | Redis 7 | 10-min API response cache |
 | Optimizer | FastAPI (Python 3.12) | Route optimization microservice |
 | TSP Solver | Google OR-Tools | Near-optimal TSP solution |
@@ -233,7 +233,7 @@ All routes require `Authorization: Bearer {token}`.
 
 | Metric | Value |
 |--------|-------|
-| Doctors in database | 166 |
+| Doctors in database | 160 |
 | Pharmacies in database | 50 |
 | Data source | OpenStreetMap (Overpass + Nominatim) |
 | Coverage | Rabat · Sale · Temara |
