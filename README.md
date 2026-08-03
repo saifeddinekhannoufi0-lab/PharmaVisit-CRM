@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
   <img src="public/img/readme_logo.png" alt="PharmaVisit CRM Logo" width="180" />
   <h1>PharmaVisit CRM</h1>
   <p><strong>Intelligent Field CRM for Pharmaceutical Sales Representatives</strong></p>
@@ -136,7 +136,7 @@ Ordered stops sent to OSRM Route API → returns GeoJSON LineString drawn on the
 |-------|------------|------|
 | Backend | Laravel 11 (PHP 8.3) | REST API, auth, Eloquent ORM |
 | Auth | Laravel Sanctum | Bearer token authentication |
-| Database | MySQL 8 | Primary data store (651 doctors) |
+| Database | MySQL 8 | Primary data store (166 doctors, 492 pharmacies) |
 | Cache | Redis 7 | 10-min API response cache |
 | Optimizer | FastAPI (Python 3.12) | Route optimization microservice |
 | TSP Solver | Google OR-Tools | Near-optimal TSP solution |
@@ -233,8 +233,8 @@ All routes require `Authorization: Bearer {token}`.
 
 | Metric | Value |
 |--------|-------|
-| Doctors in database | 651 |
-| Pharmacies in database | 11 |
+| Doctors in database | 166 |
+| Pharmacies in database | 492 |
 | Data source | OpenStreetMap (Overpass + Nominatim) |
 | Coverage | Rabat · Sale · Temara |
 | Coordinates range | 33.94–34.02°N · -6.90–-6.82°W |
