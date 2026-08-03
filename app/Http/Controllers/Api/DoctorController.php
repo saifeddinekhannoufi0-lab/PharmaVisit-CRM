@@ -50,7 +50,7 @@ class DoctorController extends Controller
                 $query->where('city', $city);
             }
 
-            $perPage = min((int) ($request->query('per_page', 25)), 100);
+            $perPage = min((int) ($request->query('per_page', 25)), 1000);
 
             $paginated = $query->orderBy('last_name')->paginate($perPage);
 

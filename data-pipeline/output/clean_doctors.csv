@@ -1,26 +1,605 @@
-row_id,first_name,last_name,specialty,address,city,postal_code,region,phone,source
-1,Amina,Chraibi,Cardiologie,14 Avenue Mohammed V,Rabat,10000,Rabat-Salé-Kénitra,+212537123001,sample
-2,Hassan,Ouazzani,Pédiatrie,7 Rue Patrice Lumumba,Rabat,10000,Rabat-Salé-Kénitra,+212537123002,sample
-3,Fatima,El Idrissi,Médecine Générale,23 Avenue Al Amir Fal,Salé,11000,Rabat-Salé-Kénitra,+212537123003,sample
-4,Youssef,Berrada,Neurologie,45 Boulevard Hassan II,Rabat,10020,Rabat-Salé-Kénitra,+212537123004,sample
-5,Khadija,Mansouri,Gynécologie,"3 Rue Oued Fès, Agdal",Rabat,10080,Rabat-Salé-Kénitra,+212537123005,sample
-6,Houda,El Amrani,Cardiologie,13 Rue du Parc,Casablanca,20000,Casablanca-Settat,+212522123001,sample
-7,Rachid,Sebti,Neurologie,22 Boulevard Zerktouni,Casablanca,20050,Casablanca-Settat,+212522123002,sample
-8,Asmaa,El Kadiri,Gynécologie,5 Rue Atlas,Casablanca,20000,Casablanca-Settat,+212522123003,sample
-9,Kamal,Benali,Pédiatrie,17 Avenue Hassan II,Casablanca,20000,Casablanca-Settat,+212522123004,sample
-10,Mohamed,Lahlou,Ophtalmologie,18 Avenue Fal Ould Omer,Rabat,10000,Rabat-Salé-Kénitra,+212537123006,sample
-11,Nour,El Fassi,Dermatologie,34 Boulevard Mohammed V,Fès,30000,Fès-Meknès,+212535123001,sample
-12,Anas,Kettani,Médecine Générale,7 Rue Ibn Battouta,Marrakech,40000,Marrakech-Safi,+212524123001,sample
-13,Hind,Bensouda,Endocrinologie,15 Avenue Al Moukaouama,Tanger,90000,Tanger-Tétouan-Al Hoceïma,+212539123001,sample
-14,Aziz,Zniber,Chirurgie Générale,11 Boulevard Al Massira,Salé,11000,Rabat-Salé-Kénitra,+212537123007,sample
-15,Zineb,Alaoui,Rhumatologie,120 Avenue Mehdi Ben Barka,Rabat,10100,Rabat-Salé-Kénitra,+212537123008,sample
-16,Samir,Taleb,Pneumologie,8 Rue des Orangers,Agadir,80000,Souss-Massa,+212528123001,sample
-17,Leila,Cherkaoui,Pédiatrie,34 Rue Moulay Rachid,Témara,12000,Rabat-Salé-Kénitra,+212537123009,sample
-18,Mehdi,Boussaid,Médecine Interne,Avenue Ibn Sina,Rabat,10050,Rabat-Salé-Kénitra,+212537123010,sample
-19,Rim,Tazi,Endocrinologie,67 Avenue Hassan II,Rabat,10020,Rabat-Salé-Kénitra,+212537123011,sample
-20,Omar,Filali,Pneumologie,5 Rue Doukala,Rabat,10000,Rabat-Salé-Kénitra,+212537123012,sample
-21,Nadia,Benkirane,Dermatologie,55 Rue Tarik Ibn Ziad,Rabat,10000,Rabat-Salé-Kénitra,+212537123013,sample
-22,Khalid,El Ouahabi,Chirurgie Générale,3 Avenue Al Amir Sultan,Salé,11020,Rabat-Salé-Kénitra,+212537123014,sample
-23,Sara,Moujahid,Ophtalmologie,12 Boulevard Al Massira,Rabat,10000,Rabat-Salé-Kénitra,+212537123015,sample
-24,Driss,Laamari,Cardiologie,78 Rue Abou Inane,Fès,30020,Fès-Meknès,+212535123002,sample
-25,Widad,Bennis,Médecine Générale,22 Avenue des FAR,Casablanca,20100,Casablanca-Settat,+212522123005,sample
+row_id,first_name,last_name,specialty,address,city,postal_code,region,phone,source,lat,lng
+1,Pharmacie,L'Hôpital Militaire صيدلية المستشفى العسكري,Pharmacie,4 Avenue Al Arz شارع الأرز,Rabat ⵔⴱⴰⵟ الرباط,10100,Morocco,,overpass,33.9639919,-6.8701924
+2,Pharmacie,Misk صيدلية مسك,Pharmacie,Avenue Abderrahim Bouabid شارع عبد الرحيم بوعبيد,Rabat ⵔⴱⴰⵟ الرباط,10100,Morocco,,overpass,33.9632595,-6.8729779
+3,Pharmacie,Ryad صيدلية الرياض,Pharmacie,8 Avenue Annakhil شارع النخيل,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9622649,-6.8771300
+4,Pharmacie,Ibn Sina صيدلية ابن سينا,Pharmacie,78 Avenue Fal Ould Oumeir شارع فال ولد عمير,Rabat ⵔⴱⴰⵟ الرباط,10080,Morocco,,overpass,33.9962816,-6.8481761
+5,Pharmacie,Moderne الصيدلية العصرية,Pharmacie,Pharmacie Moderne الصيدلية العصرية,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0002024,-6.8468272
+6,Pharmacie,Marjane Hay Ryad صيدلية مرجان حي الرياض,Pharmacie,Rocade de Rabat الطريق السيار المداري الرباط,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9538628,-6.8525408
+7,Pharmacie,Benyahya صيدلية بنيحيى,Pharmacie,Avenue Hassan II شارع الحسن الثاني,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0059473,-6.8562210
+8,Pharmacie,Kounouz,Pharmacie,Pharmacie Kounouz,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9630866,-6.8666198
+9,Pharmacie,Et Laboratoire Zitoune صيدلية و مختبر الزيتون,Pharmacie,Rue Al Karm زنقة الكرم,Rabat,10100,Rabat-Salé-Kénitra,,overpass,33.9620870,-6.8636699
+10,Hopital,Ibn Sina /Chu Ibn Sina,Hôpital,Hopital Ibn Sina /CHU Ibn SIna,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9838968,-6.8504077
+11,Pharmacie,El Fath,Pharmacie,Pharmacie El Fath,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0480173,-6.7970992
+12,Pharmacie,Des Écoles صيدلية المدارس,Pharmacie,Rue Al Jaoutann,Rabat,10100,Rabat-Salé-Kénitra,,overpass,33.9651542,-6.8668657
+13,Hopital,Moulay Youssef,Hôpital,Hopital Moulay Youssef,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0102418,-6.8613729
+14,Pharmacie,Centre Chèques Postaux صيدلية مركز الشيكات البريدية,Pharmacie,45 Avenue Moulay Ismail شارع مولاي اسماعيل,Rabat ⵔⴱⴰⵟ الرباط,10020,Morocco,,overpass,34.0209889,-6.8267416
+15,Pharmacie,Chellah صيدلية شالة,Pharmacie,Avenue Chellah شارع شالة,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0217171,-6.8312237
+16,Pharmacie,Du Théatre صيدلية المسرح,Pharmacie,11 Rue Al Marj زنقة المرج,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0195429,-6.8310709
+17,Pharmacie,De La Tour Hassan صيدلية صومعة حسان,Pharmacie,Place de l'Unité Africaine ساحة الوحدة الإفريقية,Rabat,10020,Rabat-Salé-Kénitra,,overpass,34.0178583,-6.8290641
+18,Mohammed,V,Pharmacie,MohammedV,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0489348,-6.7994052
+19,Pharmacie,Mamounia,Pharmacie,Avenue Othman BIbn Affane,Salé,,Rabat-Salé-Kénitra,,overpass,34.0503377,-6.8005667
+20,La,Grande Pharmacie الصيدلية الكبرى,Pharmacie,17 Avenue Abou Faris Al Marini شارع أبو فارس المريني,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0163793,-6.8319284
+21,Pharmacie,Gharbia صيدلية الغربية,Pharmacie,Rue Karachi زنقة كالكوتا,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0273181,-6.8455781
+22,Pharmacie,Ibn Hajar صيدلية إبن حجر,Pharmacie,4 Rue Ibn Hajar,Rabat,10090,Rabat-Salé-Kénitra,,overpass,34.0085482,-6.8511786
+23,Pharmacie,El Irfane صيدلية العرفان,Pharmacie,شارع علال الفاسي,Rabat,10112,Rabat-Salé-Kénitra,,overpass,33.9818509,-6.8645470
+24,Polyclinique,Internationale De Rabat,Clinique,Polyclinique Internationale de Rabat,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0207477,-6.8230042
+25,Pharmacie,Des Oudayas صيدلية الأوداية,Pharmacie,Avenue Al Marsa شارع المرسى,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0295220,-6.8358024
+26,Pharmacie,Assanaoubar صيدلية الصنوبر,Pharmacie,6 Avenue Assanaoubar شارع الصنوبر,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9579230,-6.8794404
+27,Pharmacie,Borj صيدلية البرج,Pharmacie,Avenue Addolb شارع الدلب,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9475044,-6.8736322
+28,Clinique,Du Chellah,Clinique,Rue d'Annaba,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0165850,-6.8296770
+29,Pharmacie,Les Arcades صيدلية أركاد,Pharmacie,Avenue Pasteur شارع باستور,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0125082,-6.8425147
+30,Pharmacie,De Palma صيدلية بالما,Pharmacie,Avenue Moulay Abdellah,Témara تمارة,12000,Morocco,,overpass,33.9342673,-6.9439595
+31,Pharmacie,De La Capitale صيدلية العاصمة,Pharmacie,15 Rue Moulay Abdalaziz زنقة مولاي عبد العزيز,Rabat ⵕⵕⴱⴰⵟ الرباط,10000,Morocco,,overpass,34.0141694,-6.8313865
+32,Clinique,La Ménara,Clinique,Clinique La Ménara,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0143671,-6.8312643
+33,Pharmacie,Rhaouti صيدلية غوتي,Pharmacie,شارع علال الفاسي,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,overpass,33.9760080,-6.8699708
+34,Pharmacie,Descartes صيدلية ديكارت,Pharmacie,64 Avenue des Nations Unies شارع الأمم المتحدة,Rabat,10080,Rabat-Salé-Kénitra,,overpass,33.9914532,-6.8467235
+35,Pharmacie,Al Faraj صيدلية الفرج,Pharmacie,Rue Balafrej زنقة بلافريج,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0107326,-6.8564975
+36,D'Ophtamologie,Dc Rafi,Clinique,D'ophtamologie Dc Rafi,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0159318,-6.8273553
+37,Dc,Khachani,Clinique,Dc Khachani,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0156518,-6.8271189
+38,Pharmacie,Ben Omar صيدلية بن عمر,Pharmacie,Avenue Chellah شارع شالة,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,overpass,34.0154509,-6.8271485
+39,Pharmacie,Guedira صيدلية عبد الحكيم اكديرة,Pharmacie,3 Avenue Allal Ben Abdellah شارع علال بن عبد الله,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,overpass,34.0215779,-6.8363628
+40,Pharmacie,La Renaissance صيدلية النهضة,Pharmacie,Avenue Mohamed V شارع محمد الخامس,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0203254,-6.8372771
+41,Pharmacie,Al Alfiya صيدلية الألفية,Pharmacie,15 Avenue de Michlifen شارع مشليفن,Rabat,10080,Rabat-Salé-Kénitra,,overpass,33.9933940,-6.8478351
+42,Pharmacie,Ibn Khattab صيدلية بن خطاب,Pharmacie,32 Avenue Omar Ibn Khattab شارع عمر بن الخطاب,Rabat ⵔⴱⴰⵟ الرباط,10080,Morocco,,overpass,34.0023082,-6.8459085
+43,Pharmacie,Des Facultés صيدلية الكليات,Pharmacie,52 Avenue Omar Ibn Khattab شارع عمر بن الخطاب,Rabat,10090,Rabat-Salé-Kénitra,,overpass,33.9994604,-6.8445409
+44,Pharmacie,Des Nations Unies صيدلية الأمم المتحدة,Pharmacie,Rue Jabal El Ayachi زنقة جبل العياشي,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,overpass,33.9956587,-6.8455968
+45,Pharmacie,L'Oasis صيدلية الواحة,Pharmacie,8 Avenue Oqba,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0101104,-6.8436866
+46,Pharmacie,Alam صيدلية علام,Pharmacie,33 Avenue Oqba,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0082884,-6.8445817
+47,Pharmacie,Dounia Soleil صيدلية دنيا الشمس,Pharmacie,16 Rue Casablanca زنقة الدار البيضاء,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0246476,-6.8299740
+48,Pharmacie,De La Résistance صيدلية المقاومة,Pharmacie,32 Avenue Al Mouqaouama شارع المقاومة,Rabat,10040,Rabat-Salé-Kénitra,,overpass,34.0229167,-6.8462022
+49,Pharmacie,Safiya صيدلية الصافية,Pharmacie,Avenue Annakhil شارع النخيل,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9552146,-6.8656761
+50,Pharmacie,Amyris صيدلية أمرس,Pharmacie,35 Avenue Abderrahim Bouabid شارع عبد الرحيم بوعبيد,Rabat,10100,Rabat-Salé-Kénitra,,overpass,33.9664590,-6.8689394
+51,Clinique,Souissi,Clinique,Clinique Souissi,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9766467,-6.8356290
+52,Pharmacie,Al Minbat صيدلية المنبت,Pharmacie,18 Avenue Mehdi Ben Barka,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9786059,-6.8368404
+53,Fleming,Fleming,Pharmacie,Rue Sahel,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9479770,-6.8289978
+54,Pharmacie,Des Zaers صيدلية زعير,Pharmacie,Avenue Mohammed VI شارع محمد السادس,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,overpass,33.9820186,-6.8288893
+55,Pharmacie,Talha صيدلية طلحة,Pharmacie,Rue Bani Meskine زنقة بني مسكين,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9524920,-6.8294350
+56,Pharmacie,La Pinède صيدلية الصنوبر,Pharmacie,155 Avenue Mohammed VI شارع محمد السادس,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,overpass,33.9854203,-6.8282520
+57,Pharmacie,Des Ministères D'Agdal صيدلية وزارات أكدال,Pharmacie,Rue Mohamed Bel Hassan Al Wazani زنقة محمد بلحسن الوزاني,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9953600,-6.8556405
+58,Pharmacie,Ibn Tofail صيدلية ابن طفيل,Pharmacie,Avenue Assalam شارع السلام,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9937350,-6.8720219
+59,Pharmacie,Essalam صيدلية السلام,Pharmacie,Avenue Assalam شارع السلام,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9985411,-6.8699254
+60,Ya.Sin,Ya.Sin,Pharmacie,Ya.Sin,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9725938,-6.8201801
+61,Ibnou,Rochd,Clinique,Ibnou Rochd,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9879960,-6.8533347
+62,Pharmacie,C.H.U صيدلية المستشفى الجامعي,Pharmacie,16 Avenue Ibn Rochd شارع ابن رشد,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9877718,-6.8530394
+63,Pharmacie,L'Étoile صيدلية النجمة,Pharmacie,4 Rue Amir Abdelkader زنقة الأمير عبد القادر,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9900489,-6.8541423
+64,Pharmacie,Guyville Harhoura صيدلية غايفيل هرهورة,Pharmacie,Pharmacie Guyville Harhoura صيدلية غايفيل هرهورة,Témara تمارة,12000,Morocco,,overpass,33.9361065,-6.9417122
+65,Pharmacie,Oqba صيدلية عقبة,Pharmacie,62 Avenue Oqba شارع عقبة,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0031697,-6.8496954
+66,Pharmacie,Des Orangers صيدلية الليمون,Pharmacie,Pharmacie des Orangers صيدلية الليمون,Salé,,Rabat-Salé-Kénitra,,overpass,34.0527906,-6.7849912
+67,Cabinet,Dr Essadel,Médecine Générale,32 Avenue Maghreb Arabe,Rabat,10040,Rabat-Salé-Kénitra,,overpass,34.0203552,-6.8446021
+68,Clinique,Des Ambassadeurs,Clinique,Clinique des Ambassadeurs,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9618647,-6.8226646
+69,Centre,De Cardiologie Shems,Cardiologie,Centre de Cardiologie Shems,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0022276,-6.8521364
+70,Clinique,Du Bouregreg,Clinique,Rue Taza,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0209439,-6.8234519
+71,Pharmacie,Et Laboratoire Les Almohades صيدلية و مختبر الموحدين,Pharmacie,5 Rue Zagora Hassan,Rabat الرباط,10000,Morocco,,overpass,34.0206772,-6.8243041
+72,Pharmacie,L'Officine Moderne صيدلية المستوصف الحديث,Pharmacie,19 Avenue d'Alger شارع الجزائر,Rabat الرباط,10000,Morocco,,overpass,34.0174608,-6.8258189
+73,Pharmacie,Nassim Al Bahr صيدلية نسيم البحر,Pharmacie,Pharmacie Nassim Al Bahr صيدلية نسيم البحر,Témara تمارة,12000,Morocco,,overpass,33.9274329,-6.9503182
+74,Centre,De Radiologie Bouregreg,Radiologie,Centre de Radiologie Bouregreg,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0224581,-6.8255280
+75,Centre,De Pédiatrie,Clinique,Centre de Pédiatrie,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0211375,-6.8229674
+76,Centre,De Kinesitherapie,Médecine Générale,Centre De Kinesitherapie,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9338428,-6.9421844
+77,Pharmacie,Le Littoral صيدلية الساحل,Pharmacie,Avenue Abdrrahim Bouabid,Témara تمارة,12000,Morocco,+212537626425,overpass,33.9297373,-6.9465894
+78,Pharmacie,Essaada صيدلية السعادة,Pharmacie,Avenue Mohamed VI,Témara تمارة,12000,Morocco,,overpass,33.9335925,-6.9404550
+79,Pharmacie,Michlifen صيدلية مشليفن,Pharmacie,2 Avenue de Michlifen شارع مشليفن,Rabat,10080,Rabat-Salé-Kénitra,,overpass,33.9946256,-6.8505065
+80,Pharmacie,Des Cliniques صيدلية المصحات,Pharmacie,9 Rue Ouazzane زنقة وزان,Rabat الرباط,10020,Morocco,+212537203364,overpass,34.0210339,-6.8213996
+81,Pharmacie,De La Marne صيدلية مارل,Pharmacie,42 Avenue Patrice Lumumba شارع باتريس لومومبا,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,overpass,34.0140629,-6.8290191
+82,Pharmacie,Ibn El Haytam صيدلية ابن الهيثم,Pharmacie,119 Avenue Al Mouqaouama شارع المقاومة,Rabat,10000,Rabat-Salé-Kénitra,+212537734603,overpass,34.0170042,-6.8531909
+83,Pharmacie,Aya صيدلية اًية,Pharmacie,Avenue El Hachimi El Mestari زنقة الهاشمي المستاري,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0166735,-6.8567883
+84,Pharmacie,Maghrebine الصيدلية المغاربية,Pharmacie,Place des Alliés ساحة الحلفاء,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,overpass,34.0221318,-6.8497586
+85,Pharmacie,Cherqi صيدلية الشرقي,Pharmacie,Avenue Laalou شارع لعلو,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0286307,-6.8387859
+86,Pharmacie,Miramar صيدلية ميرامار,Pharmacie,Pharmacie Miramar صيدلية ميرامار,Témara تمارة,12000,Morocco,,overpass,33.9436808,-6.9340169
+87,Pharmacie,De La Côte صيدلية الشاطئ,Pharmacie,Avenue Al Kifah شارع الكفاح,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9906974,-6.8765319
+88,Pharmacie,Sayegh صيدلية الصايغ,Pharmacie,3 Avenue Al Kifah شارع الكفاح,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9904097,-6.8822260
+89,Pharmacie,La Grande Mosquée صيدلية المسجد الكبير,Pharmacie,Pharmacie la Grande Mosquée صيدلية المسجد الكبير,Témara تمارة,12000,Morocco,,overpass,33.9414093,-6.9365945
+90,Pharmacie,Zahra صيدلية زهرة,Pharmacie,12 Rue Prince Moulay Abdellah,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,overpass,34.0174629,-6.8350178
+91,Pharmacie,Al Boustane صيدلية البستان,Pharmacie,69 Avenue Al Mostakbal شارع المستقبل,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9803551,-6.8883849
+92,Pharmacie,La Vitalité صيدلية الحيوية,Pharmacie,Avenue Atthuya,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9569468,-6.8595193
+93,Pharmacie,Attannoub صيدلية التنوب,Pharmacie,Pharmacie Attannoub صيدلية التنوب,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9568429,-6.8547399
+94,Odentologie,Gendarmerie Royale,Dentiste,Odentologie Gendarmerie Royale,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9952362,-6.8516965
+95,Pharmacie,Bab Marrakech صيدلية باب مراكش,Pharmacie,Rue Al Achaari زنقة الأشعري,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0074394,-6.8481517
+96,Hôpital,Public Hay Said Hajji,Clinique,Hôpital Public Hay Said HAJJI,Salé,,Rabat-Salé-Kénitra,,overpass,34.0743862,-6.7859846
+97,Pharmacie,Hay Arrahma,Pharmacie,Avenue Ali Ben Abi Taleb شارع علي بن أبي طالب,Salé,,Rabat-Salé-Kénitra,,overpass,34.0575178,-6.7982334
+98,Cabinet,Gastro Enterology De Salé,Gastro-Entérologie,Cabinet Gastro Enterology De Salé,Rabat,,Rabat-Salé-Kénitra,+212537882572,overpass,34.0334269,-6.8232190
+99,La,Grande Pharmacie De Salé,Pharmacie,La grande Pharmacie de Salé,Rabat,,Rabat-Salé-Kénitra,+212537780012,overpass,34.0356505,-6.8238970
+100,Pharmacie,De L'Union,Pharmacie,Pharmacie de l'Union,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0366326,-6.8239893
+101,Pharmacie,Ryad Sale,Pharmacie,Pharmacie Ryad Sale,Rabat,,Rabat-Salé-Kénitra,+212537879765,overpass,34.0357828,-6.8209248
+102,Pharmacie,Fennich,Pharmacie,Pharmacie Fennich,Rabat,,Rabat-Salé-Kénitra,+212537883932,overpass,34.0412544,-6.8283229
+103,Pharmacie,Al Wifak صيدلية الوفاق,Pharmacie,3 Avenue Ibn Sina,Rabat,10090,Rabat-Salé-Kénitra,,overpass,34.0012208,-6.8512268
+104,Pharmacie,Laraki صيدلية العراقي,Pharmacie,Boulevard Gaza,Témara تمارة,12000,Morocco,,overpass,33.9230063,-6.9310203
+105,Pharmacie,Al Maghrib Al Arabi صيدلية المغرب العربي,Pharmacie,25 Avenue Maghreb Arabe شارع المغرب العربي,Rabat ⵔⴱⴰⵟ الرباط,10060,Morocco,,overpass,34.0195343,-6.8464862
+106,Pharmacie,Fellat صيدلية فلات,Pharmacie,Place de Russie ساحة روسيا,Rabat ⵔⴱⴰⵟ الرباط,10040,Morocco,,overpass,34.0195444,-6.8499448
+107,Cabinet,Dentaire عيادة طب الأسنان,Dentiste,Cabinet Dentaire عيادة طب الأسنان,Rabat,,Rabat-Salé-Kénitra,+21237205822,overpass,34.0221480,-6.8464406
+108,Dr,Taoufik Bouhmidi Généraliste,Médecine Générale,Dr Taoufik Bouhmidi Généraliste,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9953050,-6.8483379
+109,Pharmacie,Choukro Allah صيدلية شكر الله,Pharmacie,Pharmacie Choukro Allah صيدلية شكر الله,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9877056,-6.8732178
+110,Pharmacie,Al Bouchra صيدلية البشرى,Pharmacie,Avenue El Majd شارع المجد,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9791681,-6.8794588
+111,Pharmacie,Mazhar صيدلية المزار,Pharmacie,127 Avenue El Majd شارع المجد,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9753505,-6.8824050
+112,دكتورة,كريمة بن بوعزة,Médecine Générale,imm n° 9 app 10 زنقة جبل بويبلان,Rabat,,Rabat-Salé-Kénitra,+212537672367,overpass,33.9951501,-6.8455961
+113,Pharmacie,Al Andalous صيدلية الأندلس,Pharmacie,131 Avenue Mohammed VI شارع محمد السادس,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9884197,-6.8278690
+114,Dr,Benzineb Asmae Psy,Médecine Générale,15 Avenue Oqba شارع عقبة,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0045929,-6.8481239
+115,Pharmacie,Du Mausolée صيدلية الضريح,Pharmacie,8 Rue Al Mouahidine زنقة الموحدين,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,overpass,34.0237902,-6.8253315
+116,Pharmacie,Ziady صيدلية الزيادي,Pharmacie,Avenue Assalam شارع السلام,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9966312,-6.8710228
+117,Pharmacie,Jnane Souissi صيدلية جنان السويسي,Pharmacie,Rue Sahel زنقة الساحل,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9487807,-6.8433871
+118,Clinique,Rabat Zaers,Clinique,Avenue Mohammed VI,Rabat,,Rabat-Salé-Kénitra,+212537656565,overpass,34.0018731,-6.8270427
+119,Pharmacie,El Ismaili صيدلية الإسماعلي,Pharmacie,Pharmacie El Ismaili صيدلية الإسماعلي,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0450322,-6.7980612
+120,Pharmacie,Charaf,Pharmacie,Pharmacie Charaf,Salé,,Rabat-Salé-Kénitra,,overpass,34.0610442,-6.8099242
+121,Pharmacie,Salam Eddine El Ayoubi,Pharmacie,Boulevard Rahal Al Maskini,Salé,,Rabat-Salé-Kénitra,,overpass,34.0558772,-6.8098055
+122,Pharmacie,Al Firdaous,Pharmacie,Avenue D,Salé,,Rabat-Salé-Kénitra,,overpass,34.0690016,-6.7921217
+123,Pharmacie,Al Kawthar,Pharmacie,Avenue Allal Ben Abdellah,Salé,,Rabat-Salé-Kénitra,,overpass,34.0672118,-6.7943171
+124,Pharmacie,Ibn Zohr صيدلية ابن زهر,Pharmacie,Avenue Al Kifah,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9915637,-6.8681016
+125,Pharmacie,Bouchra Al Oum صيدلية بشرى الأم,Pharmacie,Avenue de Chebanate,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9840482,-6.8885078
+126,Pharmacie,Amwaj صيدلية أمواج,Pharmacie,Rue Abou Bakr Achchafii,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9800111,-6.8914063
+127,Pharmacie,Al Kawthar صيدلية الكوثر,Pharmacie,rue Inbihat,Rabat,10140,Rabat-Salé-Kénitra,,overpass,33.9812530,-6.8786686
+128,Pharmacie,Des Résidences صيدلية الإقامات,Pharmacie,Rue Al Kanari,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9736530,-6.8985156
+129,Pharmacie,Idéale صيدلية إديال,Pharmacie,Avenue El Menzeh,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9752975,-6.8925723
+130,Pharmacie,Attaissir صيدلية التيسير,Pharmacie,Pharmacie Attaissir صيدلية التيسير,Rabat,10153,Rabat-Salé-Kénitra,,overpass,33.9781106,-6.8914703
+131,Pharmacie,Sofia صيدلية صوفيا,Pharmacie,Avenue El Massira,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9709498,-6.8944170
+132,Pharmacie,El Menzeh صيدلية المنزه,Pharmacie,Avenue El Massira,Rabat,10153,Rabat-Salé-Kénitra,,overpass,33.9754894,-6.8892613
+133,Pharmacie,Al Amane صيدلية الأمان,Pharmacie,Rue Ibn Al Abbar,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9732709,-6.8874319
+134,Pharmacie,Marassa صيدلية المرسى,Pharmacie,Boulevard d'Egypte,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0251367,-6.8416741
+135,Pharmacie,Al Amana صيدلية الأمانة,Pharmacie,Avenue Hassan II,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0127439,-6.8488091
+136,Pharmacie,Diour Jamaâ صيدلية ديور الجامع,Pharmacie,Pharmacie Diour Jamaâ صيدلية ديور الجامع,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0166694,-6.8465681
+137,Pharmacie,Belmahi صيدلية بن الماحي,Pharmacie,Avenue Tonkin شارع طونكان,Rabat,10003,Rabat-Salé-Kénitra,,overpass,34.0162248,-6.8497592
+138,Pharmacie,Du Minaret صيدلية المنارة,Pharmacie,Avenue Hassan II,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0140137,-6.8480362
+139,Pharmacie,El Amine صيدلية الأمين,Pharmacie,Avenue Hassan II,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0173385,-6.8447823
+140,Pharmacie,La Corniche صيدلية الكرنيش,Pharmacie,1 Rue Addis-Abeba زنقة أديس أبابا,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0258963,-6.8485412
+141,Pharmacie,De L'Océan صيدلية المحيط,Pharmacie,54 Avenue Abdelkrim Al Khattabi شارع عبد الكريم الخطابي,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0251959,-6.8464955
+142,Parapharmacie,Parapharmacie,Pharmacie,Avenue D,Salé,,Rabat-Salé-Kénitra,,overpass,34.0629524,-6.7839141
+143,Pharmacie,Al Ikhlas,Pharmacie,5,Salé,,Rabat-Salé-Kénitra,,overpass,34.0594188,-6.7847959
+144,Pharmacie,Assounah صيدلية السنة,Pharmacie,Avenue Mohamed V شارع محمد الخامس,Rabat ⵔⴱⴰⵟ الرباط,10002,Morocco,,overpass,34.0112560,-6.8290584
+145,Pharmacie,Rania صيدلية رانيا,Pharmacie,Rue Temar,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9522471,-6.8737290
+146,Pharmacie,Les Colonnes صيدلية ليكولون,Pharmacie,15 Avenue Mohamed El Fassi شارع محمد الفاسي,Rabat ⵔⴱⴰⵟ الرباط,10010,Morocco,,overpass,34.0132496,-6.8223070
+147,Centre,Ibtissam,Clinique,Rue Zagora Hassan,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0205982,-6.8242519
+148,Unibio,- Laboratoire D'Annalyses Medicales,Laboratoire,Rue d'Annaba,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0170145,-6.8283489
+149,Pharmacie,Riad Al Otor صيدلية رياض الأطر,Pharmacie,Rue Addouma,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9512032,-6.8570328
+150,Cabinet,Medicale,Clinique,Avenue Sidi Mohammed Ben Abdellah,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0103968,-6.8596651
+151,Pharmacie,Moulay Youssef صيدلية مولاي يوسف,Pharmacie,184 Avenue Sidi Mohammed Ben Abdellah,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0066587,-6.8631591
+152,Pharmacie,Ziniber,Pharmacie,Pharmacie Ziniber,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0409161,-6.8126875
+153,Pharmacie,Du Croissant صيدلية الهلال,Pharmacie,65 Avenue Sidi Mohammed Ben Abdellah,Rabat,10052,Rabat-Salé-Kénitra,,overpass,34.0105454,-6.8595631
+154,Centre,De Biologie Agdal (Cba),Laboratoire,37 Avenue de France شارع فرنسا,Rabat,10080,Rabat-Salé-Kénitra,+212537777010,overpass,33.9968987,-6.8510860
+155,Pharmacie,Badr صيدلية بدر,Pharmacie,15 Avenue Fal Ould Oumeir,Rabat,10090,Rabat-Salé-Kénitra,,overpass,34.0039110,-6.8515426
+156,Cabinet,De Pêdiatrie,Clinique,Rue Oued Baht,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0004260,-6.8471438
+157,Pharmacie,Hay Karima,Pharmacie,Avenue Mohammed V,Salé,,Rabat-Salé-Kénitra,,overpass,34.0552061,-6.7934252
+158,Pharmacie,De L'Agdal صيدلية أكدال,Pharmacie,Rue Ibn Hanbal,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,overpass,33.9887734,-6.8480240
+159,Pharmacie,Semlali,Pharmacie,Boulevard Bocfeur Abd Karim Khatabi,Salé,,Rabat-Salé-Kénitra,,overpass,34.0607103,-6.8133232
+160,Ma,Petite Pharmacie,Pharmacie,Zankat Bouchoak,Salé,,Rabat-Salé-Kénitra,,overpass,34.0538383,-6.7917073
+161,Pharmacie,Bab Sebta,Pharmacie,Pharmacie Bab Sebta,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0428986,-6.8198450
+162,Pharmacie,Du Quartier Industriel,Pharmacie,Avenue Omar Ibn Laass,Salé,,Rabat-Salé-Kénitra,,overpass,34.0586393,-6.7889178
+163,Pharmacie,Sidi Moussa,Pharmacie,Avenue Nasser,Salé,,Rabat-Salé-Kénitra,,overpass,34.0502727,-6.8226855
+164,Pharmacie,Lahkim,Pharmacie,Pharmacie Lahkim,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0471208,-6.8239568
+165,Pharmacie,Al Osra,Pharmacie,Pharmacie al Osra,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0482115,-6.8208495
+166,Pharmacie,Hammi,Pharmacie,Avenue Ibn Al Haytem,Salé,,Rabat-Salé-Kénitra,,overpass,34.0516850,-6.7822069
+167,Cooper,Pharma,Pharmacie,Boulevard Oujada,Salé,,Rabat-Salé-Kénitra,,overpass,34.0530005,-6.8157861
+168,Pharmacie,Az-Zahra,Pharmacie,Rue Oued Roumane,Salé,,Rabat-Salé-Kénitra,,overpass,34.0518705,-6.7787817
+169,Pharmacie,Annour,Pharmacie,Avenue Ibn Al Haytem,Salé,,Rabat-Salé-Kénitra,,overpass,34.0569994,-6.7774004
+170,Pharmacie,Nour Salé,Pharmacie,Boulevard Oujada,Salé,,Rabat-Salé-Kénitra,,overpass,34.0530067,-6.8157737
+171,Parapharmacie,Raputons,Pharmacie,Boulevard Rahal Al Maskini,Salé,,Rabat-Salé-Kénitra,,overpass,34.0637245,-6.8031389
+172,Pharmacie,Moulay Idriss,Pharmacie,Rue Abed Allah Bnou Abbass,Salé,,Rabat-Salé-Kénitra,,overpass,34.0645711,-6.8066458
+173,Pharmacie,Al Jazira,Pharmacie,Boulevard Rahal Al Maskini,Salé,,Rabat-Salé-Kénitra,,overpass,34.0677573,-6.8001549
+174,Pharmacie,Anoual,Pharmacie,Avenue de L'Aviation,Salé,,Rabat-Salé-Kénitra,,overpass,34.0604448,-6.7678450
+175,Pharmacie,L'Opera,Pharmacie,Pharmacie L'Opera,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0458079,-6.8098189
+176,Laboriad,Laboriad,Laboratoire,Rue Maziata,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9693411,-6.8643415
+177,Pharmacie,Tahiri,Pharmacie,Boulevard Jbel Saghro,Salé,,Rabat-Salé-Kénitra,,overpass,34.0775797,-6.7908517
+178,Pharmacie,Taiba,Pharmacie,Boulevard Oued Alokous,Salé,,Rabat-Salé-Kénitra,,overpass,34.0813241,-6.7900255
+179,Pharmacie,Rizk,Pharmacie,Avenue 6 Novembre,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0479125,-6.8079038
+180,Pharmacie,Dar Essalam صيدلية دار السلام,Pharmacie,Rue Bani Jaber,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9792107,-6.8171898
+181,Dar,Dmana,Pharmacie,Avenue Al Massira Al Khadra,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0281209,-6.8008932
+182,Pharmacie,Bouchouk,Pharmacie,Pharmacie Bouchouk,Salé,,Rabat-Salé-Kénitra,,overpass,34.0814785,-6.7860545
+183,Pharmacie,Du Dispensaire,Pharmacie,Boulevard Jbel Tobqal,Salé,,Rabat-Salé-Kénitra,,overpass,34.0760995,-6.7843319
+184,Pharmacie,Aicha,Pharmacie,Boulevard Jbel Bounacer,Salé,,Rabat-Salé-Kénitra,,overpass,34.0743666,-6.7868015
+185,Pharmacie,Du Haut Souissi صيدلية السويسي العالي,Pharmacie,Rue Abderahmane B. Abi Baker,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9376309,-6.8141721
+186,Pharmacie,L'Enfant صيدلية الطفل,Pharmacie,Rue Mghila,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9813791,-6.8102890
+187,Pharmacie,Ibn Al Haytam,Pharmacie,Avenue Mohamed V,Salé,,Rabat-Salé-Kénitra,,overpass,34.0669030,-6.7783727
+188,Pharmacie,Du Golf صيدلية الكولف,Pharmacie,Rue Abd Elkader Rechdi,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9408540,-6.8197973
+189,Pharmacie,Essania,Pharmacie,Avenue Salah Eddine el Ayoubi,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0474325,-6.8129303
+190,Pharmacie,Nassiha,Pharmacie,Rue Al Amal,Salé,,Rabat-Salé-Kénitra,,overpass,34.0693482,-6.7823531
+191,Pharmacie,Et Laboratoire Al Hayat,Pharmacie,Avenue du Haut-Atlas,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0428108,-6.7909214
+192,Pharmacie,El Farah,Pharmacie,Avenue Ali Ben Abi Taleb شارع علي بن أبي طالب,Salé,,Rabat-Salé-Kénitra,,overpass,34.0694026,-6.7857380
+193,Pharmacie,Ilham,Pharmacie,Avenue Oued Eddahab,Salé,,Rabat-Salé-Kénitra,,overpass,34.0719210,-6.7856562
+194,Pharmacie,Inbiat,Pharmacie,Avenue Assalam,Salé,,Rabat-Salé-Kénitra,,overpass,34.0517494,-6.7908946
+195,Pharmacie,Alhan,Pharmacie,Avenue Mohamed V,Salé,,Rabat-Salé-Kénitra,,overpass,34.0532150,-6.7952733
+196,Pharmacie,Volubilis,Pharmacie,Avenue 20 Aout,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0410484,-6.7798573
+197,Pharmacie,El Ouedgi,Pharmacie,Avenue 20 Aout,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0443499,-6.7788471
+198,Pharmacie,Ikram,Pharmacie,Avenue Imam Malik,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0445566,-6.7825127
+199,Pharmacie,Safir,Pharmacie,Avenue Imam Malik,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0407105,-6.7843419
+200,Pharmacie,Lazrak,Pharmacie,Pharmacie Lazrak,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0465707,-6.7806908
+201,Pharmacie,L'Hopital,Pharmacie,Avenue Ali Ben Abi Taleb شارع علي بن أبي طالب,Salé,,Rabat-Salé-Kénitra,,overpass,34.0644811,-6.7908671
+202,Pharmacie,Al Ahbab,Pharmacie,Avenue Oued Eddahab,Salé,,Rabat-Salé-Kénitra,,overpass,34.0691315,-6.7886858
+203,Pharmacie,Zohour,Pharmacie,Avenue Omar Ibn Laass,Salé,,Rabat-Salé-Kénitra,,overpass,34.0614525,-6.7928351
+204,Pharmacie,Super Arrahma,Pharmacie,Avenue Mohamed V,Salé,,Rabat-Salé-Kénitra,,overpass,34.0618886,-6.7828037
+205,Pharmacie,Centre De Santé,Pharmacie,Rue Oued Bouregreg,Salé,,Rabat-Salé-Kénitra,,overpass,34.0667763,-6.7911668
+206,Pharmacie,Al Houda صيدلية الهدى,Pharmacie,Avenue El Farah,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9897329,-6.8107592
+207,Pharmacie,L'Olivier صيدلية الزيتونة,Pharmacie,Pharmacie l'Olivier صيدلية الزيتونة,Témara تمارة,12000,Morocco,,overpass,33.9405327,-6.8930863
+208,Pharmacie,Abouab Al Wifaq صيدلية أبواب الوفاق,Pharmacie,Pharmacie Abouab Al Wifaq صيدلية أبواب الوفاق,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9267824,-6.9291602
+209,Pharmacie,Mecca صيدلية مكة,Pharmacie,Avenue Ailanthus,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9443673,-6.8692589
+210,Docteur,Bernoussi,Médecine Générale,46 Avenue de France شارع فرنسا,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9971855,-6.8497532
+211,هاتف,هاتف,Dentiste,12 Rue des Cédriers,Rabat,11156,Rabat-Salé-Kénitra,1234123,overpass,34.0362856,-6.7944523
+212,Clinique,Dentaire Mahaj,Dentiste,Clinique Dentaire Mahaj,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9605503,-6.8714040
+213,Pharmacie,Mesk Ellil صيدلية مسك الليل,Pharmacie,Pharmacie Mesk Ellil صيدلية مسك الليل,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9474695,-6.8607684
+214,Pharmacie,Des Orangers صيدلية الليمون,Pharmacie,189 Avenue Hassan II شارع الحسن الثاني,Rabat,10040,Rabat-Salé-Kénitra,,overpass,34.0198347,-6.8425075
+215,Pharmacie,Bon Secours صيدلية العناية,Pharmacie,Rue Tchad زنقة نشاد,Rabat,10040,Rabat-Salé-Kénitra,,overpass,34.0202562,-6.8433934
+216,Cabinet,Dentaire,Dentiste,28,Rabat,,Rabat-Salé-Kénitra,+212537206619,overpass,34.0220347,-6.8281762
+217,Pharmacie,Gueliz صيدلية كليز,Pharmacie,Avenue Bouregreg,Salé El Jadida,11100,Morocco,,overpass,33.9890295,-6.7381193
+218,Pharmacie,Elixir صيدلية إلكسير,Pharmacie,Avenue H'ssaine,Salé El Jadida,11100,Morocco,,overpass,33.9869735,-6.7378151
+219,Pharmacie,Bayti صيدلية بيتي,Pharmacie,Avenue Mohamed V شارع الحسن الثاني,Salé El Jadida,11100,Morocco,,overpass,33.9879668,-6.7343864
+220,Pharmacie,Guissi صيدلية كيسي,Pharmacie,Avenue Bouregreg,Salé El Jadida,11000,Morocco,,overpass,33.9910836,-6.7351757
+221,Pharmacie,Cité Royale صيدلية الحي الملكي,Pharmacie,Avenue Atlas شارع الأطلس,Salé El Jadida,11100,Morocco,,overpass,33.9919551,-6.7403575
+222,Pharmacie,Ibn Hicham صيدلية ابن هشام,Pharmacie,Pharmacie Ibn Hicham صيدلية ابن هشام,Salé El Jadida,11100,Morocco,,overpass,33.9913245,-6.7311118
+223,Pharmacie,Yakoubi صيدلية اليعقوبي,Pharmacie,Avenue Lalla Meriem شارع للا مريم,Salé El Jadida,11100,Morocco,,overpass,33.9939277,-6.7303623
+224,Pharmacie,Al Habayb صيدلية الحبايب,Pharmacie,Avenue Wahda,Salé El Jadida,11100,Morocco,,overpass,33.9934432,-6.7357701
+225,Pharmacie,Principale الصيدلية الرئيسية,Pharmacie,Pharmacie Principale الصيدلية الرئيسية,Salé El Jadida,11100,Morocco,,overpass,33.9979868,-6.7468771
+226,Pharmacie,La Fontaine صيدلية النافورة,Pharmacie,Pharmacie la Fontaine صيدلية النافورة,Salé El Jadida,11100,Morocco,,overpass,33.9928932,-6.7427023
+227,Pharmacie,Chifaa صيدلية الشفاء,Pharmacie,Pharmacie Chifaa صيدلية الشفاء,Salé El Jadida,11102,Morocco,,overpass,33.9982345,-6.7432098
+228,Pharmacie,Centrale الصيدلية المركزية,Pharmacie,Avenue Sidi Mohamed Ben Hassan,Salé El Jadida,11100,Morocco,,overpass,33.9938770,-6.7441454
+229,Pharmacie,Sala El Jadida صيدلية سلا الجديدة,Pharmacie,Avenue Moulay Youssef شارع مولاي يوسف,Salé El Jadida,11100,Morocco,,overpass,33.9962426,-6.7450454
+230,Pharmacie,Wahiba صيدلية وهيبة,Pharmacie,Avenue Lalla Meriem شارع للا مريم,Salé El Jadida,11100,Morocco,,overpass,34.0019759,-6.7404392
+231,Pharmacie,El Maarid صيدلية المعرض,Pharmacie,Avenue Mohamed V شارع الحسن الثاني,Salé El Jadida,11102,Morocco,,overpass,33.9999034,-6.7452214
+232,Pharmacie,Mimoza صيدلية ميموزا,Pharmacie,Avenue Moulay Youssef شارع مولاي يوسف,Salé El Jadida,11100,Morocco,,overpass,33.9993447,-6.7396468
+233,Phamacie,Sebati صيدلية سباتي,Pharmacie,Phamacie Sebati صيدلية سباتي,Salé El Jadida,11100,Morocco,,overpass,34.0069161,-6.7434941
+234,Pharmacie,Athena صيدلية أثينا,Pharmacie,Pharmacie Athena صيدلية أثينا,Salé El Jadida,11100,Morocco,,overpass,34.0034180,-6.7433238
+235,Pharmacie,Rihab صيدلية رحاب,Pharmacie,Pharmacie Rihab صيدلية رحاب,Salé El Jadida,11100,Morocco,,overpass,34.0045767,-6.7459462
+236,Pharmacie,Al Arz صيدلية الأرز,Pharmacie,Avenue Lalla Meriem شارع للا مريم,Salé El Jadida,11100,Morocco,,overpass,33.9962930,-6.7328820
+237,Pharmacie,Errai صيدلية الراي,Pharmacie,Pharmacie Errai صيدلية الراي,Salé El Jadida,11100,Morocco,,overpass,34.0125781,-6.7366589
+238,Pharmacie,Al Aqsa صيدلية الأقصى,Pharmacie,Pharmacie Al Aqsa صيدلية الأقصى,Salé,11100,Rabat-Salé-Kénitra,,overpass,34.0105423,-6.7332257
+239,Pharmacie,Bouregrag صيدلية ابي رقراق,Pharmacie,Avenue Bouregreg,Salé El Jadida,11100,Morocco,,overpass,33.9945515,-6.7305609
+240,Pharmacie,Des Villas صيدلية الفيلات,Pharmacie,Pharmacie des Villas صيدلية الفيلات,Salé El Jadida,11100,Morocco,,overpass,33.9969830,-6.7300312
+241,Pharmacie,Du Myrte صيدلية الريحان,Pharmacie,Pharmacie du Myrte صيدلية الريحان,Salé El Jadida,11100,Morocco,,overpass,34.0019190,-6.7348576
+242,Pharmacie,Assabil صيدلية السبيل,Pharmacie,Pharmacie Assabil صيدلية السبيل,Salé El Jadida,11100,Morocco,,overpass,34.0008065,-6.7293940
+243,Pharmacie,Mail Central صيدلية البريد المركزي,Pharmacie,Avenue Wahda,Salé El Jadida,11100,Morocco,,overpass,33.9956835,-6.7382401
+244,Pharmacie,Al Wafae صيدلية الوفاء,Pharmacie,Pharmacie Al Wafae صيدلية الوفاء,Salé,11000,Rabat-Salé-Kénitra,,overpass,34.0239456,-6.7567668
+245,Pharmacie,Kamil صيدلية كميل,Pharmacie,Pharmacie Kamil صيدلية كميل,Salé El Jadida,11100,Morocco,,overpass,34.0178930,-6.7409602
+246,Pharmacie,Hssain صيدلية حصين,Pharmacie,Pharmacie Hssain صيدلية حصين,Salé El Jadida,11100,Morocco,,overpass,34.0195302,-6.7437123
+247,Pharmacie,Du Soleil صيدلية شمس,Pharmacie,Pharmacie du Soleil صيدلية شمس,Salé,11100,Rabat-Salé-Kénitra,,overpass,34.0251030,-6.7524119
+248,Pharmacie,Maghreb Arabe صيدلية المغرب العربي,Pharmacie,Pharmacie Maghreb Arabe صيدلية المغرب العربي,Salé El Jadida,11100,Morocco,,overpass,33.9982188,-6.7337354
+249,Pharmacie,Ambra صيدلية عنبرة,Pharmacie,Pharmacie Ambra صيدلية عنبرة,Salé El Jadida,11100,Morocco,,overpass,34.0239444,-6.7494643
+250,Pharmacie,Taiba صيدلية طيبة,Pharmacie,Rue Calibtous,Sala El Jadida,11100,Morocco,,overpass,34.0024214,-6.7217888
+251,Pharmacie,Al Abridi صيدلية العبريدي,Pharmacie,Pharmacie Al Abridi صيدلية العبريدي,Salé El Jadida,11100,Morocco,,overpass,34.0031947,-6.7467236
+252,Pharmacie,Al Andaloussia صيدلية الأندلسية,Pharmacie,Avenue Mohamed V شارع الحسن الثاني,Salé Al Jadida,11000,Morocco,,overpass,33.9955298,-6.7416676
+253,Pharmacie,Les Pyramides صيدلية الأهرامات,Pharmacie,Pharmacie Les Pyramides صيدلية الأهرامات,Salé El Jadida,11100,Morocco,,overpass,33.9994080,-6.7443113
+254,Pharmacie,Faculté صيدلية الجامعة,Pharmacie,Pharmacie Faculté صيدلية الجامعة,Salé El Jadida,14000,Morocco,,overpass,34.0158739,-6.7358220
+255,Pharmacie,Bayti,Pharmacie,Pharmacie Bayti,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9879171,-6.7344171
+256,Cabinet,D'Ophtalmologie Dr El Ghorfi Touria,Ophtalmologie,Rue Ibn Moqaffaa,Yacoub El Mansour يعقوب المنصور,10153,Morocco,,overpass,33.9764438,-6.8890890
+257,Pharmacie,Saber صيدلية صابر,Pharmacie,Pharmacie Saber صيدلية صابر,Mers El Kheir ⵄⵉⵏ ⵄⵜⵉⵇ مرس الخير,12200,Morocco,,overpass,33.8647617,-6.9331717
+258,Pharmacie,Labbayk صيدلية لبيك,Pharmacie,Pharmacie Labbayk صيدلية لبيك,Mers El Kheir ⵎⵔⵙ ⵍⵅⵉⵔ مرس الخير,12200,Morocco,,overpass,33.8637995,-6.9296526
+259,Pharmacie,Nouvelle Ville صيدلية المدينة الجديدة,Pharmacie,Pharmacie Nouvelle Ville صيدلية المدينة الجديدة,Tamesna,12200,Morocco,,overpass,33.8504085,-6.9332897
+260,Pharmacie,Al Imrane صيدلية العمران,Pharmacie,Pharmacie Al Imrane صيدلية العمران,Mers El Kheir ⵄⵉⵏ ⵄⵜⵉⵇ مرس الخير,12200,Morocco,,overpass,33.8610201,-6.9288978
+261,Pharmacie,Mers El Kheir صيدلية مرس الخير,Pharmacie,Pharmacie Mers El Kheir صيدلية مرس الخير,Mers El Kheir,12200,Morocco,,overpass,33.8708641,-6.9186411
+262,مصحة,طب الأعين الشيخ مول العينين,Clinique,مصحة طب الأعين الشيخ مول العينين,Rabat,,Rabat-Salé-Kénitra,+212537882796,overpass,34.0345106,-6.8236692
+263,Docteur,Taimi - Pédiatre,Pédiatrie,Docteur Taimi - Pédiatre,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9963339,-6.8487777
+264,Pharmacie,Jnane Zahra صيدلية جنان زهرة,Pharmacie,Pharmacie Jnane Zahra صيدلية جنان زهرة,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.8746108,-6.9783761
+265,Pharmacie,Al Hamd صيدلية الحمد,Pharmacie,Pharmacie Al Hamd صيدلية الحمد,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.8844585,-6.9678158
+266,Pharmacie,Al Jid صيدلية الجد,Pharmacie,Pharmacie Al Jid صيدلية الجد,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.8867602,-6.9646063
+267,Pharmacie,Najm صيدلية نجم,Pharmacie,Pharmacie Najm صيدلية نجم,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.8925579,-6.9606901
+268,Pharmacie,Hind صيدلية هند,Pharmacie,Pharmacie Hind صيدلية هند,Témara تمارة,12000,Morocco,,overpass,33.8959471,-6.9355343
+269,Pharmacie,La Référence صيدلية المرجع,Pharmacie,Pharmacie la Référence صيدلية المرجع,Témara تمارة,12000,Morocco,,overpass,33.8946815,-6.9319600
+270,Pharmacie,L'Amitié صيدلية الصداقة,Pharmacie,Pharmacie l'Amitié صيدلية الصداقة,Témara تمارة,12000,Morocco,,overpass,33.8966775,-6.9297096
+271,Pharmacie,Al Bouchra صيدلية البشرى,Pharmacie,Pharmacie Al Bouchra صيدلية البشرى,Témara تمارة,12000,Morocco,,overpass,33.9014891,-6.9346514
+272,Pharmacie,Annaourass صيدلية النورس,Pharmacie,Pharmacie Annaourass صيدلية النورس,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9039311,-6.9319935
+273,Phamacie,Ghouroub صيدلية الغروب,Pharmacie,Phamacie Ghouroub صيدلية الغروب,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9025831,-6.9282568
+274,Pharmacie,Centrale Annasr الصيدلية المركزية النصر,Pharmacie,Pharmacie Centrale Annasr الصيدلية المركزية النصر,Témara تمارة,12000,Morocco,,overpass,33.8995265,-6.9306125
+275,Pharmacie,Islah صيدلية إصلاح,Pharmacie,Pharmacie Islah صيدلية إصلاح,Témara تمارة,12000,Morocco,,overpass,33.9061970,-6.9343977
+276,Pharmacie,Sonia صيدلية صونية,Pharmacie,Pharmacie Sonia صيدلية صونية,Témara تمارة,12000,Morocco,,overpass,33.8906682,-6.9211785
+277,Pharmacie,La Paix صيدلية السلام,Pharmacie,Avenue Tarik Ibn Ziad شارع طارق بن زياد,Témara تمارة,12000,Morocco,,overpass,33.8996620,-6.9249127
+278,Pharmacie,Essafae صيدلية الصفاء,Pharmacie,Pharmacie Essafae صيدلية الصفاء,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9076189,-6.9236075
+279,Pharmacie,Socrate صيدلية سقراط,Pharmacie,Pharmacie Socrate صيدلية سقراط,Témara تمارة,12016,Morocco,,overpass,33.9018538,-6.9233913
+280,Pharmacie,Koutoubia صيدلية الكتبية,Pharmacie,Avenue Hamza Bnou Abdelmottaleb,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9049666,-6.9260325
+281,Pharmacie,Lamia صيدلية لمياء,Pharmacie,Pharmacie Lamia صيدلية لمياء,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9053782,-6.9230663
+282,Pharmacie,Sijilmassa صيدلية سجلماسة,Pharmacie,Pharmacie Sijilmassa صيدلية سجلماسة,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9072147,-6.9270748
+283,Pharmacie,Al Kasbah صيدلية القصبة,Pharmacie,Pharmacie Al Kasbah صيدلية القصبة,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9059939,-6.9295412
+284,Pharmacie,Amina صيدلية أمينة,Pharmacie,Pharmacie Amina صيدلية أمينة,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9134840,-6.9283621
+285,Pharmacie,Skikina صيدلية سكيكينة,Pharmacie,Pharmacie Skikina صيدلية سكيكينة,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9107361,-6.9322297
+286,Pharmacie,Atlal صيدلية أطلال,Pharmacie,Pharmacie Atlal صيدلية أطلال,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9087987,-6.9311325
+287,Pharmacie,Sables D'Or صيدلية الرمال الذهبية,Pharmacie,Pharmacie Sables d'Or صيدلية الرمال الذهبية,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9161007,-6.9708360
+288,Pharmacie,Atlantique صيدلية اطلنتيك,Pharmacie,Pharmacie Atlantique صيدلية اطلنتيك,Témara تمارة,12000,Morocco,,overpass,33.9467779,-6.9330918
+289,Pharmacie,Izdihar صيدلية إزدهار,Pharmacie,Pharmacie Izdihar صيدلية إزدهار,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9116419,-6.9698401
+290,Pharmacie,Tarik El Fellah صيدلية طريق الفلاح,Pharmacie,Pharmacie Tarik El Fellah صيدلية طريق الفلاح,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9140096,-6.9618995
+291,Pharmacie,Chatea صيدلية الشاطئ,Pharmacie,Pharmacie Chatea صيدلية الشاطئ,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9209668,-6.9620737
+292,Pharmacie,Mirador صيدلية ميرادور,Pharmacie,Pharmacie Mirador صيدلية ميرادور,Témara,12014,Rabat-Salé-Kénitra,,overpass,33.9248926,-6.9588618
+293,Pharmacie,Acima صيدلية أسيما,Pharmacie,Pharmacie Acima صيدلية أسيما,Témara تمارة,12000,Morocco,,overpass,33.9372478,-6.9393493
+294,Pharmacie,Assaka صيدلية السكة,Pharmacie,Pharmacie Assaka صيدلية السكة,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.8914394,-6.9695212
+295,Pharmacie,Mosquée Lamdouar صيدلية مسجد لمضور,Pharmacie,Pharmacie Mosquée Lamdouar صيدلية مسجد لمضور,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.8849696,-6.9866044
+296,Pharmacie,Sami صيدلية السامي,Pharmacie,Pharmacie Sami صيدلية السامي,Témara تمارة,12000,Morocco,,overpass,33.9147773,-6.9404058
+297,Pharmacie,Oum Hani صيدلية أم هاني,Pharmacie,Pharmacie Oum Hani صيدلية أم هاني,Témara تمارة,12000,Morocco,,overpass,33.9128603,-6.9373046
+298,Pharmacie,Mariman صيدلية ماريمان,Pharmacie,Pharmacie Mariman صيدلية ماريمان,Témara تمارة,12022,Morocco,,overpass,33.9182108,-6.9361179
+299,Pharmacie,Noufa صيدلية نوفا,Pharmacie,Pharmacie Noufa صيدلية نوفا,Témara تمارة,12022,Morocco,,overpass,33.9187879,-6.9337317
+300,Pharmacie,Fidaa صيدلية الفداء,Pharmacie,Pharmacie Fidaa صيدلية الفداء,Témara تمارة,12000,Morocco,,overpass,33.9270462,-6.9374179
+301,Pharmacie,Errachad صيدلية الرشاد,Pharmacie,Pharmacie Errachad صيدلية الرشاد,Témara تمارة,12000,Morocco,,overpass,33.9187315,-6.9300250
+302,Pharmacie,Attadamoun صيدلية التضامن,Pharmacie,Pharmacie Attadamoun صيدلية التضامن,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9249094,-6.9362756
+303,Pharmacie,El Fadi صيدلية الفاضي,Pharmacie,Pharmacie El Fadi صيدلية الفاضي,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9231017,-6.9286710
+304,Pharmacie,Camelia صيدلية كاميليا,Pharmacie,Pharmacie Camelia صيدلية كاميليا,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9251264,-6.9205466
+305,Pharmacie,Zamzam صيدلية زمزم,Pharmacie,Pharmacie Zamzam صيدلية زمزم,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9238885,-6.9248428
+306,Pharmacie,Kenzi Témara صيدلية كنزي تمارة,Pharmacie,Pharmacie Kenzi Témara صيدلية كنزي تمارة,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9257001,-6.9272041
+307,Pharmacie,Manar Al Wifak صيدلية منار الوفاق,Pharmacie,Pharmacie Manar Al Wifak صيدلية منار الوفاق,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9270952,-6.9325478
+308,Pharmacie,Al Woroud صيدلية الورود,Pharmacie,Pharmacie Al Woroud صيدلية الورود,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9281361,-6.9265001
+309,Pharmacie,Malak صيدلية ملاك,Pharmacie,Pharmacie Malak صيدلية ملاك,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9296684,-6.9290140
+310,Pharmacie,Cherkawa صيدلية شرقاوة,Pharmacie,Pharmacie Cherkawa صيدلية شرقاوة,Témara تمارة,12000,Morocco,,overpass,33.9374010,-6.9206480
+311,Pharmacie,Lahkim صيدلية لحكيم,Pharmacie,Pharmacie Lahkim صيدلية لحكيم,Témara تمارة,12000,Morocco,,overpass,33.8974704,-6.9206679
+312,Pharmacie,Le Cactus صيدلية الصبار,Pharmacie,Pharmacie le Cactus صيدلية الصبار,Témara تمارة,12000,Morocco,,overpass,33.8980005,-6.9170177
+313,Pharmacie,Bensaid صيدلية بنسعيد,Pharmacie,Pharmacie Bensaid صيدلية بنسعيد,Témara تمارة,12000,Morocco,,overpass,33.9016216,-6.9187741
+314,Grande,Pharmacie De Témara الصيدلية الكبرى تمارة,Pharmacie,Grande Pharmacie de Témara الصيدلية الكبرى تمارة,Témara تمارة,12000,Morocco,,overpass,33.9036090,-6.9140238
+315,Pharmacie,Oum Aicha صيدلية أم عائشة,Pharmacie,Pharmacie Oum Aicha صيدلية أم عائشة,Témara تمارة,12000,Morocco,,overpass,33.9058091,-6.9121661
+316,Pharmacie,Ghita صيدلية غيثة,Pharmacie,Pharmacie Ghita صيدلية غيثة,Témara تمارة,12000,Morocco,,overpass,33.9043250,-6.9178434
+317,Pharmacie,Al Hilal صيدلية الهلال,Pharmacie,Pharmacie Al Hilal صيدلية الهلال,Témara تمارة,12000,Morocco,,overpass,33.9066687,-6.9152836
+318,Pharmacie,Zahrat Al Amal صيدلية زهرة الأمل,Pharmacie,Pharmacie Zahrat Al Amal صيدلية زهرة الأمل,Témara تمارة,12000,Morocco,,overpass,33.9079077,-6.9086815
+319,Pharmacie,Dakar صيدلية دكار,Pharmacie,Pharmacie Dakar صيدلية دكار,Témara تمارة,12000,Morocco,,overpass,33.9108680,-6.9087569
+320,Pharmacie,Mouram صيدلية مرام,Pharmacie,Pharmacie Mouram صيدلية مرام,Témara تمارة,12000,Morocco,,overpass,33.9109904,-6.9053822
+321,Pharmacie,Anniema صيدلية النعمة,Pharmacie,Pharmacie Anniema صيدلية النعمة,Témara تمارة,12000,Morocco,,overpass,33.9137440,-6.9067290
+322,Pharmacie,Riad Fès صيدلية رياض فاس,Pharmacie,Pharmacie Riad Fès صيدلية رياض فاس,Témara تمارة,12000,Morocco,,overpass,33.9201526,-6.9003706
+323,Pharmacie,Rochdi صيدلية رشدي,Pharmacie,Pharmacie Rochdi صيدلية رشدي,Témara تمارة,12000,Morocco,,overpass,33.9217184,-6.8854504
+324,Pharmacie,Assalam صيدلية السلام,Pharmacie,Pharmacie Assalam صيدلية السلام,Témara تمارة,12000,Morocco,,overpass,33.9146273,-6.8889785
+325,Pharmacie,Al Kawthar صيدلية الكوثر,Pharmacie,Pharmacie Al Kawthar صيدلية الكوثر,Témara تمارة,12000,Morocco,,overpass,33.9157845,-6.8867194
+326,Pharmacie,Al Maarif صيدلية المعارف,Pharmacie,Pharmacie Al Maarif صيدلية المعارف,Témara تمارة,12000,Morocco,,overpass,33.9170967,-6.8904975
+327,Pharmacie,Al Ghait صيدلية الغيث,Pharmacie,Pharmacie Al Ghait صيدلية الغيث,Témara تمارة,12000,Morocco,,overpass,33.9192774,-6.8874284
+328,Pharmacie,La Santé صيدلية الصحة,Pharmacie,80 Avenue Tarik Ibn Ziad شارع طارق بن زياد,Témara تمارة,12000,Morocco,,overpass,33.9288090,-6.8909732
+329,Pharmacie,Ennassim صيدلية النسيم,Pharmacie,Pharmacie Ennassim صيدلية النسيم,Témara تمارة,12000,Morocco,,overpass,33.9262605,-6.8865728
+330,Pharmacie,De La Famille صيدلية العائلة,Pharmacie,Pharmacie de la Famille صيدلية العائلة,Témara تمارة,12000,Morocco,,overpass,33.9264648,-6.8934790
+331,Pharmacie,Naimi صيدلية النعيمي,Pharmacie,Pharmacie Naimi صيدلية النعيمي,Témara تمارة,12000,Morocco,,overpass,33.9262586,-6.8900068
+332,Pharmacie,Fatine صيدلية فاتن,Pharmacie,Boulevard Moulay Ali Cherif,Témara تمارة,12000,Morocco,,overpass,33.9242032,-6.8919994
+333,Pharmacie,Al Hay صيدلية الحي,Pharmacie,Avenue Tarik Ibn Ziad شارع طارق بن زياد,Témara تمارة,12000,Morocco,,overpass,33.9228441,-6.8974840
+334,Pharmacie,Badr صيدلية بدر,Pharmacie,Pharmacie Badr صيدلية بدر,Témara تمارة,12000,Morocco,,overpass,33.9228264,-6.8950291
+335,Pharmacie,Al Maghrib Al Arabi صيدلية المغرب العربي,Pharmacie,Boulevard des Idrissides,Témara تمارة,12000,Morocco,,overpass,33.9198499,-6.8966467
+336,Pharmacie,De La Victoire صيدلية النصر,Pharmacie,Avenue Ibn Khaldoun شارع ابن خلدون,Témara تمارة,12000,Morocco,,overpass,33.9212630,-6.8932382
+337,Pharmacie,L'Espoir صيدلية الأمل,Pharmacie,Pharmacie l'Espoir صيدلية الأمل,Témara تمارة,12006,Morocco,,overpass,33.9216662,-6.8897352
+338,Pharmacie,Al Yassmine صيدلية الياسمين,Pharmacie,Rue de Melillia,Témara تمارة,12000,Morocco,,overpass,33.9201295,-6.8913652
+339,Pharmacie,El Mostaocef صيدلية المستوصف,Pharmacie,Pharmacie El Mostaocef صيدلية المستوصف,Témara تمارة,12000,Morocco,,overpass,33.9177626,-6.8940202
+340,Pharmacie,Soundous صيدلية سندس,Pharmacie,Pharmacie Soundous صيدلية سندس,Témara تمارة,12000,Morocco,,overpass,33.9371878,-6.8849284
+341,Pharmacie,Narjis صيدلية النرجس,Pharmacie,Pharmacie Narjis صيدلية النرجس,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9405698,-6.8844553
+342,Pharmacie,Al Mamoune صيدلية المامون,Pharmacie,Pharmacie Al Mamoune صيدلية المامون,Témara تمارة,12000,Morocco,,overpass,33.9427007,-6.8834139
+343,Pharmacie,Erraha صيدلية الراحة,Pharmacie,Pharmacie Erraha صيدلية الراحة,Témara تمارة,12000,Morocco,,overpass,33.9423669,-6.8862505
+344,Pharmacie,Azur صيدلية أزور,Pharmacie,Pharmacie Azur صيدلية أزور,Témara تمارة,12000,Morocco,,overpass,33.9364125,-6.8876555
+345,Pharmacie,Rim صيدلية ريم,Pharmacie,Pharmacie Rim صيدلية ريم,Témara تمارة,12000,Morocco,,overpass,33.9403017,-6.8877409
+346,Pharmacie,El Guich صيدلية الكيش,Pharmacie,Pharmacie El Guich صيدلية الكيش,Témara تمارة,12000,Morocco,,overpass,33.9389333,-6.8866628
+347,Pharmacie,Des Cités صيدلية الإقامات,Pharmacie,Pharmacie des Cités صيدلية الإقامات,Témara تمارة,12000,Morocco,,overpass,33.9371887,-6.8933101
+348,Pharmacie,Al Anouar صيدلية الأنوار,Pharmacie,Pharmacie Al Anouar صيدلية الأنوار,Témara تمارة,12000,Morocco,,overpass,33.9390192,-6.8911083
+349,Pharmacie,Granada صيدلية غرناطة,Pharmacie,Pharmacie Granada صيدلية غرناطة,Témara تمارة,12000,Morocco,,overpass,33.9386033,-6.8951207
+350,Pharmacie,La Source صيدلية المنبع,Pharmacie,Pharmacie la Source صيدلية المنبع,Témara تمارة,12000,Morocco,,overpass,33.9344817,-6.8919746
+351,Pharmacie,Anassiha صيدلية النصيحة,Pharmacie,Pharmacie Anassiha صيدلية النصيحة,Témara تمارة,12000,Morocco,,overpass,33.9410053,-6.9004563
+352,Pharmacie,Al Masjid صيدلية المسجد,Pharmacie,Pharmacie Al Masjid صيدلية المسجد,Témara تمارة,12000,Morocco,,overpass,33.9416153,-6.8975602
+353,Pharmacie,Al Mouhafada صيدلية المحافظة,Pharmacie,Pharmacie Al Mouhafada صيدلية المحافظة,Témara تمارة,12000,Morocco,,overpass,33.9334471,-6.8948429
+354,Pharmacie,Al Farabi صيدلية الفرابي,Pharmacie,Pharmacie Al Farabi صيدلية الفرابي,Témara تمارة,12000,Morocco,,overpass,33.9366248,-6.8982848
+355,Pharmacie,Moulay Idriss صيدلية مولاي إدريس,Pharmacie,Pharmacie Moulay Idriss صيدلية مولاي إدريس,Témara تمارة,12000,Morocco,,overpass,33.9327124,-6.8980801
+356,Pharmacie,Bahia صيدلية باهية,Pharmacie,170 Avenue Moulay Idriss Ier,Témara تمارة,12000,Morocco,,overpass,33.9300581,-6.8992114
+357,Pharmacie,Bouarouss صيدلية بوعروس,Pharmacie,Pharmacie Bouarouss صيدلية بوعروس,Témara تمارة,12000,Morocco,,overpass,33.9312391,-6.9014276
+358,Pharmacie,Ibn Nafiss صيدلية ابن النفيس,Pharmacie,Boulevard Moulay Ali Cherif,Témara تمارة,12000,Morocco,,overpass,33.9305512,-6.9039631
+359,Pharmacie,Moulay Ali Cherif صيدلية مولاي علي الشريف,Pharmacie,Boulevard Moulay Ali Cherif,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9327517,-6.9071789
+360,Pharmacie,Jardins Des Oudaya صيدلية حدائق الوداية,Pharmacie,Boulevard Sahl Rhône,Témara تمارة,12000,Morocco,,overpass,33.9393475,-6.8991335
+361,Pharmacie,Al Hiba صيدلية الهبة,Pharmacie,Pharmacie Al Hiba صيدلية الهبة,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9337937,-6.9020855
+362,Pharmacie,Beni Hachem صيدلية بني هاشم,Pharmacie,Pharmacie Beni Hachem صيدلية بني هاشم,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9357349,-6.9064874
+363,Pharmacie,Macha Allah صيدلية ما شاء الله,Pharmacie,Pharmacie Macha Allah صيدلية ما شاء الله,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9343147,-6.9097087
+364,Pharmacie,El Massira صيدلية المسيرة,Pharmacie,Pharmacie El Massira صيدلية المسيرة,Témara تمارة,12000,Morocco,,overpass,33.9286568,-6.8957097
+365,Pharmacie,Al Ihssan صيدلية الإحسان,Pharmacie,Pharmacie Al Ihssan صيدلية الإحسان,Témara تمارة,12000,Morocco,,overpass,33.9303761,-6.8932609
+366,Pharmacie,Al Fajr صيدلية الفجر,Pharmacie,Boulevard Moulay Ali Cherif,Témara تمارة,12000,Morocco,,overpass,33.9272960,-6.8967799
+367,Pharmacie,2000 صيدلية,Pharmacie,Boulevard Moulay Ali Cherif,Témara تمارة,12000,Morocco,,overpass,33.9287041,-6.9000699
+368,Pharmacie,El Qods صيدلية القدس,Pharmacie,Pharmacie El Qods صيدلية القدس,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9266607,-6.9019680
+369,Pharmacie,Leila صيدلية ليلى,Pharmacie,Pharmacie Leila صيدلية ليلى,Témara تمارة,12000,Morocco,,overpass,33.9254898,-6.8994468
+370,Pharmacie,Du Centre صيدلية المركز,Pharmacie,Avenue Hassan II شارع الحسن الثاني,Témara تمارة,12000,Morocco,,overpass,33.9245592,-6.9175650
+371,Pharmacie,Du Marché صيدلية السوق,Pharmacie,Avenue Mohamed V,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9281315,-6.9079699
+372,Pharmacie,Houdaya صيدلية هوداية,Pharmacie,Pharmacie Houdaya صيدلية هوداية,Témara تمارة,12000,Morocco,,overpass,33.9212580,-6.9095421
+373,Pharmacie,El Moumen صيدلية المومن,Pharmacie,28 Avenue Mohemed Zerktouni,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9250446,-6.9086836
+374,Pharmacie,Moulay Slimane صيدلية مولاي سليمان,Pharmacie,Pharmacie Moulay Slimane صيدلية مولاي سليمان,Témara تمارة,12000,Morocco,,overpass,33.9234948,-6.9051324
+375,Pharmacie,Bakkali صيدلية البقالي,Pharmacie,Avenue Allal Ben Abdellah,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9263421,-6.9057074
+376,Pharmacie,Nahda صيدلية النهضة,Pharmacie,Avenue Mohamed Zerktouni,Témara تمارة,12000,Morocco,,overpass,33.9210433,-6.9030973
+377,Pharmacie,Tarik Ibn Ziad صيدلية طارق بن زياد,Pharmacie,Avenue Tarik Ibn Ziad شارع طارق بن زياد,Témara تمارة,12000,Morocco,,overpass,33.9186575,-6.9031235
+378,Pharmacie,Al Khiam صيدلية الخيام,Pharmacie,Avenue Moulay Rachid,Témara تمارة,12000,Morocco,,overpass,33.9187178,-6.9053563
+379,Pharmacie,De Prestige صيدلية المجد,Pharmacie,Pharmacie de Prestige صيدلية المجد,Témara تمارة,12000,Morocco,,overpass,33.9207794,-6.9063890
+380,Pharmacie,Témara صيدلية تمارة,Pharmacie,Pharmacie Témara صيدلية تمارة,Témara تمارة,12000,Morocco,,overpass,33.9252812,-6.9172712
+381,Pharmacie,Hatim صيدلية حاتم,Pharmacie,Avenue Tarik Ibn Ziad شارع طارق بن زياد,Témara تمارة,12000,Morocco,,overpass,33.9160794,-6.9064637
+382,Pharmacie,Aredouane صيدلية الرضوان,Pharmacie,Pharmacie Aredouane صيدلية الرضوان,Témara تمارة,12000,Morocco,,overpass,33.9189754,-6.9088554
+383,Pharmacie,Nouvelle الصيدلية الجديدة,Pharmacie,Rue Hassan,Témara تمارة,12000,Morocco,,overpass,33.9211395,-6.9124989
+384,Pharmacie,Fathallah صيدلية فتح الله,Pharmacie,Pharmacie Fathallah صيدلية فتح الله,Témara تمارة,12000,Morocco,,overpass,33.9160241,-6.9093014
+385,Pharmacie,Al Fouarat صيدلية الفوارات,Pharmacie,Avenue Tarik Ibn Ziad شارع طارق بن زياد,Témara تمارة,12000,Morocco,,overpass,33.9130534,-6.9107743
+386,Pharmacie,Labchir صيدلية لبشير,Pharmacie,Avenue Abdelkrim Al Khattabi,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9156295,-6.9120998
+387,Pharmacie,Abi Houraira صيدلية أبي هريرة,Pharmacie,15 Avenue du Caire,Témara تمارة,12000,Morocco,,overpass,33.9107831,-6.9155249
+388,Pharmacie,Les Urgences صيدلية المستعجلات,Pharmacie,Pharmacie les Urgences صيدلية المستعجلات,Témara تمارة,12000,Morocco,,overpass,33.9108240,-6.9132135
+389,Pharmacie,Essalama صيدلية السلامة,Pharmacie,2 Avenue Mohamed V شارع محمد الخامس,Témara تمارة,12000,Morocco,,overpass,33.9233742,-6.9138331
+390,Pharmacie,Hay Al Azrak صيدلية حي الأزرق,Pharmacie,Pharmacie Hay Al Azrak صيدلية حي الأزرق,Témara تمارة,12000,Morocco,,overpass,33.9229060,-6.9162382
+391,Pharmacie,Et Laboratoire Chifaa صيدلية و مختبر الشفاء,Pharmacie,4 Avenue Hassan II شارع الحسن الثاني,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9221981,-6.9199735
+392,Pharmacie,Al Maarifa صيدلية المعرفة,Pharmacie,Pharmacie Al Maarifa صيدلية المعرفة,Témara ⵜⵎⴰⵔⴰ تمارة,12000,Morocco,,overpass,33.9153701,-6.9224901
+393,Pharmacie,Fath El Kheir,Pharmacie,Avenue Abdelkrim Al Khattabi,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9067659,-6.9206488
+394,Pharmacie,Moulat صيدلية مولات,Pharmacie,88 Avenue Hassan I شارع الحسن الأول,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9090600,-6.9210455
+395,Pharmacie,Al Afaq,Pharmacie,Pharmacie Al Afaq,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9117790,-6.9195283
+396,Pharmacie,Mosquée Zahra صيدلية مسجد الزهراء,Pharmacie,21 Avenue Hassan I شارع الحسن الأول,Témara تمارة,12000,Morocco,,overpass,33.9112587,-6.9219571
+397,Pharmacie,Khizrane صيدلية خيزران,Pharmacie,Pharmacie Khizrane صيدلية خيزران,Témara تمارة,12000,Morocco,,overpass,33.9183439,-6.9142993
+398,Pharmacie,Ibn Sina صيدلية بن سينا,Pharmacie,1 Avenue Mohamed V شارع محمد الخامس,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9132048,-6.9242799
+399,Pharmacie,Roudani صيدلية الروداني,Pharmacie,Pharmacie Roudani صيدلية الروداني,Témara تمارة,12000,Morocco,,overpass,33.9176120,-6.9159627
+400,Pharmacie,Kenza صيدلية كنزة,Pharmacie,2 Avenue Mohamed V شارع محمد الخامس,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9204252,-6.9164897
+401,Pharmacie,Andaloussi صيدلية أندلسي,Pharmacie,62 Avenue Mohamed V شارع محمد الخامس,Témara تمارة,12000,Morocco,,overpass,33.9169582,-6.9199853
+402,Pharmacie,Echoumoue صيدلية الشموع,Pharmacie,Pharmacie Echoumoue صيدلية الشموع,Témara تمارة,12000,Morocco,,overpass,33.9141061,-6.9173491
+403,Pharmacie,Oum Kaltoum صيدلية أم كلثوم,Pharmacie,122 Avenue du Caire,Témara ⵜⵎⴰⵔⴰ تمارة,12000,Morocco,,overpass,33.9140077,-6.9209603
+404,Pharmacie,Ilias صيدلية إلياس,Pharmacie,Rue de Rabat,Témara تمارة,12000,Morocco,,overpass,33.9154505,-6.9190345
+405,Pharmacie,Aswak Assalam صيدلية أسواق السلام,Pharmacie,448 Avenue Hassan II شارع الحسن الثاني,Témara تمارة,12000,Morocco,,overpass,33.9051823,-6.9404555
+406,Pharmacie,La Liberté صيدلية الحرية,Pharmacie,2 Avenue Hassan II شارع الحسن الثاني,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9226632,-6.9194801
+407,Pharmacie,Carré Santé Beauté صيدلية الجمال و الصحة,Pharmacie,Avenue Mehdi Ben Barka,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9604086,-6.8558563
+408,Pharmacie,Ibn Toumerte صيدلية ابن تومرت,Pharmacie,40 Avenue Ibn Toumert شارع ابن تومرت,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0161602,-6.8391178
+409,Pharmacie,Ryad Andalous صيدلية رياض الأندلس,Pharmacie,Rue Morino,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9570777,-6.8831228
+410,Pharmacie,Al Baraka صيدلية البركة,Pharmacie,Zankat Oulad Hariz,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9888007,-6.8239329
+411,Pharmacie,Hay El Fath صيدلية حي الفتح,Pharmacie,شارع المسيرة,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9648165,-6.9037249
+412,Pharmacie,El Ighata صيدلية الإغاثة,Pharmacie,Pharmacie El Ighata صيدلية الإغاثة,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9669117,-6.9059580
+413,Pharmacie,Al Mountazah صيدلية المنتزه,Pharmacie,Pharmacie Al Mountazah صيدلية المنتزه,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9686741,-6.8978006
+414,Pharmacie,Al Mountalak صيدلية المنطلق,Pharmacie,Pharmacie Al Mountalak صيدلية المنطلق,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,overpass,33.9696951,-6.9008125
+415,Pharmacie,Marjolaine صيدلية مارجولين,Pharmacie,Pharmacie Marjolaine صيدلية مارجولين,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9697750,-6.9043704
+416,Pharmacie,Yacoub El Mansour صيدلية يعقوب المنصور,Pharmacie,Pharmacie Yacoub El Mansour صيدلية يعقوب المنصور,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9725882,-6.8836256
+417,Pharmacie,L'Avenir صيدلية المستقبل,Pharmacie,23 Avenue El Majd شارع المجد,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9712315,-6.8859781
+418,Pharmacie,Al Bahja صيدلية البهجة,Pharmacie,Avenue El Majd شارع المجد,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9685567,-6.8884884
+419,Pharmacie,Kasry صيدلية قصري,Pharmacie,Pharmacie Kasry صيدلية قصري,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9687435,-6.8933510
+420,Pharmacie,Al Hikma صيدلية الحكمة,Pharmacie,Pharmacie Al Hikma صيدلية الحكمة,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9707695,-6.8909279
+421,Pharmacie,Al Massira صيدلية المسيرة,Pharmacie,شارع المسيرة,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9733091,-6.8912277
+422,Pharmacie,Attine صيدلية التين,Pharmacie,830 Avenue des Far شارع الجيش الملكي,Rabat,10153,Rabat-Salé-Kénitra,,overpass,33.9772954,-6.8893143
+423,Pharmacie,Al Khawarizmi صيدلية الخوارزمي,Pharmacie,شارع المنزه,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9731035,-6.8945642
+424,Pharmacie,Lotus صيدلية لوتس,Pharmacie,Avenue des Far شارع الجيش الملكي,Rabat ⵕⵕⴱⴰⵟ الرباط,10000,Morocco,,overpass,33.9794101,-6.8954273
+425,Pharmacie,Al Azhar صيدلية الأزهر,Pharmacie,شارع المحيط الهادي,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9732030,-6.8971320
+426,Pharmacie,El Mouna صيدلية المنى,Pharmacie,Pharmacie El Mouna صيدلية المنى,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9869334,-6.8875054
+427,Pharmacie,Al Hamd صيدلية الحمد,Pharmacie,شارع المسيرة,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9896223,-6.8744720
+428,Pharmacie,Al Amal صيدلية الأمل,Pharmacie,شارع المسيرة,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9871927,-6.8756888
+429,Pharmacie,Al Kifah صيدلية الكفاح,Pharmacie,Avenue Al Kifah شارع الكفاح,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9906675,-6.8716954
+430,Pharmacie,Chbanat صيدلية الشبانات,Pharmacie,Rue Abou Zaraa Addinachqi,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9821180,-6.8913054
+431,Pharmacie,Abi Hourayra صيدلية أبي هريرة,Pharmacie,Pharmacie Abi Hourayra صيدلية أبي هريرة,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9882321,-6.8824171
+432,Pharmacie,Bouitat صيدلية البويتات,Pharmacie,Pharmacie Bouitat صيدلية البويتات,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9865506,-6.8795935
+433,Pharmacie,Ennaim صيدلية النعيم,Pharmacie,Pharmacie Ennaim صيدلية النعيم,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9889570,-6.8781018
+434,Pharmacie,Ar-Rahman صيدلية الرحمان,Pharmacie,Avenue Al Mostakbal شارع المستقبل,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9861083,-6.8822802
+435,Pharmacie,El Kouass صيدلية القواس,Pharmacie,شارع المسيرة,Rabat,10140,Rabat-Salé-Kénitra,,overpass,33.9824049,-6.8809576
+436,Pharmacie,El Mansour صيدلية المنصور,Pharmacie,Avenue Al Izdihar شارع الإزدهار,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9812502,-6.8845478
+437,Pharmacie,Ibn Baytar صيدلية بن البيطار,Pharmacie,شارع المسيرة,Rabat,10130,Rabat-Salé-Kénitra,,overpass,33.9836714,-6.8792088
+438,Pharmacie,Tarik صيدلية طارق,Pharmacie,شارع المسيرة,Rabat,10153,Rabat-Salé-Kénitra,,overpass,33.9781948,-6.8854167
+439,Pharmacie,Al Majd صيدلية المجد,Pharmacie,Pharmacie Al Majd صيدلية المجد,Rabat,10130,Rabat-Salé-Kénitra,,overpass,33.9834241,-6.8766120
+440,Pharmacie,Bekkari صيدلية البكاري,Pharmacie,Pharmacie Bekkari صيدلية البكاري,Rabat,10150,Rabat-Salé-Kénitra,,overpass,33.9783383,-6.8825148
+441,Pharmacie,Assabah صيدلية الصباح,Pharmacie,Pharmacie Assabah صيدلية الصباح,Rabat,10120,Rabat-Salé-Kénitra,,overpass,33.9925619,-6.8817746
+442,Pharmacie,Hay Al Kora صيدلية حي الكورة,Pharmacie,Pharmacie Hay Al Kora صيدلية حي الكورة,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9962381,-6.8780082
+443,Pharmacie,Ibn Rochd صيدلية ابن رشد,Pharmacie,2 Avenue Assalam شارع السلام,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0040184,-6.8656020
+444,Pharmacie,Nadia صيدلية نادية,Pharmacie,Pharmacie Nadia صيدلية نادية,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0013575,-6.8710003
+445,Pharmacie,Al Masjid صيدلية المسجد,Pharmacie,9 Avenue Sidi Mohammed Ben Abdellah شارع سيدي محمد بن عبد الله,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0025588,-6.8692028
+446,Pharmacie,Marché De Gros صيدلية سوق الجملة,Pharmacie,Pharmacie Marché de Gros صيدلية سوق الجملة,Rabat,10000,Rabat-Salé-Kénitra,,overpass,34.0042521,-6.8688539
+447,Pharmacie,El Atlas صيدلية الأطلس,Pharmacie,204 Avenue Sidi Mohammed Ben Abdellah شارع سيدي محمد بن عبد الله,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9988325,-6.8729038
+448,Pharmacie,Al Khair صيدلية الخير,Pharmacie,49 Avenue Sidi Mohammed Ben Abdellah شارع سيدي محمد بن عبد الله,Rabat,10000,Rabat-Salé-Kénitra,,overpass,33.9961903,-6.8751656
+449,Pharmacie,Hay Bouhlal صيدلية حي بوهلال,Pharmacie,43 Avenue Sidi Mohammed Ben Abdellah شارع سيدي محمد بن عبد الله,Rabat,10120,Rabat-Salé-Kénitra,,overpass,33.9938882,-6.8773241
+450,Pharmacie,Nahim صيدلية نهيم,Pharmacie,Pharmacie Nahim صيدلية نهيم,Rabat,10120,Rabat-Salé-Kénitra,,overpass,33.9945332,-6.8697116
+451,عزيزي,فاطمة,Clinique,شارع الفتح,الرباط,,Morocco,,overpass,33.9665247,-6.9026010
+452,Optique,Lazrak,Médecine Générale,Optique Lazrak,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0220244,-6.8420332
+453,عثمان,أمزيان,Médecine Générale,عثمان أمزيان,الرباط,,Morocco,,overpass,33.9694526,-6.8973246
+454,Dr.Bensouda,Abdallah Cabinet D'Urologie Et Andrologie,Urologie,17 Rue Jbel Moussa زنقة جبل موسى,Rabat,,Rabat-Salé-Kénitra,+212537670303,overpass,33.9937957,-6.8478310
+455,Dr,Imane Khachani - Cabinet De Gynécologie Obstétrique & Fertilité Hay Riad,Gynécologie,Rue Annakhil,Rabat,,Rabat-Salé-Kénitra,+212537715794,overpass,33.9596011,-6.8736368
+456,Pharmacie,Bin El Ouidane,Pharmacie,Pharmacie Bin El Ouidane,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0066391,-6.8508352
+457,Pharmacie,De Rabat,Pharmacie,Pharmacie de Rabat,Rabat,,Rabat-Salé-Kénitra,+212537707468,overpass,34.0184271,-6.8457835
+458,صيدلية,النزهة,Pharmacie,صيدلية النزهة,Rabat,,Rabat-Salé-Kénitra,+212537636684,overpass,33.9566815,-6.8171845
+459,Clinique,Vip,Clinique,Clinique VIP,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9690306,-6.8689470
+460,Centre,De Cardiologie,Clinique,CENTRE DE CARDIOLOGIE,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9698703,-6.8673722
+461,المستعجلات,المستعجلات,Hôpital,المستعجلات,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9698292,-6.8707789
+462,صيدلية,عز الدين,Pharmacie,صيدلية عز الدين,Salé,,Rabat-Salé-Kénitra,,overpass,34.0867589,-6.7817856
+463,صيدلية,الحساني Pharmacie El Hassani,Pharmacie,صيدلية الحساني Pharmacie El Hassani,Rabat,,Rabat-Salé-Kénitra,+212537832965,overpass,34.0148984,-6.7651773
+464,Pharmacie,Ennasr صيدلية النصر,Pharmacie,Pharmacie Ennasr صيدلية النصر,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0126624,-6.7648397
+465,Mutawakkil,Pharmacy صيدلية المتوكل,Pharmacie,Mutawakkil Pharmacy صيدلية المتوكل,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0168961,-6.7677242
+466,Pharmacie,Printemps,Pharmacie,Pharmacie Printemps,Rabat,,Rabat-Salé-Kénitra,+212537828686,overpass,34.0178129,-6.7652398
+467,Dr,Kamal Osman,Médecine Générale,12 Rue Benghazi زنقة بنغازي,Rabat ⵕⵕⴱⴰⵟ الرباط,10000,Morocco,+212537729522,overpass,34.0154471,-6.8321061
+468,El,Yassmine,Pharmacie,El yassmine,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9889539,-6.8143609
+469,Centre,Dentaire Ibtissamati,Dentiste,Centre Dentaire Ibtissamati,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0498977,-6.7983952
+470,Pasteur,Pasteur,Pharmacie,Pasteur,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0481748,-6.8006116
+471,صيدلية,الرياض,Pharmacie,صيدلية الرياض,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0438361,-6.8043040
+472,د.,مومن فدوى,Médecine Générale,د. مومن فدوى,Rabat,,Rabat-Salé-Kénitra,+212537410741,overpass,33.9021592,-6.9230067
+473,Docteur,Mrabet Ouafae,Dentiste,Docteur Mrabet Ouafae,Témara,,Rabat-Salé-Kénitra,+212537741111,overpass,33.9079367,-6.9250253
+474,طارق,ابن زياد,Laboratoire,طارق ابن زياد,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9043139,-6.9193509
+475,Al,Fath,Médecine Générale,Rue Ibn Katir,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9858078,-6.8881045
+476,Al,Masbah,Pharmacie,Rue Ibn Taimia,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9862189,-6.8876238
+477,Pharmacie,16 Novembre,Pharmacie,rue du 16 novembre,Rabat,,Rabat-Salé-Kénitra,+212537675669,overpass,33.9911460,-6.8489787
+478,Pharmacie,Al Balsem صيدلية البلسم,Pharmacie,Pharmacie Al Balsem صيدلية البلسم,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9215482,-6.9584707
+479,Pharmacie,Anzi,Pharmacie,Angle Avenue Hassan 2 et Rue Abbas Ibn Farnas N° 1,Rabat,10080,Rabat-Salé-Kénitra,,overpass,34.0031796,-6.8585763
+480,Rhumatologie,Rhumatologie,Hôpital,rhumatologie,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9764220,-6.8700317
+481,Centre,Dentaire Dr. Batali Mounia,Dentiste,323 Avenue Moulay Idriss Ier,Témara تمارة,12000,Morocco,+212530170408,overpass,33.9304968,-6.8971295
+482,Pharmacie,Et Parapharmacie Line,Pharmacie,Pharmacie et ParaPharmacie Line,Témara تمارة,,Morocco,+212537402506,overpass,33.9170964,-6.8990926
+483,Hôpital,Universitaire Uir,Médecine Générale,HÔPITAL UNIVERSITAIRE UIR,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9860765,-6.7272684
+484,Dr,Anas El Jabri,Dentiste,37 Rue Jabal Oukaïmeden زنقة جبل أوكايمدن,Rabat,10080,Rabat-Salé-Kénitra,,overpass,33.9954778,-6.8479049
+485,Dr.,Sebti,Dentiste,Dr. Sebti,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0180290,-6.8320013
+486,Polyclinique,Belvédère,Clinique,Polyclinique Belvédère,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0107368,-6.8416030
+487,Radiologie,Centreville,Radiologie,Radiologie Centreville,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0182512,-6.8322441
+488,Ophtalmologie,Mikou,Ophtalmologie,Ophtalmologie Mikou,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0182425,-6.8322127
+489,Centre,Des Maladies Rénales Bellevue,Médecine Générale,Centre des Maladies Rénales Bellevue,Rabat,,Rabat-Salé-Kénitra,+212537673344,overpass,33.9937023,-6.8506909
+490,Centre,De Cardiologie,Cardiologie,Centre de Cardiologie,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9927887,-6.8482533
+491,Pharmacie,Des Universités,Pharmacie,Pharmacie des Universités,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9881575,-6.8513294
+492,Docteur,Rachid Benzida,Cardiologie,Docteur Rachid Benzida,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9937843,-6.8491890
+493,Cabinet,Belghiti,Dentiste,Cabinet Belghiti,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9907130,-6.8512629
+494,Centre,Mahaj,Médecine Générale,Centre Mahaj,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9632159,-6.8662476
+495,Dr,Nadia Berbiche,Médecine Générale,Dr Nadia Berbiche,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9930939,-6.8488440
+496,Dr,Farah El Hadadi,Dermatologie,Dr Farah El Hadadi,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9929609,-6.8486422
+497,Dr.,Mohammed Himmich,Dentiste,Dr. Mohammed Himmich,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9939351,-6.8512270
+498,Para,Efficience,Pharmacie,Para Efficience,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0404449,-6.8066351
+499,Parapharmacie,Parapharmacie,Pharmacie,Rue Mohamed Triki زنقة محمد التريكي,Rabat,10090,Rabat-Salé-Kénitra,,overpass,34.0026489,-6.8575656
+500,Centre,El Mouradi-Kine,Médecine Générale,Centre EL MOURADI-KINE,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9964553,-6.8780302
+501,Pharmacie,Et Parapharmacie Sid El Abed,Pharmacie,Pharmacie et parapharmacie Sid El Abed,Harhoura هرهورة,12000,Morocco,,overpass,33.9108503,-6.9748590
+502,Bo,Sourire,Dentiste,Bo sourire,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0011979,-6.8439013
+503,Moulay,Abdellah,Hôpital,Moulay Abdellah,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0263046,-6.7535900
+504,Malak,Boukhzar,Médecine Générale,23 Avenue Al Kifah شارع الكفاح,Rabat,10120,Rabat-Salé-Kénitra,+212537690003,overpass,33.9908302,-6.8749734
+505,صيدلية,الأدارسة,Pharmacie,صيدلية الأدارسة,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9845780,-6.8168070
+506,Pharmacie,Alioua,Pharmacie,Pharmacie Alioua,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9841630,-6.8199160
+507,صيدلية,الصحة,Pharmacie,صيدلية الصحة,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9944140,-6.8156610
+508,صيدلية,فاطمة الزهراء,Pharmacie,صيدلية فاطمة الزهراء,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9914930,-6.8120670
+509,Pharmacie,Relais Des Médecins,Pharmacie,Pharmacie Relais des Médecins,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9502460,-6.8854690
+510,صيدلية,بريستيجيا,Pharmacie,صيدلية بريستيجيا,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9533110,-6.8822250
+511,Pharmacie,Secteur 15,Pharmacie,Pharmacie Secteur 15,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9522780,-6.8785360
+512,صيدلية,الرباط كورنيش,Pharmacie,صيدلية الرباط كورنيش,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0030820,-6.8719240
+513,صيدلية,أبطال,Pharmacie,صيدلية أبطال,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9829920,-6.8240540
+514,صيدلية,التقدم,Pharmacie,صيدلية التقدم,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9867080,-6.8197280
+515,Pharmacie,Rachad Takaddoum,Pharmacie,Pharmacie Rachad Takaddoum,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9836090,-6.8197240
+516,المركز,الصحي التقدم,Hôpital,المركز الصحي التقدم,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9840190,-6.8246300
+517,Pharmacie,Alem,Pharmacie,Pharmacie Alem,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9674210,-6.9025210
+518,صيدلية,غرناطة,Pharmacie,صيدلية غرناطة,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9836316,-6.8834345
+519,المركز,الصحي حصاين,Hôpital,المركز الصحي حصاين,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0197920,-6.7451550
+520,Pharmacie,Ellimoune Hssain صيدلية الليمون احصين,Pharmacie,Pharmacie Ellimoune Hssain صيدلية الليمون احصين,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0215250,-6.7522780
+521,صيدلية,القرية,Pharmacie,صيدلية القرية,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0226260,-6.7672310
+522,صيدلية,أركانة,Pharmacie,صيدلية أركانة,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0183519,-6.7471425
+523,صيدلية,النجمة,Pharmacie,صيدلية النجمة,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0191667,-6.7666389
+524,Para,Moloud,Pharmacie,Para Moloud,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9299560,-6.8992640
+525,صيدلية,ريم,Pharmacie,صيدلية ريم,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9410540,-6.8884900
+526,Hôpital,Universitaire Mohammed Vi Des Sciences Et De La Santé,Hôpital,Avenue Mohammed Ben Abdellah Regragui,Rabat ⵔⴱⴰⵟ الرباط,10100,Morocco,+212530440441,overpass,33.9807053,-6.8566012
+527,Chu,Ibn Sina (Souissi),Hôpital,CHU Ibn Sina (Souissi),Rabat,,Rabat-Salé-Kénitra,,overpass,33.9834625,-6.8511983
+528,Hôpital,Militaire Mohammed V - المستشفى العسكري محمد الخامس,Hôpital,Hôpital Militaire Mohammed V - المستشفى العسكري محمد الخامس,Rabat ⵔⴱⴰⵟ الرباط,,Morocco,,overpass,33.9697158,-6.8703091
+529,Hôpital,Des Enfants Du Chu Ibn Sina,Hôpital,Hôpital Des Enfants Du CHU Ibn Sina,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9864541,-6.8542771
+530,Maternite,Du Souissi / Chu Ibn Sina,Hôpital,Maternite du Souissi / CHU Ibn SIna,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9873368,-6.8554080
+531,Centre,De Santé,Hôpital,Centre de santé,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0457237,-6.7972527
+532,Clinique,Belvedere Centre De Cardiologie,Hôpital,Clinique Belvedere Centre De Cardiologie,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0107422,-6.8416074
+533,Nouveau,Hopital My Abdellah,Hôpital,Nouveau Hopital My Abdellah,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0262886,-6.7536010
+534,مستوصف,القرية Hôpital D'El Karia,Hôpital,Avenue Moulay Abdellah,سلا Salé,11004,Morocco,,overpass,34.0232931,-6.7668810
+535,La,Capitale,Hôpital,La Capitale,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0167844,-6.8282204
+536,Hôpital,Cheikh Zaid مستشفي الشيخ زايد بالرباط,Hôpital,Avenue Allal Fassi شارع علال الفاسي,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,+212537683848,overpass,33.9774766,-6.8696998
+537,Clinique,Atlas,Clinique,Rue Houssali,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0136649,-6.8415558
+538,Clinique,Des Orangers,Clinique,Clinique des orangers,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0174238,-6.8422696
+539,Clinique,El Amal,Hôpital,Clinique El Amal,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0130329,-6.8226153
+540,Clinique,Benjelloum,Hôpital,Clinique Benjelloum,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0151703,-6.8238999
+541,Centre,Hémodialyse Idriss Al Akbar - Dr Oualim Zouhair,Clinique,23 Avenue Tariq Ibn Ziyad شارع طارق بن زياد,Rabat ⵔⴱⴰⵟ الرباط,10020,Morocco,,overpass,34.0158258,-6.8213203
+542,Centre,De Santé Hay El Kifah المركز الصحي حي الكفاح,Médecine Générale,Centre de Santé Hay El Kifah المركز الصحي حي الكفاح,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0167829,-6.7679862
+543,Centre,De Transfusion Sanguine,Médecine Générale,Centre de Transfusion Sanguine,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9985773,-6.8620680
+544,Clinique,Agdal,Hôpital,Avenue Ibn Sina,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9956497,-6.8510137
+545,Clinique,Beauséjour,Clinique,Clinique Beauséjour,Rabat,,Rabat-Salé-Kénitra,+212537781313,overpass,34.0324632,-6.8243995
+546,Clinique,De La Vision De Rabat,Clinique,Clinique De La Vision de Rabat,Rabat,,Rabat-Salé-Kénitra,+212537676666,overpass,34.0072877,-6.8442143
+547,Clinique,Ibn Khaldoun مصحة إبن خلدون,Clinique,32 Avenue Ibn Khaldoun شارع ابن خلدون,Rabat,10090,Rabat-Salé-Kénitra,+212537776767,overpass,34.0067677,-6.8442429
+548,Clinique,Des Nations Unies,Clinique,Clinique des Nations Unies,Rabat ⵔⴱⴰⵟ الرباط,,Morocco,,overpass,33.9893353,-6.8490772
+549,Hopital,Des Enfants/ Chu Ibn Sina,Hôpital,Hopital Des Enfants/ CHU Ibn Sina,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9867479,-6.8545196
+550,Clinique,Pasteur,Clinique,Clinique Pasteur,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9464626,-6.8662661
+551,Pharmacie,Al Kasba,Pharmacie,Avenue Sidi Moussa,Salé,,Rabat-Salé-Kénitra,,overpass,34.0564026,-6.8198596
+552,Pharmacie,Ambassador,Pharmacie,Rue Ain Khalouiya زنقة عين خلوية,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9600755,-6.8196068
+553,Pharmacie,Yamina,Pharmacie,Rue Ain Khalouiya زنقة عين خلوية,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9590961,-6.8233224
+554,Pharmacie,Ibtissam,Pharmacie,Avenue Lalla Amina,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0410362,-6.8101288
+555,Pharmacie,Achouhadaa,Pharmacie,Avenue Achouhada,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0385712,-6.7920811
+556,Cabinet,Medical,Clinique,Avenue Assalam,Salé,,Rabat-Salé-Kénitra,,overpass,34.0505248,-6.7892240
+557,Pharmacie,Elamana,Pharmacie,Avenue Omar Bnou Abdelazziz,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0429026,-6.7812576
+558,Cabinet,Docteur Amar - Généraliste,Hôpital,Avenue Al Salwa,Salé سلا,11010,Morocco,,overpass,34.0459802,-6.7998223
+559,Hospital,Sidi Lahcen,Hôpital,Hospital sidi lahcen,Témara تمارة,,Morocco,,overpass,33.9044385,-6.9383922
+560,Warda-Pharmacie,Warda-Pharmacie,Pharmacie,Avenue Bir Kacem,Rabat ⵔⴱⴰⵟ الرباط,,Morocco,,overpass,33.9579784,-6.8482276
+561,Hopital,Des Spécialités / Hcu Ibn Sina,Hôpital,Hopital Des Spécialités / HCU Ibn Sina,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9820234,-6.8580191
+562,Polyclinique,Polyclinique,Hôpital,Polyclinique,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9373530,-6.9201872
+563,Hôpital,Fath El Kheir,Hôpital,Hôpital Fath El Kheir,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9063780,-6.9206231
+564,Hopital,Moulay Abdallah,Hôpital,Hopital Moulay Abdallah,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0374682,-6.8125956
+565,مستشفي,العياشي,Hôpital,مستشفي العياشي,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0346468,-6.8259071
+566,Croix,Rouge,Hôpital,Croix rouge,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0352228,-6.8242486
+567,Centre,De Dialyse Guich Oudaya,Hôpital,villa A48 résidence Ouhoud Guich oudaya,Témara تمارة,10160,Morocco,,overpass,33.9438300,-6.8848079
+568,Hôpital,Matérintés Souissi,Médecine Générale,Hôpital matérintés Souissi,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9868854,-6.8552947
+569,Hopital,Maternité Souissi,Médecine Générale,Hopital Maternité Souissi,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9871805,-6.8558771
+570,المعهد,الوطني للانكولوجيا,Hôpital,المعهد الوطني للانكلوجيا سيدي محمد بن عبد الله شارع علال الفاسي,الرباط,10000,Morocco,,overpass,33.9723284,-6.8731815
+571,Clinique,16 Novembre,Clinique,22 Avenue Ahmed Balafrej شارع أحمد بلافريج,Rabat ⵔⴱⴰⵟ الرباط,,Morocco,+212537671717,overpass,33.9802059,-6.8423539
+572,Mouradallah,Mouradallah,Pharmacie,Avenue Mohamed Al Yazidi شارع محمد اليزيدي,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9533480,-6.8695980
+573,Hôpital,Wlad Bennasser,Hôpital,Hôpital wlad bennasser,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9283820,-6.9023329
+574,Centre,De Santé Niveau 1 Al Fath,Médecine Générale,centre de santé niveau 1 AL FATH,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9858407,-6.8880823
+575,Pharmacie,Sedrati صيدلية السدراتي,Pharmacie,Pharmacie Sedrati صيدلية السدراتي,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9216086,-6.9548718
+576,Pharmacie,Regragui صيدلية الرجراجي,Pharmacie,Pharmacie Regragui صيدلية الرجراجي,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9249658,-6.9546066
+577,Pharmacie,Sid El Abed صيدلية سيد العابد,Pharmacie,Pharmacie Sid El Abed صيدلية سيد العابد,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9107817,-6.9749028
+578,Pharmacie,Vital صيدلية فيتال,Pharmacie,Pharmacie Vital صيدلية فيتال,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9170188,-6.9663375
+579,Pharmacie,Les Roches Blanches صيدلية الصخور البيضاء,Pharmacie,Pharmacie les Roches Blanches صيدلية الصخور البيضاء,Témara تمارة,12000,Morocco,+212537744707,overpass,33.9304396,-6.9510769
+580,Pharmacie,Internationale الصيدلية الدولية,Pharmacie,Pharmacie Internationale الصيدلية الدولية,Témara تمارة,12000,Morocco,,overpass,33.9219426,-6.9390991
+581,Pharmacie,Jorio صيدلية جوريو,Pharmacie,Pharmacie Jorio صيدلية جوريو,Témara تمارة,12000,Morocco,,overpass,33.9214360,-6.9342956
+582,Pharmacie,Santé صيدلية الصحة,Pharmacie,Pharmacie Santé صيدلية الصحة,Témara تمارة,12022,Morocco,,overpass,33.9208422,-6.9362284
+583,Pharmacie,Ryad El Wifak صيدلية رياض الوفاق,Pharmacie,Pharmacie Ryad El Wifak صيدلية رياض الوفاق,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9242785,-6.9336763
+584,Pharmacie,Al Moubaraka صيدلية المباركة,Pharmacie,Pharmacie Al Moubaraka صيدلية المباركة,Témara تمارة,12000,Morocco,,overpass,33.9269659,-6.9351078
+585,Pharmacie,Harhoura صيدلية هرهورة,Pharmacie,Rue Dar Essalam,Témara تمارة,12000,Morocco,,overpass,33.9402050,-6.9390632
+586,Pharmacie,Le Rivage صيدلية لوريفاج,Pharmacie,Pharmacie le Rivage صيدلية لوريفاج,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.9287877,-6.9548697
+587,Pharmacie,Bouchra Al Hamd صيدلية بشرى الحمد,Pharmacie,Pharmacie Bouchra Al Hamd صيدلية بشرى الحمد,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.8833557,-6.9715263
+588,Pharmacie,Hassouni صيدلية الحسوني,Pharmacie,Pharmacie Hassouni صيدلية الحسوني,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.8924265,-6.9653531
+589,Pharmacie,El Amal صيدلية الأمل,Pharmacie,Pharmacie El Amal صيدلية الأمل,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.8934537,-6.9554898
+590,Pharmacie,Aïn Atiq صيدلية عين عتيق,Pharmacie,Pharmacie Aïn Atiq صيدلية عين عتيق,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.8883681,-6.9715061
+591,Pharmacie,Aya صيدلية اًية,Pharmacie,Pharmacie Aya صيدلية اًية,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.8928565,-6.9729862
+592,Pharmacie,Kouchy صيدلية كوشي,Pharmacie,Pharmacie Kouchy صيدلية كوشي,Témara,12000,Rabat-Salé-Kénitra,,overpass,33.8810924,-6.9656255
+593,Plateaux,Médico-Techniques,Médecine Générale,Plateaux médico-techniques,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9856987,-6.7273952
+594,Cancérologie,Cancérologie,Médecine Générale,Cancérologie,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9860099,-6.7282810
+595,Consultations,Consultations,Médecine Générale,Consultations,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9865468,-6.7278246
+596,Ambulatoire,Ambulatoire,Médecine Générale,Ambulatoire,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9862739,-6.7275707
+597,Clinique,Dentaire Des Nations Unis,Dentiste,Clinique dentaire des nations unis,Rabat,,Rabat-Salé-Kénitra,,overpass,33.9890652,-6.8489864
+598,Parapharmacie,Univers Para,Pharmacie,parapharmacie Univers Para,Rabat,,Rabat-Salé-Kénitra,,overpass,34.0194727,-6.8256421
+599,Clinique,Ibn Sina,Clinique,Avenue Ibn Rochd شارع ابن رشد,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,nominatim,33.9888024,-6.8548723
+600,Clinique,Des Bijoux,Clinique,Zanqat Sebbahi,Rabat ⵔⴱⴰⵟ الرباط,10030,Morocco,,nominatim,34.0240708,-6.8380394
+601,Centre,D'Expertise Médical Du Personnel Navigant,Médecine Générale,Avenue Docteur Abdelkrim El Khatib,Rabat ⵔⴱⴰⵟ الرباط,10100,Morocco,,nominatim,33.9721848,-6.8706131
+602,المصحة,الدولية رياض النخيل,Médecine Générale,Avenue Annakhil شارع النخيل,Rabat ⵔⴱⴰⵟ الرباط,10104,Morocco,,nominatim,33.9499179,-6.8606514
+603,Direction,Des Médicaments Et De La Pharmacie,Pharmacie,Rue La Mfaddel Charkaoui,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,nominatim,33.9869003,-6.8578588
+604,Buvette,De La Direction Des Médicaments Et De La Pharmacie,Pharmacie,Rue La Mfaddel Charkaoui,Rabat ⵔⴱⴰⵟ الرباط,10000,Morocco,,nominatim,33.9867686,-6.8584054

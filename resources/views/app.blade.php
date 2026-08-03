@@ -6,19 +6,28 @@
   <meta name="description" content="PharmaVisit CRM — Field service routing for pharma sales reps">
   <title>PharmaVisit CRM</title>
 
-  <!-- Leaflet CSS (served locally — no SRI check needed) -->
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS (served locally) -->
   <link rel="stylesheet" href="/css/vendor/leaflet.css">
+  <!-- Leaflet MarkerCluster CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
 
   <!-- App CSS -->
-  <link rel="stylesheet" href="/css/pharmavisit.css">
+  <link rel="stylesheet" href="/css/pharmavisit.css?v=5">
 </head>
 <body>
 
 <!-- ── Login overlay ─────────────────────────────────────────────────────── -->
 <div id="login-overlay">
+  <div class="login-bg-orbs"></div>
   <div class="login-card">
     <div class="login-logo">
-      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><path d="M9 10h1.5l1-2.5 1.5 5 1-2.5H16"/></svg></div>
+      <img class="icon" src="/img/app_logo.png" alt="PharmaVisit Logo" style="object-fit: cover; border-radius: 14px;">
       <h2>PharmaVisit</h2>
       <p>Sign in to your rep dashboard</p>
     </div>
@@ -44,20 +53,25 @@
 <!-- ── Main application ───────────────────────────────────────────────────── -->
 <div id="app">
 
+  <!-- Floating Logo (visible when sidebar is collapsed) -->
+  <button id="floating-logo-btn" class="floating-logo-btn" title="Show Sidebar">
+    <img src="/img/app_logo.png" alt="Logo">
+  </button>
+
   <!-- Sidebar -->
   <aside id="sidebar">
 
     <!-- Header: logo + rep card -->
     <div id="sidebar-header">
       <div class="logo">
-        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><path d="M9 10h1.5l1-2.5 1.5 5 1-2.5H16"/></svg></div>
+        <img class="logo-icon" src="/img/app_logo.png" alt="PharmaVisit Logo" style="object-fit: cover; border-radius: var(--radius-sm);">
         <div class="logo-text">
           <h1>PharmaVisit</h1>
           <p>Field Rep Dashboard</p>
         </div>
       </div>
       <div class="rep-card">
-        <div class="rep-avatar" id="rep-initials">?</div>
+        <img class="rep-avatar" src="/img/rep_avatar.png" alt="Rep Avatar" style="object-fit: cover;">
         <div class="rep-info">
           <div class="rep-name" id="rep-name">Loading…</div>
           <div class="rep-territory" id="rep-territory">—</div>
@@ -80,6 +94,13 @@
         <div class="stat-value" id="stat-reps">—</div>
         <div class="stat-label">Reps</div>
       </div>
+    </div>
+
+    <!-- Location status indicator -->
+    <div id="location-status" class="location-status loc-status-requesting">
+      <span class="loc-icon">⏳</span>
+      <span class="loc-text">Getting your location…</span>
+      <span class="loc-actions"></span>
     </div>
 
     <!-- Tabs -->
@@ -133,6 +154,21 @@
       <h3 id="visit-panel-name">Doctor Name</h3>
       <p class="sub" id="visit-panel-sub">Specialty · City</p>
 
+      <div class="visit-panel-contact">
+        <div class="contact-item" id="visit-panel-address-row">
+          <svg class="ico text-prio-high" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span id="visit-panel-address"></span>
+        </div>
+        <div class="contact-item" id="visit-panel-phone-row">
+          <svg class="ico text-prio-high" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <a href="#" id="visit-panel-phone" class="text-accent" style="text-decoration:none;"></a>
+        </div>
+        <div class="contact-item" id="visit-panel-coords-row">
+          <svg class="ico text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+          <span id="visit-panel-coords"></span>
+        </div>
+      </div>
+
       <div class="form-row">
         <div class="form-group" style="flex:2">
           <label for="visit-notes">Visit notes</label>
@@ -166,13 +202,14 @@
 <!-- Toast container -->
 <div id="toast-container"></div>
 
-<!-- Leaflet JS (served locally — no SRI/CDN issues) -->
+<!-- Leaflet JS (served locally) -->
 <script src="/js/vendor/leaflet.js"></script>
-<!-- Bridge: normalize export name (some Leaflet builds export window.leaflet instead of window.L) -->
 <script>if (typeof L === 'undefined' && window.leaflet) { window.L = window.leaflet; }</script>
+<!-- Leaflet MarkerCluster JS -->
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
 <!-- App JS -->
-<script src="/js/pharmavisit.js"></script>
+<script src="/js/pharmavisit.js?v=5"></script>
 
 </body>
 </html>

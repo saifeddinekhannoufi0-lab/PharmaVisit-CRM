@@ -25,3 +25,17 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Data pipeline scratch / test scripts
+test_nominatim.py
+test_nominatim.json
+test_overpass.py
+test_overpass_2.py
+test_overpass_urllib.py
+test_regex.php
+
+# Duplicate output folder (artifact of path bug)
+data-pipeline/data-pipeline/
+
+# Agent skills (IDE-specific)
+.agent/

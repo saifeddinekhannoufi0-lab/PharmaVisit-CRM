@@ -19,7 +19,13 @@ const State = {
   markers:     [],
   routeLayer:  null,
   map:         null,
-  activePanel: null,   // doctor currently in visit panel
+  activePanel: null,
+  userLocation: null,        // { lat, lng, name, type, accuracy }
+  locationMarker: null,      // Leaflet marker for user position
+  _accuracyCircle: null,     // Leaflet circle for GPS accuracy radius
+  _gpsWatchId: null,         // navigator.geolocation.watchPosition handle
+  _clusterGroup: null,       // Leaflet.markercluster group
+  settingStartLocation: false,
 };
 
 // ─── API helper ───────────────────────────────────────────────────────────────
@@ -100,22 +106,52 @@ async function bootstrap() {
 async function initDashboard() {
   renderRepCard();
 
-  // Load territory + doctors + pharmacies in parallel
-  const [territory, doctors, pharmacies] = await Promise.all([
-    api('GET', '/territory'),
-    api('GET', '/doctors?per_page=100'),
-    api('GET', '/pharmacies?per_page=100'),
+  // Load territory first, then fetch ALL doctors + pharmacies (paginated)
+  const territory = await api('GET', '/territory');
+  State.territory = territory;
+
+  // Fetch all pages in parallel using per_page=500
+  const [doctors, pharmacies] = await Promise.all([
+    fetchAllPages('/doctors', 500),
+    fetchAllPages('/pharmacies', 500),
   ]);
 
-  State.territory  = territory;
-  State.doctors    = doctors?.data  ?? [];
-  State.pharmacies = pharmacies?.data ?? [];
+  State.doctors    = doctors;
+  State.pharmacies = pharmacies;
 
   renderStats();
   renderEntityList();
 
   // Drop all doctor pins on the map by default
   dropInitialPins();
+
+  // Proactively request user location on dashboard load
+  requestUserLocation();
+}
+
+/**
+ * Fetch all pages from a paginated API endpoint.
+ * Returns a flat array of all items across all pages.
+ */
+async function fetchAllPages(endpoint, perPage = 500) {
+  const firstPage = await api('GET', `${endpoint}?per_page=${perPage}&page=1`);
+  if (!firstPage) return [];
+
+  const items = [...(firstPage.data ?? [])];
+  const lastPage = firstPage.last_page ?? 1;
+
+  // Fetch remaining pages in parallel if there are more
+  if (lastPage > 1) {
+    const pageNums = Array.from({ length: lastPage - 1 }, (_, i) => i + 2);
+    const pages = await Promise.all(
+      pageNums.map(p => api('GET', `${endpoint}?per_page=${perPage}&page=${p}`))
+    );
+    for (const page of pages) {
+      if (page?.data) items.push(...page.data);
+    }
+  }
+
+  return items;
 }
 
 // ─── Render rep card ──────────────────────────────────────────────────────────
@@ -123,8 +159,10 @@ function renderRepCard() {
   const u = State.user;
   document.getElementById('rep-name').textContent      = u.name;
   document.getElementById('rep-territory').textContent = u.territory?.name ?? '—';
-  document.getElementById('rep-initials').textContent  =
-    u.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  const initialsEl = document.getElementById('rep-initials');
+  if (initialsEl) {
+    initialsEl.textContent = u.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  }
 }
 
 // ─── Stats bar ────────────────────────────────────────────────────────────────
@@ -137,15 +175,15 @@ function renderStats() {
 
 // ─── Entity list ──────────────────────────────────────────────────────────────
 function renderEntityList(filter = '') {
-  const list    = document.getElementById('entity-list');
+  const list     = document.getElementById('entity-list');
   const entities = State.activeTab === 'doctors' ? State.doctors : State.pharmacies;
 
-  const filtered = filter
+  const q = filter.toLowerCase();
+  const filtered = q
     ? entities.filter(e => {
         const name = (e.full_name ?? e.name ?? '').toLowerCase();
         const spec = (e.specialty ?? '').toLowerCase();
         const city = (e.city ?? '').toLowerCase();
-        const q    = filter.toLowerCase();
         return name.includes(q) || spec.includes(q) || city.includes(q);
       })
     : entities;
@@ -155,9 +193,42 @@ function renderEntityList(filter = '') {
     return;
   }
 
-  list.innerHTML = filtered.map(e => buildEntityCard(e)).join('');
+  const isDocTab = State.activeTab === 'doctors';
 
-  // Re-check selected state
+  // Group by specialty / city
+  const grouped = {};
+  filtered.forEach(e => {
+    const key = isDocTab ? (e.specialty || 'Unknown Specialty') : (e.city || 'Unknown City');
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(e);
+  });
+
+  const groups = Object.keys(grouped).sort();
+
+  // Build HTML using DocumentFragment via a temp div for performance
+  const frag = document.createDocumentFragment();
+  const wrapper = document.createElement('div');
+
+  // Expand only the first group; collapse all others by default
+  groups.forEach((groupName, index) => {
+    const catId    = `cat-${index}`;
+    const isOpen   = index === 0 || !!q; // open first group, or all when searching
+    const rotStyle = isOpen ? '' : 'transform:rotate(-90deg)';
+    const dispStyle = isOpen ? 'block' : 'none';
+
+    wrapper.innerHTML += `
+      <div class="category-header" onclick="toggleCategory('${catId}')">
+        <div>${groupName} <span class="cat-count">(${grouped[groupName].length})</span></div>
+        <svg id="icon-${catId}" class="cat-chevron" style="${rotStyle}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div id="${catId}" style="display:${dispStyle}">
+        ${grouped[groupName].map(e => buildEntityCard(e)).join('')}
+      </div>`;
+  });
+
+  list.innerHTML = wrapper.innerHTML;
+
+  // Restore checkbox states
   list.querySelectorAll('.entity-checkbox').forEach(cb => {
     cb.checked = State.selectedIds.has(parseInt(cb.dataset.id));
     cb.closest('.entity-item').classList.toggle('selected', cb.checked);
@@ -165,6 +236,18 @@ function renderEntityList(filter = '') {
 
   updateOptimizeButton();
 }
+
+window.toggleCategory = function(catId) {
+  const el = document.getElementById(catId);
+  const icon = document.getElementById(`icon-${catId}`);
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+    if (icon) icon.style.transform = 'rotate(0deg)';
+  } else {
+    el.style.display = 'none';
+    if (icon) icon.style.transform = 'rotate(-90deg)';
+  }
+};
 
 function buildEntityCard(e) {
   const isDoc  = State.activeTab === 'doctors';
@@ -224,9 +307,11 @@ function switchTab(tab) {
 // ─── Map ──────────────────────────────────────────────────────────────────────
 function initMap() {
   State.map = L.map('map', {
-    zoomControl: true,
+    zoomControl: false,
     attributionControl: true,
   }).setView([33.97, -6.85], 12);
+
+  L.control.zoom({ position: 'bottomright' }).addTo(State.map);
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -239,27 +324,77 @@ function dropInitialPins() {
   clearMapLayers();
 
   const entities = State.activeTab === 'doctors' ? State.doctors : State.pharmacies;
-  entities.forEach(e => {
-    if (!e.lat || !e.lng) return;
+  const geocoded  = entities.filter(e => e.lat && e.lng);
 
+  if (!geocoded.length) return;
+
+  // Use marker clustering for performance with 600+ markers
+  const cluster = L.markerClusterGroup({
+    chunkedLoading: true,
+    maxClusterRadius: 60,
+    showCoverageOnHover: false,
+    iconCreateFunction(c) {
+      const n = c.getChildCount();
+      const size = n < 10 ? 32 : n < 100 ? 40 : 48;
+      return L.divIcon({
+        html: `<div class="cluster-icon" style="width:${size}px;height:${size}px;line-height:${size}px">${n}</div>`,
+        className: '',
+        iconSize: [size, size],
+      });
+    },
+  });
+
+  geocoded.forEach(e => {
     const marker = L.marker([e.lat, e.lng], {
       icon: L.divIcon({
         className: '',
-        html: `<div class="map-marker prio-${e.priority ?? 'medium'}" style="background:${prioColor(e.priority)}">
-                 <span style="font-size:9px">+</span>
-               </div>`,
+        html: `<div class="map-marker prio-${e.priority ?? 'medium'}"><span class="map-marker-dot"></span></div>`,
         iconSize: [34, 34],
-        iconAnchor: [17, 17],
+        iconAnchor: [17, 34],
       }),
-    }).addTo(State.map);
+    });
+
+    const isDoc = 'specialty' in e;
+    const tag   = isDoc ? 'DOCTEUR' : 'PHARMACIE';
+    const name  = e.full_name || e.name;
+    const sub   = e.specialty || (isDoc ? 'Médecin' : 'Pharmacie');
+    const addr  = e.address  ? `<div class="pic2-row"><span>📍</span> <span>${e.address}</span></div>` : '';
+    const phone = e.phone    ? `<div class="pic2-row"><span>📞</span> <span style="color:#0284c7">${e.phone}</span></div>` : '';
+
+    marker.bindPopup(`
+      <div class="pic2-tooltip">
+        <div class="pic2-tag">${tag}</div>
+        <div class="pic2-name">${name}</div>
+        <div class="pic2-sub">${sub}</div>
+        <div class="pic2-details">${addr}${phone}</div>
+        <button class="pic2-btn" onclick="toggleSelectById(${e.id})">Ajouter à ma journée</button>
+      </div>`, { offset: [0, -28], className: 'pic2-leaflet-tooltip' });
 
     marker.on('click', () => showVisitPanel(e));
+    cluster.addLayer(marker);
     State.markers.push(marker);
   });
+
+  State._clusterGroup = cluster;
+  State.map.addLayer(cluster);
 }
 
+window.toggleSelectById = function(id) {
+  if (State.selectedIds.has(id)) {
+    State.selectedIds.delete(id);
+  } else {
+    State.selectedIds.add(id);
+  }
+  renderEntityList();
+  updateOptimizeButton();
+};
+
 function clearMapLayers() {
-  State.markers.forEach(m => State.map.removeLayer(m));
+  if (State._clusterGroup) {
+    State.map.removeLayer(State._clusterGroup);
+    State._clusterGroup = null;
+  }
+  State.markers.forEach(m => { try { State.map.removeLayer(m); } catch(e) {} });
   State.markers = [];
   if (State.routeLayer) {
     State.map.removeLayer(State.routeLayer);
@@ -271,44 +406,234 @@ function prioColor(p) {
   return { high: '#f43f5e', medium: '#f59e0b', low: '#22c55e' }[p] ?? '#4f8ef7';
 }
 
-// ─── Optimization ─────────────────────────────────────────────────────────────
+// ─── User Location (Live GPS Tracking) ───────────────────────────────────────
 
 /**
- * Get the user's current GPS position via the browser Geolocation API.
- * Returns { lat, lng } or null if denied/unavailable.
+ * Start continuous GPS tracking via the browser Geolocation API.
+ * Uses watchPosition to automatically update the user's position.
+ * Falls back to cached location while waiting for GPS lock.
  */
-function getCurrentPosition() {
-  return new Promise((resolve) => {
-    if (!navigator.geolocation) return resolve(null);
+function requestUserLocation() {
+  if (!navigator.geolocation) {
+    renderLocationStatus('unavailable');
+    useCachedLocationFallback();
+    return;
+  }
 
-    navigator.geolocation.getCurrentPosition(
-      (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-      ()    => resolve(null),
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
-    );
-  });
+  renderLocationStatus('requesting');
+
+  // First try to restore cached location immediately (while GPS is locking)
+  const cached = localStorage.getItem('pharmavisit_last_location');
+  if (cached) {
+    try {
+      const loc = JSON.parse(cached);
+      if (loc.lat && loc.lng) {
+        State.userLocation = { lat: loc.lat, lng: loc.lng, name: 'Last Known Location', type: 'cached' };
+        updateLocationMarker();
+        // Don't change status yet — GPS is still trying
+      }
+    } catch (e) {}
+  }
+
+  // Start live GPS watch — this keeps tracking and updating
+  State._gpsWatchId = navigator.geolocation.watchPosition(
+    (pos) => {
+      State.userLocation = {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+        name: 'Your Current Location',
+        type: 'gps',
+        accuracy: pos.coords.accuracy,
+      };
+      // Cache it
+      localStorage.setItem('pharmavisit_last_location', JSON.stringify(State.userLocation));
+      updateLocationMarker();
+      renderLocationStatus('gps');
+    },
+    (err) => {
+      console.warn('[PharmaVisit] GPS error:', err.message);
+      // If we already have a cached location, use it
+      if (State.userLocation) {
+        renderLocationStatus(State.userLocation.type === 'gps' ? 'gps' : 'cached');
+      } else {
+        useCachedLocationFallback();
+      }
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 60000,
+    }
+  );
+
+  // Also do a one-shot getCurrentPosition for faster first lock
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      State.userLocation = {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+        name: 'Your Current Location',
+        type: 'gps',
+        accuracy: pos.coords.accuracy,
+      };
+      localStorage.setItem('pharmavisit_last_location', JSON.stringify(State.userLocation));
+      updateLocationMarker();
+      renderLocationStatus('gps');
+    },
+    () => {}, // watchPosition handles errors
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+  );
 }
+
+/**
+ * Use cached location when GPS is completely unavailable.
+ */
+function useCachedLocationFallback() {
+  const cached = localStorage.getItem('pharmavisit_last_location');
+  if (cached) {
+    try {
+      const loc = JSON.parse(cached);
+      if (loc.lat && loc.lng) {
+        State.userLocation = { lat: loc.lat, lng: loc.lng, name: 'Last Known Location', type: 'cached' };
+        updateLocationMarker();
+        renderLocationStatus('cached');
+        return;
+      }
+    } catch (e) {}
+  }
+  renderLocationStatus('unavailable');
+}
+
+/**
+ * Show / update the user's location marker on the map.
+ */
+function updateLocationMarker() {
+  if (!State.userLocation) return;
+
+  const { lat, lng, name, type, accuracy } = State.userLocation;
+
+  // Remove old marker
+  if (State.locationMarker) {
+    State.map.removeLayer(State.locationMarker);
+    State.locationMarker = null;
+  }
+  if (State._accuracyCircle) {
+    State.map.removeLayer(State._accuracyCircle);
+    State._accuracyCircle = null;
+  }
+
+  const isGps = type === 'gps';
+
+  State.locationMarker = L.marker([lat, lng], {
+    icon: L.divIcon({
+      className: '',
+      html: `<div class="my-location-marker ${isGps ? 'loc-marker-gps' : 'loc-marker-cached'}">
+               <span class="loc-pulse"></span>
+               <span class="loc-dot"></span>
+             </div>`,
+      iconSize: [40, 40],
+      iconAnchor: [20, 20],
+    }),
+    zIndexOffset: 1000,
+  }).addTo(State.map);
+
+  State.locationMarker.bindTooltip(`<b>📍 Start:</b> ${name}`, {
+    permanent: false,
+    direction: 'top',
+    offset: [0, -16],
+  });
+
+  // Show accuracy circle for GPS
+  if (isGps && accuracy && accuracy < 5000) {
+    State._accuracyCircle = L.circle([lat, lng], {
+      radius: accuracy,
+      color: '#3b82f6',
+      fillColor: '#3b82f6',
+      fillOpacity: 0.08,
+      weight: 1,
+      opacity: 0.3,
+    }).addTo(State.map);
+  }
+}
+
+/**
+ * Render the location status indicator in the sidebar.
+ */
+function renderLocationStatus(status) {
+  const el = document.getElementById('location-status');
+  if (!el) return;
+
+  const configs = {
+    requesting: {
+      icon: '⏳',
+      text: 'Getting your location…',
+      cls: 'loc-status-requesting',
+      action: '',
+    },
+    gps: {
+      icon: '📍',
+      text: 'GPS location active',
+      cls: 'loc-status-ok',
+      action: '',
+    },
+    cached: {
+      icon: '📌',
+      text: 'Using last known location',
+      cls: 'loc-status-cached',
+      action: `<button class="loc-refresh-btn" onclick="requestUserLocation()" title="Retry GPS">↻</button>`,
+    },
+    unavailable: {
+      icon: '⚠️',
+      text: 'Enable location in browser',
+      cls: 'loc-status-unavailable',
+      action: `<button class="loc-refresh-btn" onclick="requestUserLocation()" title="Retry GPS">Retry</button>`,
+    },
+  };
+
+  const cfg = configs[status] || configs.unavailable;
+  el.className = `location-status ${cfg.cls}`;
+  el.innerHTML = `
+    <span class="loc-icon">${cfg.icon}</span>
+    <span class="loc-text">${cfg.text}</span>
+    <span class="loc-actions">${cfg.action}</span>
+  `;
+}
+
+// ─── Optimization ─────────────────────────────────────────────────────────────
 
 async function optimizeRoute() {
   if (State.selectedIds.size < 1) return;
 
   const btn = document.getElementById('btn-optimize');
   btn.classList.add('loading');
-  showLoading('Getting your location…');
 
   try {
     const doctorIds = [...State.selectedIds];
 
-    // Try real GPS first, fall back to map center
-    const gps = await getCurrentPosition();
-    const startLat  = gps ? gps.lat : State.map.getCenter().lat;
-    const startLng  = gps ? gps.lng : State.map.getCenter().lng;
-    const startName = gps ? 'Your Current Location' : 'Map Center (GPS unavailable)';
-
-    if (!gps) {
-      showToast('GPS unavailable — using map center as start', 'warning');
+    // If GPS hasn't locked yet, wait up to 8s for it
+    if (!State.userLocation) {
+      showLoading('Waiting for GPS lock…');
+      await new Promise(resolve => {
+        const deadline = Date.now() + 8000;
+        const check = setInterval(() => {
+          if (State.userLocation || Date.now() >= deadline) {
+            clearInterval(check);
+            resolve();
+          }
+        }, 200);
+      });
     }
 
+    // Still nothing? Can't proceed without a location
+    if (!State.userLocation) {
+      btn.classList.remove('loading');
+      hideLoading();
+      showToast('Location unavailable — please enable GPS in your browser settings', 'error');
+      renderLocationStatus('unavailable');
+      return;
+    }
+
+    const { lat: startLat, lng: startLng, name: startName } = State.userLocation;
     showLoading('Optimizing your route…');
 
     const result = await api('POST', '/routes/optimize', {
@@ -361,6 +686,29 @@ function renderOptimizedRoute(result) {
         iconSize: [34, 34], iconAnchor: [17, 17],
       }),
     }).addTo(State.map);
+
+    const stopInfo = State.doctors.find(d => d.id === stop.id) || State.pharmacies.find(p => p.id === stop.id) || stop;
+    const isDoc = 'specialty' in stopInfo;
+    const tag = isDoc ? 'DOCTEUR' : 'PHARMACIE';
+    const name = stopInfo.full_name || stopInfo.name;
+    const sub = stopInfo.specialty ? stopInfo.specialty : (isDoc ? 'Médecin' : 'Pharmacie');
+    const addr = stopInfo.address ? `<div class="pic2-row"><span>📍</span> <span>${stopInfo.address}</span></div>` : '';
+    const phone = stopInfo.phone ? `<div class="pic2-row"><span>📞</span> <span style="color:#0284c7">${stopInfo.phone}</span></div>` : '';
+    const coords = `<div class="pic2-row"><span>🌐</span> <span style="color:#6b7280">${stop.lat.toFixed(6)}, ${stop.lng.toFixed(6)}</span></div>`;
+    
+    const tooltipHtml = `
+      <div class="pic2-tooltip">
+        <div class="pic2-tag">${tag}</div>
+        <div class="pic2-name">${name}</div>
+        <div class="pic2-sub">${sub}</div>
+        <div class="pic2-details">
+          ${addr}
+          ${phone}
+          ${coords}
+        </div>
+      </div>
+    `;
+    m.bindPopup(tooltipHtml, { offset: [0, -28], className: 'pic2-leaflet-tooltip' });
 
     m.on('click', () => {
       // Find full doctor object
@@ -433,6 +781,35 @@ function showVisitPanel(entity) {
   document.getElementById('visit-panel-sub').textContent  = isDoc
     ? `${entity.specialty ?? ''} · ${entity.city ?? ''}`
     : entity.city ?? '';
+
+  const addrRow = document.getElementById('visit-panel-address-row');
+  const addrEl  = document.getElementById('visit-panel-address');
+  if (entity.address) {
+    addrRow.style.display = 'flex';
+    addrEl.textContent = entity.address;
+  } else {
+    addrRow.style.display = 'none';
+  }
+
+  const phoneRow = document.getElementById('visit-panel-phone-row');
+  const phoneEl  = document.getElementById('visit-panel-phone');
+  if (entity.phone) {
+    phoneRow.style.display = 'flex';
+    phoneEl.textContent = entity.phone;
+    phoneEl.href = `tel:${entity.phone}`;
+  } else {
+    phoneRow.style.display = 'none';
+  }
+
+  const coordsRow = document.getElementById('visit-panel-coords-row');
+  const coordsEl  = document.getElementById('visit-panel-coords');
+  if (entity.lat && entity.lng) {
+    coordsRow.style.display = 'flex';
+    coordsEl.textContent = `${Number(entity.lat).toFixed(6)}, ${Number(entity.lng).toFixed(6)}`;
+  } else {
+    coordsRow.style.display = 'none';
+  }
+
   document.getElementById('visit-doctor-id').value    = isDoc ? entity.id : '';
   document.getElementById('visit-pharmacy-id').value  = isDoc ? '' : entity.id;
   document.getElementById('visit-notes').value        = '';
@@ -501,6 +878,28 @@ document.addEventListener('DOMContentLoaded', () => {
   // Map must be initialized here — Leaflet's L global is guaranteed ready after DOM parsing
   initMap();
   bootstrap();
+
+  // Sidebar Toggle via Logo
+  const floatingLogo = document.getElementById('floating-logo-btn');
+  const sidebar = document.getElementById('sidebar');
+
+  floatingLogo?.addEventListener('click', () => {
+    sidebar.classList.remove('collapsed');
+    floatingLogo.style.opacity = '0';
+    floatingLogo.style.pointerEvents = 'none';
+  });
+
+  document.querySelector('#sidebar-header .logo')?.addEventListener('click', () => {
+    sidebar.classList.add('collapsed');
+    floatingLogo.style.opacity = '1';
+    floatingLogo.style.pointerEvents = 'auto';
+  });
+
+  // Init logo state
+  if (sidebar && !sidebar.classList.contains('collapsed') && floatingLogo) {
+    floatingLogo.style.opacity = '0';
+    floatingLogo.style.pointerEvents = 'none';
+  }
 
   // Login form
   document.getElementById('btn-login').addEventListener('click', login);

@@ -59,43 +59,38 @@ class DatabaseSeeder extends Seeder
             'is_active'   => true,
         ]);
 
-        // ─── Doctors (Rabat territory) ────────────────────────────────
-        $rabatDoctors = [
-            ['Amina',    'Chraibi',   'Cardiologie',        'Clinique Al Farabi',   '14 Avenue Mohammed V',             'Rabat',    '10000', -6.8498, 33.9716, 'high'],
-            ['Hassan',   'Ouazzani',  'Pédiatrie',          'Cabinet Ouazzani',     '7 Rue Patrice Lumumba',            'Rabat',    '10000', -6.8412, 33.9768, 'high'],
-            ['Fatima',   'El Idrissi','Médecine Générale',  null,                   '23 Avenue Al Amir Fal Ould Omer',  'Salé',     '11000', -6.7985, 34.0311, 'medium'],
-            ['Youssef',  'Berrada',   'Neurologie',         'Centre Neurologique',  '45 Boulevard Hassan II',           'Rabat',    '10020', -6.8527, 33.9824, 'high'],
-            ['Khadija',  'Mansouri',  'Gynécologie',        'Polyclinique Agdal',   '3 Rue Oued Fès, Agdal',            'Rabat',    '10080', -6.8605, 33.9904, 'medium'],
-            ['Mohamed',  'Lahlou',    'Ophtalmologie',      'Cabinet Lahlou',       '18 Avenue Fal Ould Omer',          'Rabat',    '10000', -6.8490, 33.9800, 'medium'],
-            ['Samir',    'Bennani',   'Dermatologie',       null,                   '9 Rue Soussa',                     'Salé',     '11000', -6.8005, 34.0378, 'low'],
-            ['Rim',      'Tazi',      'Endocrinologie',     'Clinique Al Amal',     '67 Avenue Hassan II',              'Rabat',    '10020', -6.8533, 33.9831, 'high'],
-            ['Omar',     'Filali',    'Pneumologie',        null,                   '5 Rue Doukala',                    'Rabat',    '10000', -6.8467, 33.9743, 'medium'],
-            ['Zineb',    'Alaoui',    'Rhumatologie',       'Centre Méd. Hay Riad', '120 Avenue Mehdi Ben Barka',       'Rabat',    '10100', -6.8714, 33.9597, 'medium'],
-            ['Abdelkrim','Hakimi',    'Chirurgie Générale', 'Clinique Cheikh Zaïd', 'Hay Riad',                         'Rabat',    '10100', -6.8700, 33.9600, 'high'],
-            ['Souad',    'Marzouki',  'Cardiologie',        null,                   '2 Avenue Ibn Sina',                'Rabat',    '10050', -6.8445, 33.9873, 'high'],
-            ['Mehdi',    'Boussaid',  'Médecine Interne',   'Hôpital Ibn Sina',     'Avenue Ibn Sina',                  'Rabat',    '10050', -6.8444, 33.9878, 'medium'],
-            ['Leila',    'Cherkaoui', 'Pédiatrie',          null,                   '34 Rue Moulay Rachid, Témara',     'Témara',   '12000', -6.9108, 33.9226, 'low'],
-            ['Aziz',     'Zniber',    'Médecine Générale',  'Cabinet Médical',      '11 Boulevard Al Massira',          'Salé',     '11000', -6.7978, 34.0378, 'medium'],
-        ];
+        // ─── Doctors (Rabat territory - from Scraped CSV) ─────────────
+        $csvPath = base_path('data-pipeline/output/raw_doctors.csv');
+        if (file_exists($csvPath) && ($handle = fopen($csvPath, 'r')) !== false) {
+            $header = fgetcsv($handle);
+            while (($row = fgetcsv($handle)) !== false) {
+                if (count($row) < 11) continue;
 
-        foreach ($rabatDoctors as [$fn, $ln, $spec, $clinic, $addr, $city, $zip, $lng, $lat, $prio]) {
-            Doctor::create([
-                'territory_id' => $rabat->id,
-                'first_name'   => $fn,
-                'last_name'    => $ln,
-                'specialty'    => $spec,
-                'clinic_name'  => $clinic,
-                'address'      => $addr,
-                'city'         => $city,
-                'postal_code'  => $zip,
-                'region'       => 'Rabat-Salé-Kénitra',
-                'lat'          => $lat,
-                'lng'          => $lng,
-                'geocoded_at'  => now(),
-                'phone'        => '+212 5 37 ' . rand(10, 99) . ' ' . rand(10, 99) . ' ' . rand(10, 99),
-                'priority'     => $prio,
-                'is_active'    => true,
-            ]);
+                // Remove Tifinagh (Shlha) and Arabic characters, plus extra spaces
+                $row = array_map(function($val) {
+                    $clean = preg_replace('/[\x{2D30}-\x{2D7F}\x{0600}-\x{06FF}]+/u', '', $val);
+                    return trim(preg_replace('/\s+/', ' ', $clean));
+                }, $row);
+                
+                Doctor::create([
+                    'territory_id' => $rabat->id,
+                    'first_name'   => $row[0] ?: 'Dr',
+                    'last_name'    => $row[1] ?: 'Unknown',
+                    'specialty'    => $row[2] ?: 'Médecine Générale',
+                    'clinic_name'  => null,
+                    'address'      => $row[3] ?: 'Rabat',
+                    'city'         => $row[4] ?: 'Rabat',
+                    'postal_code'  => $row[5] ?: '10000',
+                    'region'       => $row[6] ?: 'Rabat-Salé-Kénitra',
+                    'lat'          => is_numeric($row[9]) ? (float)$row[9] : null,
+                    'lng'          => is_numeric($row[10]) ? (float)$row[10] : null,
+                    'geocoded_at'  => now(),
+                    'phone'        => $row[7] ?: ('+212 5 37 ' . rand(10, 99) . ' ' . rand(10, 99) . ' ' . rand(10, 99)),
+                    'priority'     => ['high', 'medium', 'low'][array_rand(['high', 'medium', 'low'])],
+                    'is_active'    => true,
+                ]);
+            }
+            fclose($handle);
         }
 
         // ─── Doctors (Casablanca territory) ───────────────────────────
@@ -182,7 +177,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        $this->command->info('✅ Seeded: 2 territories, 3 reps, 22 doctors, 11 pharmacies');
+        $this->command->info('✅ Seeded: 2 territories, 3 reps, Scraped doctors, 11 pharmacies');
         $this->command->info('   Login: sarah@pharmavisit.ma / password (Rabat territory)');
         $this->command->info('   Login: nadia@pharmavisit.ma / password (Casablanca territory)');
     }

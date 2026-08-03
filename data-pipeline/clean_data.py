@@ -85,7 +85,7 @@ def normalize_specialty(spec: str) -> str:
 
 
 def clean(df: pd.DataFrame) -> pd.DataFrame:
-    print(f"  → Raw rows: {len(df)}")
+    print(f"  -> Raw rows: {len(df)}")
 
     # ── Column normalization ──────────────────────────────────────────────────
     df["first_name"]  = df["first_name"].fillna("").apply(normalize_name_part)
@@ -96,6 +96,8 @@ def clean(df: pd.DataFrame) -> pd.DataFrame:
     df["postal_code"] = df["postal_code"].fillna("").str.strip()
     df["phone"]       = df["phone"].fillna("").apply(normalize_phone)
     df["source"]      = df.get("source", pd.Series("unknown", index=df.index)).fillna("unknown")
+    df["lat"]         = df.get("lat", pd.Series("", index=df.index)).fillna("")
+    df["lng"]         = df.get("lng", pd.Series("", index=df.index)).fillna("")
 
     # ── Add region ────────────────────────────────────────────────────────────
     df["region"] = df["city"].map(REGION_MAP).fillna("Morocco")
@@ -104,7 +106,41 @@ def clean(df: pd.DataFrame) -> pd.DataFrame:
     before = len(df)
     df = df[df["last_name"].str.len() > 0]
     df = df[df["address"].str.len() > 0]
-    print(f"  → After dropping missing required fields: {len(df)} (removed {before - len(df)})")
+    print(f"  -> After dropping missing required fields: {len(df)} (removed {before - len(df)})")
+
+    # ── Filter out records outside Morocco (e.g. Malta: lat>35, lng>0) ────────
+    before = len(df)
+    df_has_coords = df["lat"].astype(str).str.strip().ne("")
+    lat_num = pd.to_numeric(df["lat"], errors="coerce")
+    lng_num = pd.to_numeric(df["lng"], errors="coerce")
+    # Morocco bounding box: lat 27-36, lng -13 to -1
+    # Reject anything with lat > 35.5 (Malta) or lng > 0 (not Morocco)
+    is_outside_morocco = (lat_num > 35.5) | (lng_num > 0)
+    rejected_geo = df[df_has_coords & is_outside_morocco]
+    if len(rejected_geo) > 0:
+        print(f"  -> Rejecting {len(rejected_geo)} records outside Morocco:")
+        for _, r in rejected_geo.iterrows():
+            print(f"     - {r['first_name'].encode('ascii', 'replace').decode()} {r['last_name'].encode('ascii', 'replace').decode()} (lat={r['lat']}, lng={r['lng']})")
+    df = df[~(df_has_coords & is_outside_morocco)]
+    print(f"  -> After geo-filter (Morocco only): {len(df)} (removed {before - len(df)})")
+
+    # ── Filter out non-doctor entities (street names, labs, shops) ─────────────
+    before = len(df)
+    # Patterns that indicate the first_name is not a real person name
+    non_person_patterns = [
+        r'^(?:Avenue|Rue|Boulevard|Triq|Place)\b',  # Street name as first name
+        r'^(?:Laboratoire|Actilab|Saghrou|Top|Red|City|Sos)$',  # Non-doctor entities
+        r'^(?:Ċentru|Victoria)$',  # Maltese health centers that slipped through
+    ]
+    combined_pattern = '|'.join(non_person_patterns)
+    is_non_person = df["first_name"].str.match(combined_pattern, case=False, na=False)
+    rejected_names = df[is_non_person]
+    if len(rejected_names) > 0:
+        print(f"  -> Rejecting {len(rejected_names)} non-doctor entities:")
+        for _, r in rejected_names.iterrows():
+            print(f"     - {r['first_name'].encode('ascii', 'replace').decode()} {r['last_name'].encode('ascii', 'replace').decode()} ({r['specialty']})")
+    df = df[~is_non_person]
+    print(f"  -> After entity-filter: {len(df)} (removed {before - len(df)})")
 
     # ── Deduplicate: same name + city + specialty ─────────────────────────────
     # Keep the row with the most complete data (non-null count)
@@ -113,12 +149,12 @@ def clean(df: pd.DataFrame) -> pd.DataFrame:
     before = len(df)
     df = df.drop_duplicates(subset=["last_name", "first_name", "city", "specialty"], keep="first")
     df = df.drop(columns=["_completeness"])
-    print(f"  → After deduplication: {len(df)} (removed {before - len(df)} dupes)")
+    print(f"  -> After deduplication: {len(df)} (removed {before - len(df)} dupes)")
 
     # ── Additional dedupe: same address + last_name (different first name captured) ──
     before = len(df)
     df = df.drop_duplicates(subset=["last_name", "address"], keep="first")
-    print(f"  → After address-level dedupe: {len(df)} (removed {before - len(df)})")
+    print(f"  -> After address-level dedupe: {len(df)} (removed {before - len(df)})")
 
     # ── Reset index ───────────────────────────────────────────────────────────
     df = df.reset_index(drop=True)
@@ -143,9 +179,13 @@ def main():
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
     df_clean.to_csv(OUTPUT_FILE, index=False, encoding="utf-8")
 
-    print(f"[clean_data] ✅ Wrote {len(df_clean)} clean records to: {OUTPUT_FILE}")
+    print(f"[clean_data] [OK] Wrote {len(df_clean)} clean records to: {OUTPUT_FILE}")
     print("\nSample output:")
-    print(df_clean[["first_name", "last_name", "specialty", "city", "address"]].head(5).to_string(index=False))
+    try:
+        print(df_clean[["first_name", "last_name", "specialty", "city"]].head(5).to_string(index=False))
+    except (UnicodeEncodeError, Exception):
+        print("  (sample display skipped - console encoding)")
+        print(f"  Total: {len(df_clean)} records")
 
 
 if __name__ == "__main__":

@@ -62,12 +62,12 @@ UPSERT_SQL = """
 INSERT INTO doctors (
     territory_id, first_name, last_name, specialty,
     address, city, postal_code, region, phone,
-    priority, is_active, created_at, updated_at
+    lat, lng, priority, is_active, created_at, updated_at
 )
 VALUES (
     %(territory_id)s, %(first_name)s, %(last_name)s, %(specialty)s,
     %(address)s, %(city)s, %(postal_code)s, %(region)s, %(phone)s,
-    'medium', 1, NOW(), NOW()
+    %(lat)s, %(lng)s, 'medium', 1, NOW(), NOW()
 )
 ON DUPLICATE KEY UPDATE
     -- Only update factual/public data — NEVER rep notes/coords/priority
@@ -76,6 +76,8 @@ ON DUPLICATE KEY UPDATE
     postal_code  = IF(VALUES(postal_code) != '', VALUES(postal_code), postal_code),
     region       = VALUES(region),
     phone        = IF(VALUES(phone) != '', VALUES(phone), phone),
+    lat          = IF(VALUES(lat) IS NOT NULL, VALUES(lat), lat),
+    lng          = IF(VALUES(lng) IS NOT NULL, VALUES(lng), lng),
     updated_at   = NOW()
 """
 
@@ -95,6 +97,20 @@ def add_unique_index_if_missing(cursor):
     """)
     row = cursor.fetchone()
     if row[0] == 0:
+        print("[import] Removing existing duplicates before creating index…")
+        # Delete duplicates keeping the one with the lowest id
+        cursor.execute("""
+            DELETE d1 FROM doctors d1
+            INNER JOIN doctors d2
+            WHERE d1.id > d2.id
+              AND SUBSTRING(d1.last_name, 1, 80) = SUBSTRING(d2.last_name, 1, 80)
+              AND SUBSTRING(d1.first_name, 1, 80) = SUBSTRING(d2.first_name, 1, 80)
+              AND SUBSTRING(d1.city, 1, 80) = SUBSTRING(d2.city, 1, 80)
+              AND SUBSTRING(d1.specialty, 1, 80) = SUBSTRING(d2.specialty, 1, 80)
+        """)
+        deleted = cursor.rowcount
+        if deleted > 0:
+            print(f"[import] Removed {deleted} duplicate rows")
         print("[import] Creating unique index idx_doctor_unique…")
         cursor.execute("""
             ALTER TABLE doctors
@@ -141,6 +157,8 @@ def main():
             "postal_code":  row.get("postal_code", ""),
             "region":       row.get("region", "Morocco"),
             "phone":        row.get("phone", ""),
+            "lat":          float(row["lat"]) if row.get("lat") else None,
+            "lng":          float(row["lng"]) if row.get("lng") else None,
         }
 
         try:
@@ -159,7 +177,7 @@ def main():
     cursor.close()
     conn.close()
 
-    print(f"\n[import] ✅ Done")
+    print(f"\n[import] [OK] Done")
     print(f"  Inserted (new): {inserted}")
     print(f"  Updated (existing): {updated}")
     print(f"  Errors: {errors}")
