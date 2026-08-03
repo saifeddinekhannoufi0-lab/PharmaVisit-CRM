@@ -1,181 +1,254 @@
-<div align="center">
+﻿<div align="center">
+  <img src="public/img/readme_logo.png" alt="PharmaVisit CRM Logo" width="180" />
+  <h1>PharmaVisit CRM</h1>
+  <p><strong>Intelligent Field CRM for Pharmaceutical Sales Representatives</strong></p>
+  <p><em>Route optimization · Live GPS tracking · Real medical data · Morocco region</em></p>
 
-<h1>⚕️ PharmaVisit CRM</h1>
-<p><strong>Field Service Routing & Management for Pharma Sales Reps</strong></p>
-
-<p>
-  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" />
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" />
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
-</p>
-
-<p>PharmaVisit transforms field sales management into a seamless, optimized experience — combining intelligent route planning, high-speed data caching, interactive cartography, and a premium UI to maximize reps' time on the road.</p>
-
+  <p>
+    <img src="https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" />
+    <img src="https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+    <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" />
+    <img src="https://img.shields.io/badge/MySQL-8-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
+    <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" />
+    <img src="https://img.shields.io/badge/OpenStreetMap-7EBC6F?style=for-the-badge&logo=openstreetmap&logoColor=white" />
+  </p>
 </div>
 
 ---
 
-## ✨ Features
+## Overview
+
+**PharmaVisit CRM** is a full-stack field management system built for pharmaceutical sales representatives operating in the **Rabat-Sale-Kenitra region of Morocco**. It solves a real operational problem: how to efficiently plan and optimize a day of medical visits starting directly from the rep's current GPS location.
+
+- A **real-time interactive map** with 600+ geocoded healthcare providers
+- **Automatic GPS-based route optimization** using Google OR-Tools (TSP solver)
+- **Real medical data** scraped from OpenStreetMap via Overpass API and Nominatim
+- A **territory-scoped REST API** built with Laravel 11 and Redis caching
+- A **Python microservice** for route computation backed by OSRM real-road routing
+
+---
+
+## Features
 
 | Feature | Description |
-|---|---|
-| 🧑‍💼 **Field Rep Dashboard** | Intuitive interface for representatives to manage territories, view stats, and track visits |
-| 🗺️ **Interactive Maps** | Visual mapping of doctors, pharmacies, and optimized daily routes using Leaflet.js |
-| 🚀 **Route Optimizer Engine** | Dedicated Python/FastAPI microservice leveraging Google OR-Tools to calculate highly efficient TSP routes |
-| ⚡ **Redis Performance Buffer** | Caches API responses and routes, drastically reducing MySQL bottlenecks and API latency |
-| 🤖 **Data Acquisition Pipeline** | Built-in Scrapy and Pandas pipeline to extract, clean, and import medical registry data |
-| 🎨 **Premium UI & Branding** | Dark-mode design with PHI teal palette, custom SVG iconography, and CSS micro-animations |
-| 🔌 **RESTful API** | Robust APIs built with Laravel Sanctum to manage Territories, Doctors, Pharmacies, Route Stops, and Visit Logs |
+|---------|-------------|
+| Interactive Map | Dark-mode Leaflet.js map with 600+ clustered markers (Rabat, Sale, Temara) |
+| Live GPS Tracking | watchPosition() — marker updates automatically as you move |
+| Route Optimization | OR-Tools TSP solver — shortest path from your location through selected stops |
+| Smart Search | Search by name, specialty, or city across all 600+ records |
+| Multi-type Support | Doctors, pharmacies, clinics, hospitals, dentists — all on one map |
+| Visit Logging | Record outcomes and notes for each completed visit |
+| Territory Isolation | Each rep sees only their assigned territory's data |
+| Redis Caching | API responses cached 10 minutes per territory + filter set |
+| Premium Dark UI | Glassmorphism design with animated GPS marker and route overlay |
 
 ---
 
-## 🏗️ Tech Stack
+## Architecture
 
-### Frontend
-- **Blade** + **Vanilla JS/CSS** — modern templating and sleek, dependency-free styling
-- **Leaflet.js** — lightweight, interactive cartography and mapping
-- **Custom SVGs** — scalable, inline vector icons replacing heavy font libraries
+```
+Browser SPA (Leaflet.js + Vanilla JS + CSS)
+    |  REST JSON
+Laravel 11 :8000  <-->  MySQL 8  +  Redis
+    |  HTTP
+FastAPI Microservice :8001
+    ├── OR-Tools TSP Solver
+    ├── OSRM real-road matrix
+    ├── Haversine fallback
+    └── Nominatim geocoder
 
-### Core Backend (Orchestrator)
-- **Laravel (PHP 8+)** — core application logic and RESTful API framework
-- **MySQL** — secure, relational database for entities and user data
-- **Redis** — high-performance in-memory caching layer for queries and optimization results
-- **Sanctum** — lightweight authentication system for APIs
-
-### Microservices & Data Pipelines
-- **Python + FastAPI** — Route Optimizer microservice (lightning-fast, async APIs)
-- **Google OR-Tools** — advanced routing and Travelling Salesperson Problem (TSP) solver
-- **Mapbox & OpenStreetMap (Nominatim)** — geocoding and distance matrix calculation
-- **Scrapy & Pandas** — robust data scraping, parsing, and cleaning
+Data Pipeline (Python)
+    fetch_all_rabat.py  →  clean_data.py  →  import_data.py
+    (Overpass + Nominatim)    (filter)         (MySQL)
+```
 
 ---
 
-## 🚀 Getting Started
+## Data Sources
+
+All data is collected from **free, open, public sources** — no API key required.
+
+### Overpass API (OpenStreetMap)
+**URL:** `https://overpass-api.de/api/interpreter`
+
+Queries all healthcare OSM nodes in the Rabat-Sale-Temara bounding box `(33.85,-7.00,34.10,-6.70)` — doctors, pharmacies, clinics, hospitals, dentists, and all `healthcare=*` tagged nodes.
+
+Result: **681 raw elements → 616 valid records**
+
+### Nominatim (OSM Geocoding)
+**URL:** `https://nominatim.openstreetmap.org/search`
+
+90+ text queries at >= 1 second intervals covering:
+- Specialties: `cardiologue Rabat`, `dentiste Sale`, `pharmacie Temara` ...
+- Neighborhoods: `medecin Agdal Rabat`, `doctor Hay Riad` ...
+
+Result: **225 unique → 150 valid records**
+
+### Data Cleaning Pipeline
+
+| Stage | Action | Records removed |
+|-------|--------|----------------|
+| Geo-filter | Remove lat > 35.5 or lng > 0 (Malta/Europe) | 0 |
+| Entity-filter | Remove streets, labs, non-medical entities | 21 |
+| Deduplication | Dedupe by name + coordinates | 1 |
+| **Final** | **604 clean records imported** | |
+
+---
+
+## Route Optimization Algorithm
+
+Solves the **Open Travelling Salesman Problem** — shortest path visiting N stops from GPS start, no return required.
+
+### 1. Travel Time Matrix
+
+**OSRM** (primary) — real road network:
+```
+GET /table/v1/driving/{coords}?annotations=duration,distance
+```
+
+**Haversine** (fallback) — straight-line distance:
+```
+d = 2R · atan2(sqrt(a), sqrt(1-a))
+where a = sin(Δlat/2)² + cos(lat1)·cos(lat2)·sin(Δlng/2)²
+Duration proxy = distance_m / 14   (~50 km/h urban)
+```
+
+### 2. TSP Solver — Google OR-Tools
+
+```python
+# Open TSP via dummy end depot (zero-cost arcs from all nodes)
+params.first_solution_strategy = PATH_CHEAPEST_ARC
+params.local_search_metaheuristic = GUIDED_LOCAL_SEARCH
+params.time_limit.seconds = 5
+```
+
+**Fallback: Nearest-Neighbor O(N²)** — when OR-Tools unavailable or times out.
+
+### 3. Route Geometry
+
+Ordered stops sent to OSRM Route API → returns GeoJSON LineString drawn on the Leaflet map.
+
+---
+
+## Tech Stack
+
+| Layer | Technology | Role |
+|-------|------------|------|
+| Backend | Laravel 11 (PHP 8.3) | REST API, auth, Eloquent ORM |
+| Auth | Laravel Sanctum | Bearer token authentication |
+| Database | MySQL 8 | Primary data store (651 doctors) |
+| Cache | Redis 7 | 10-min API response cache |
+| Optimizer | FastAPI (Python 3.12) | Route optimization microservice |
+| TSP Solver | Google OR-Tools | Near-optimal TSP solution |
+| Routing | OSRM | Real-road distance matrices |
+| Geocoding | Nominatim | Address-to-coordinate conversion |
+| Map | Leaflet.js + markercluster | Interactive map with clustering |
+| Tiles | OpenStreetMap / CartoDB Dark | Dark mode base map |
+| GPS | navigator.geolocation | Browser native live tracking |
+| Frontend | Vanilla JS + CSS Variables | SPA without frameworks |
+
+---
+
+## Setup
 
 ### Prerequisites
-- PHP ≥ 8.1 and Composer
-- Python ≥ 3.10
-- Node.js & npm
-- MySQL server running locally
-- Redis server running locally
+- PHP 8.3 + Composer
+- Python 3.12 + pip
+- MySQL 8
+- Redis
 
-### 1. Clone the repository
+### Install
+
 ```bash
 git clone https://github.com/saifeddinekhannoufi0-lab/PharmaVisit-CRM.git
 cd PharmaVisit-CRM
-```
 
-### 2. Set up the Laravel Core Application
-```bash
+# Laravel
 composer install
 cp .env.example .env
-# Edit .env with your MySQL and Redis credentials
+# Edit .env with your DB credentials
 php artisan key:generate
-php artisan migrate --seed
-```
+php artisan migrate
+php artisan db:seed
 
-### 3. Set up the Route Optimizer Microservice
-Open a new terminal window:
-```bash
+# Python microservice
 cd route-optimizer
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
-uvicorn main:app --port 8001
+cd ..
 ```
 
-### 4. Running the Development Server
+### Run
+
 ```bash
-npm install
-npm run dev
-php artisan serve
+# Windows (one command):
+start.bat
+
+# Or manually:
+php artisan serve                              # API  → :8000
+cd route-optimizer && uvicorn main:app --port 8001  # Optimizer → :8001
+redis-server                                        # Cache
 ```
-The app will be running at `http://localhost:8000` and the Python routing microservice at `http://localhost:8001`.
+
+### Login
+
+| Name | Email | Password | Territory |
+|------|-------|----------|-----------|
+| Sarah Bennani | sarah@pharmavisit.ma | password | Grand Rabat |
+| Karim Tazi | karim@pharmavisit.ma | password | Grand Rabat |
+| Nadia El Fassi | nadia@pharmavisit.ma | password | Casablanca Nord |
 
 ---
 
-## ⚙️ Environment Variables
+## Refresh Data (optional)
 
-Copy `.env.example` to `.env` and fill in your values:
-
-```env
-APP_NAME=PharmaVisit
-APP_ENV=local
-APP_KEY=base64:...
-APP_DEBUG=true
-APP_URL=http://localhost:8000
-
-# MySQL
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=pharmavisit
-DB_USERNAME=root
-DB_PASSWORD=your_password
-
-# Redis Caching Layer
-CACHE_DRIVER=redis
-REDIS_CLIENT=predis
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null
-REDIS_PORT=6379
-
-# Microservices
-ROUTE_OPTIMIZER_URL=http://localhost:8001
-MAPBOX_API_KEY=pk.eyJ1...
+```bash
+cd data-pipeline
+python fetch_all_rabat.py   # scrape Overpass API + Nominatim
+python clean_data.py        # filter and deduplicate
+python import_data.py       # idempotent MySQL import
 ```
 
 ---
 
-## 📁 Project Structure
+## API Reference
 
-```text
-PharmaVisit-CRM/
-├── app/
-│   ├── Http/Controllers/     # API endpoints and Web controllers
-│   ├── Models/               # Eloquent Models (Doctor, Pharmacy, Route, VisitLog)
-│   └── Services/
-│       ├── CacheService.php  # Redis serialization and TTL management
-│       └── RouteOptimizer.php# Bridge to the Python FastAPI microservice
-├── route-optimizer/
-│   ├── main.py               # FastAPI entry point
-│   ├── schemas.py            # Pydantic validation models
-│   └── services/
-│       ├── router.py         # Google OR-Tools TSP logic
-│       └── geocoder.py       # Mapbox/OSRM distance matrix fetching
-├── data-pipeline/
-│   ├── spiders/              # Scrapy spiders for medical registries
-│   ├── import_data.py        # Pandas cleaning scripts
-│   └── scrapy.cfg
-├── public/
-│   ├── css/pharmavisit.css   # Core design system and PHI Teal branding
-│   └── js/pharmavisit.js     # Frontend routing logic and Leaflet implementation
-└── resources/
-    └── views/
-        └── app.blade.php     # Main entry point and layout shell
-```
+All routes require `Authorization: Bearer {token}`.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/login | Authenticate, receive token |
+| GET | /api/territory | Your territory + stats |
+| GET | /api/doctors | Paginated, filterable doctor list |
+| GET | /api/doctors/{id} | Detail + last 5 visits |
+| POST | /api/doctors | Create doctor |
+| PUT | /api/doctors/{id} | Update doctor |
+| DELETE | /api/doctors/{id} | Soft-delete doctor |
+| GET | /api/pharmacies | Paginated pharmacy list |
+| POST | /api/routes/optimize | Compute optimized route |
+| POST | /api/visits | Log a completed visit |
 
 ---
 
-## 🧠 System Architecture
+## Data Statistics
 
-**1. The Redis Performance Buffer**
-To prevent MySQL bottlenecking, PharmaVisit caches all territory data natively in Redis. When a rep opens their dashboard, the 25-doctor paginated list and territory stats load instantly. When data is modified (e.g., adding a new doctor), `CacheService` triggers targeted tag invalidations ensuring data is always fresh while minimizing database strain.
-
-**2. Asynchronous Route Optimization**
-Calculating the "Travelling Salesman Problem" is computationally heavy. Instead of blocking the PHP thread, Laravel dispatches the list of selected geocoordinates to the Python `route-optimizer` microservice. Python leverages **Google OR-Tools** alongside the **Mapbox Matrix API** to compute the mathematically optimal route in milliseconds.
-
-The result is then returned to Laravel, cached in Redis for 24 hours, and rendered on the frontend using Leaflet.js — ensuring that if another rep calculates a similar route, no external API quotas are consumed.
+| Metric | Value |
+|--------|-------|
+| Doctors in database | 651 |
+| Pharmacies in database | 11 |
+| Data source | OpenStreetMap (Overpass + Nominatim) |
+| Coverage | Rabat · Sale · Temara |
+| Coordinates range | 33.94–34.02°N · -6.90–-6.82°W |
+| Specialties | 14 types |
 
 ---
 
-## 📜 License
-This project is licensed under the MIT License — see the LICENSE file for details.
+## License & Attribution
 
-## 👨‍💻 Author
+Map data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors — **ODbL license**
+Map tiles © [CARTO](https://carto.com/attributions)
 
-**Saifeddine Khannoufi**  
-GitHub: [@saifeddinekhannoufi0-lab](https://github.com/saifeddinekhannoufi0-lab)  
-*Built with ❤️ for optimal healthcare field management.*
+---
+
+<div align="center">
+  <sub>Built for the Moroccan pharmaceutical field by Saifeddine Khannoufi</sub>
+</div>
