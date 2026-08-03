@@ -3,27 +3,30 @@ MySQL Import Script
 =====================
 Reads clean_doctors.csv and upserts records into the pharmavisit database.
 
+Routing rules:
+  • specialty == 'Pharmacie'    → pharmacies table
+  • specialty == 'Laboratoire'  → skipped (labs are not targets)
+  • everything else             → doctors table
+
 KEY DESIGN DECISIONS:
   • Uses INSERT ... ON DUPLICATE KEY UPDATE so re-running is idempotent.
   • NEVER overwrites: notes, lat, lng, geocoded_at, priority, is_active.
     These are rep-curated fields — the pipeline must not clobber them.
-  • Only updates: address, city, postal_code, region, phone (factual data
-    that may change in the public registry).
   • New doctors are inserted with is_active=1, priority='medium'.
   • territory_id is assigned via the CITY→TERRITORY mapping below.
-    Doctors in unmapped cities default to the first territory (id=1).
 
 Run:
   cd data-pipeline
   python import_data.py
 
 Environment variables (or edit the DB_* constants below):
-  DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS
+  DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD
 """
 
 import os
 import sys
 from pathlib import Path
+from datetime import datetime
 
 import mysql.connector
 import pandas as pd
@@ -38,13 +41,16 @@ DB_CONFIG = {
     "database": os.getenv("DB_DATABASE", "pharmavisit"),
     "user":     os.getenv("DB_USERNAME", "root"),
     "password": os.getenv("DB_PASSWORD", ""),
+    "charset":  "utf8mb4",
 }
 
 INPUT_FILE = Path(__file__).parent / "output" / "clean_doctors.csv"
 
+# ─── Specialties that go to pharmacies table (not doctors) ───────────────────
+PHARMACY_SPECIALTIES = {"Pharmacie"}
+SKIP_SPECIALTIES     = {"Laboratoire"}   # not relevant for field visits
+
 # ─── City → Territory mapping ─────────────────────────────────────────────────
-# These IDs must match the territories seeded in Phase 1.
-# Extend this map as you add more territories.
 CITY_TO_TERRITORY = {
     "Rabat":      1,   # Grand Rabat (MAR-RAB)
     "Salé":       1,
@@ -58,7 +64,8 @@ def get_territory_id(city: str) -> int:
     return CITY_TO_TERRITORY.get(city, DEFAULT_TERRITORY_ID)
 
 
-UPSERT_SQL = """
+# ─── SQL statements ───────────────────────────────────────────────────────────
+DOCTOR_UPSERT_SQL = """
 INSERT INTO doctors (
     territory_id, first_name, last_name, specialty,
     address, city, postal_code, region, phone,
@@ -70,7 +77,6 @@ VALUES (
     %(lat)s, %(lng)s, 'medium', 1, NOW(), NOW()
 )
 ON DUPLICATE KEY UPDATE
-    -- Only update factual/public data — NEVER rep notes/coords/priority
     address      = IF(VALUES(address) != '', VALUES(address), address),
     city         = VALUES(city),
     postal_code  = IF(VALUES(postal_code) != '', VALUES(postal_code), postal_code),
@@ -81,13 +87,27 @@ ON DUPLICATE KEY UPDATE
     updated_at   = NOW()
 """
 
-# Duplicate detection: (last_name, first_name, city, specialty)
-# Laravel's MySQL UNIQUE constraint must match this.
-# We add a unique index via migration rather than in this script.
+PHARMACY_UPSERT_SQL = """
+INSERT INTO pharmacies (
+    territory_id, name, address, city, postal_code, region,
+    phone, lat, lng, geocoded_at, is_active, created_at, updated_at
+)
+VALUES (
+    %(territory_id)s, %(name)s, %(address)s, %(city)s, %(postal_code)s, %(region)s,
+    %(phone)s, %(lat)s, %(lng)s, NOW(), 1, NOW(), NOW()
+)
+ON DUPLICATE KEY UPDATE
+    address     = IF(VALUES(address) != '', VALUES(address), address),
+    city        = VALUES(city),
+    phone       = IF(VALUES(phone) != '', VALUES(phone), phone),
+    lat         = IF(VALUES(lat) IS NOT NULL, VALUES(lat), lat),
+    lng         = IF(VALUES(lng) IS NOT NULL, VALUES(lng), lng),
+    updated_at  = NOW()
+"""
 
 
 def add_unique_index_if_missing(cursor):
-    """Ensure the unique index used by ON DUPLICATE KEY exists."""
+    """Ensure the unique index used by ON DUPLICATE KEY exists on doctors."""
     cursor.execute("""
         SELECT COUNT(*) as cnt
         FROM information_schema.statistics
@@ -98,7 +118,6 @@ def add_unique_index_if_missing(cursor):
     row = cursor.fetchone()
     if row[0] == 0:
         print("[import] Removing existing duplicates before creating index…")
-        # Delete duplicates keeping the one with the lowest id
         cursor.execute("""
             DELETE d1 FROM doctors d1
             INNER JOIN doctors d2
@@ -117,6 +136,23 @@ def add_unique_index_if_missing(cursor):
             ADD UNIQUE INDEX idx_doctor_unique (last_name(80), first_name(80), city(80), specialty(80))
         """)
         print("[import] Index created.")
+
+    # Same for pharmacies (by name + city)
+    cursor.execute("""
+        SELECT COUNT(*) as cnt
+        FROM information_schema.statistics
+        WHERE table_schema = DATABASE()
+          AND table_name = 'pharmacies'
+          AND index_name = 'idx_pharmacy_unique'
+    """)
+    row = cursor.fetchone()
+    if row[0] == 0:
+        print("[import] Creating unique index on pharmacies…")
+        cursor.execute("""
+            ALTER TABLE pharmacies
+            ADD UNIQUE INDEX idx_pharmacy_unique (name(120), city(80))
+        """)
+        print("[import] Pharmacy index created.")
 
 
 def main():
@@ -138,39 +174,69 @@ def main():
 
     cursor = conn.cursor()
 
-    # Ensure unique index exists
+    # Ensure unique indexes exist
     add_unique_index_if_missing(cursor)
     conn.commit()
 
-    inserted = 0
-    updated  = 0
-    errors   = 0
+    doc_inserted = 0; doc_updated = 0
+    pha_inserted = 0; pha_updated = 0
+    skipped = 0; errors = 0
 
     for _, row in df.iterrows():
+        specialty = row.get("specialty", "")
+
+        # Skip labs and irrelevant entities
+        if specialty in SKIP_SPECIALTIES:
+            skipped += 1
+            continue
+
+        territory_id = get_territory_id(row.get("city", ""))
+        lat = float(row["lat"]) if row.get("lat") else None
+        lng = float(row["lng"]) if row.get("lng") else None
+
+        # ── Route to pharmacies table ─────────────────────────────────────────
+        if specialty in PHARMACY_SPECIALTIES:
+            name = f"{row.get('first_name','')} {row.get('last_name','')}".strip()
+            params = {
+                "territory_id": territory_id,
+                "name":         name,
+                "address":      row.get("address", ""),
+                "city":         row.get("city", ""),
+                "postal_code":  row.get("postal_code", ""),
+                "region":       row.get("region", "Rabat-Salé-Kénitra"),
+                "phone":        row.get("phone", ""),
+                "lat":          lat,
+                "lng":          lng,
+            }
+            try:
+                cursor.execute(PHARMACY_UPSERT_SQL, params)
+                if cursor.rowcount == 1:   pha_inserted += 1
+                elif cursor.rowcount == 2: pha_updated  += 1
+            except mysql.connector.Error as e:
+                print(f"[WARN] Pharmacy error '{name}': {e}")
+                errors += 1
+            continue
+
+        # ── Route to doctors table ────────────────────────────────────────────
         params = {
-            "territory_id": get_territory_id(row.get("city", "")),
+            "territory_id": territory_id,
             "first_name":   row.get("first_name", ""),
             "last_name":    row.get("last_name", ""),
-            "specialty":    row.get("specialty", ""),
+            "specialty":    specialty,
             "address":      row.get("address", ""),
             "city":         row.get("city", ""),
             "postal_code":  row.get("postal_code", ""),
-            "region":       row.get("region", "Morocco"),
+            "region":       row.get("region", "Rabat-Salé-Kénitra"),
             "phone":        row.get("phone", ""),
-            "lat":          float(row["lat"]) if row.get("lat") else None,
-            "lng":          float(row["lng"]) if row.get("lng") else None,
+            "lat":          lat,
+            "lng":          lng,
         }
-
         try:
-            cursor.execute(UPSERT_SQL, params)
-            rows_affected = cursor.rowcount
-            # rowcount=1 → INSERT, rowcount=2 → UPDATE (MySQL convention)
-            if rows_affected == 1:
-                inserted += 1
-            elif rows_affected == 2:
-                updated  += 1
+            cursor.execute(DOCTOR_UPSERT_SQL, params)
+            if cursor.rowcount == 1:   doc_inserted += 1
+            elif cursor.rowcount == 2: doc_updated  += 1
         except mysql.connector.Error as e:
-            print(f"[WARN] Error on {params['last_name']}, {params['city']}: {e}")
+            print(f"[WARN] Doctor error '{params['last_name']}': {e}")
             errors += 1
 
     conn.commit()
@@ -178,8 +244,9 @@ def main():
     conn.close()
 
     print(f"\n[import] [OK] Done")
-    print(f"  Inserted (new): {inserted}")
-    print(f"  Updated (existing): {updated}")
+    print(f"  Doctors  → inserted: {doc_inserted}  updated: {doc_updated}")
+    print(f"  Pharmacy → inserted: {pha_inserted}  updated: {pha_updated}")
+    print(f"  Skipped (labs): {skipped}")
     print(f"  Errors: {errors}")
     print(f"  Total processed: {total}")
 
