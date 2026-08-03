@@ -6,6 +6,7 @@ import urllib.request
 import urllib.parse
 import json
 import csv
+import re
 import time
 import sys
 from pathlib import Path
@@ -88,12 +89,34 @@ NOMINATIM_QUERIES = [
     "pharmacy Témara", "pharmacie Témara",
 ]
 
+_ARABIC_RE = re.compile(r'[\u0600-\u06FF\u2D30-\u2D7F\u0750-\u077F]+')
+
+def _strip_arabic(text):
+    """Remove Arabic/Tifinagh Unicode blocks and collapse whitespace."""
+    if not text:
+        return ''
+    cleaned = _ARABIC_RE.sub(' ', text)
+    return re.sub(r'\s+', ' ', cleaned).strip().strip('|.-:;,')
+
+def best_name(tags):
+    """
+    Return the best Latin-script name from OSM tags.
+    Priority: name:fr > name:en > name (Arabic stripped)
+    Returns '' if result is empty after stripping.
+    """
+    for key in ('name:fr', 'name:en'):
+        val = tags.get(key, '').strip()
+        if val:
+            return _strip_arabic(val)
+    raw = tags.get('name', '').strip()
+    return _strip_arabic(raw)
+
 
 def guess_specialty(tags, name_lower):
     """Determine specialty from OSM tags and name."""
-    amenity = tags.get("amenity", "")
+    amenity    = tags.get("amenity", "")
     healthcare = tags.get("healthcare", "")
-    hc_spec = tags.get("healthcare:speciality", "").lower()
+    hc_spec    = tags.get("healthcare:speciality", "").lower()
 
     if amenity == "pharmacy" or healthcare == "pharmacy":
         return "Pharmacie"
@@ -104,19 +127,17 @@ def guess_specialty(tags, name_lower):
     if amenity == "clinic" or healthcare == "clinic" or "clinique" in name_lower:
         return "Clinique"
 
-    # Check healthcare:speciality tag
     spec_map = {
-        "cardio": "Cardiologie", "ophtalmo": "Ophtalmologie",
-        "pédiat": "Pédiatrie", "pediatr": "Pédiatrie",
-        "gynéco": "Gynécologie", "gyneco": "Gynécologie",
-        "derma": "Dermatologie", "neuro": "Neurologie",
-        "chir": "Chirurgie", "radio": "Radiologie",
-        "orl": "ORL", "pneumo": "Pneumologie",
-        "gastro": "Gastro-entérologie", "uro": "Urologie",
-        "rhumato": "Rhumatologie", "endocrino": "Endocrinologie",
-        "psychiatr": "Psychiatrie", "néphro": "Néphrologie",
+        "cardio":    "Cardiologie",  "ophtalmo":   "Ophtalmologie",
+        "pédiat":    "Pédiatrie",    "pediatr":    "Pédiatrie",
+        "gynéco":    "Gynécologie",  "gyneco":     "Gynécologie",
+        "derma":     "Dermatologie", "neuro":      "Neurologie",
+        "chir":      "Chirurgie",    "radio":      "Radiologie",
+        "orl":       "ORL",          "pneumo":     "Pneumologie",
+        "gastro":    "Gastro-entérologie", "uro":  "Urologie",
+        "rhumato":   "Rhumatologie", "endocrino":  "Endocrinologie",
+        "psychiatr": "Psychiatrie",  "néphro":     "Néphrologie",
     }
-
     check_str = hc_spec + " " + name_lower
     for key, val in spec_map.items():
         if key in check_str:
@@ -126,6 +147,23 @@ def guess_specialty(tags, name_lower):
         return "Laboratoire"
 
     return "Médecine Générale"
+
+
+def guess_city(lat, lng, tags):
+    """Guess city from tags (Arabic stripped) then coordinates."""
+    city = _strip_arabic(tags.get("addr:city", "")).strip()
+    if city and len(city) > 1:
+        return city
+
+    if lat and lng:
+        lat_f, lng_f = float(lat), float(lng)
+        if lng_f < -6.88:
+            return "Salé" if lat_f > 34.02 else "Rabat"
+        if lat_f > 34.05:
+            return "Salé"
+        if lat_f < 33.92:
+            return "Témara"
+    return "Rabat"
 
 
 def parse_name(name_str):
@@ -142,26 +180,6 @@ def parse_name(name_str):
     last = parts[1] if len(parts) > 1 else name_str
 
     return first, last
-
-
-def guess_city(lat, lng, tags):
-    """Guess city from coordinates."""
-    city = tags.get("addr:city", "")
-    if city:
-        return city
-
-    # Based on approximate coordinates
-    if lat and lng:
-        lat_f, lng_f = float(lat), float(lng)
-        if lng_f < -6.88:  # West side
-            if lat_f > 34.02:
-                return "Salé"
-            return "Rabat"
-        if lat_f > 34.05:
-            return "Salé"
-        if lat_f < 33.92:
-            return "Témara"
-    return "Rabat"
 
 
 def fetch_overpass():
@@ -230,12 +248,11 @@ def process_overpass_elements(elements):
 
     for el in elements:
         tags = el.get("tags", {})
-        name = tags.get("name", "")
 
+        # Prefer French/English — OSM Morocco 'name' is typically Arabic
+        name = best_name(tags)
         if not name:
-            name = tags.get("name:fr", tags.get("name:ar", ""))
-        if not name:
-            continue  # Skip unnamed nodes
+            continue  # Skip unnamed or Arabic-only nodes
 
         # Get coordinates
         lat = el.get("lat") or (el.get("center", {}).get("lat") if el.get("center") else None)
